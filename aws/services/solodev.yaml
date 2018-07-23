@@ -109,6 +109,11 @@ Parameters:
         - '2048'
         - '4096'
 
+    MountPoint:
+        Description: The mount point for the EFS volume
+        Type: String
+        Default: "/var/www/Solodev/clients/solodev"
+
 Mappings:
     #We use default AWS Amazon AMI and install docker.
     #Amazon AMI: https://aws.amazon.com/amazon-linux-ami/
@@ -139,7 +144,7 @@ Mappings:
 
 Resources:
 
-    solodevBucket:
+    SolodevBucket:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
@@ -169,20 +174,13 @@ Resources:
                         - 'ec2:DescribeInstanceAttribute'
                         - 'ec2:DescribeInstanceStatus'
                         - 'ec2:DescribeHosts'
-                        - 'ecs:ListContainerInstances'
-                        - 'ecs:SubmitContainerStateChange'
-                        - 'ecs:SubmitTaskStateChange'
-                        - 'ecs:DescribeContainerInstances'
-                        - 'ecs:UpdateContainerInstancesState'
-                        - 'ecs:ListTasks'
-                        - 'ecs:DescribeTasks'
                         - 'sns:Publish'
                         - 'sns:ListSubscriptions'
                       Resource: '*'
                     - Effect: Allow
                       Action:
                         - 's3:*'
-                      Resource: !Join ['', ['arn:aws:s3:::', !Ref 'solodevBucket', /*]]
+                      Resource: !Join ['', ['arn:aws:s3:::', !Ref 'SolodevBucket', /*]]
             AssumeRolePolicyDocument:
                 Version: 2012-10-17
                 Statement:
@@ -200,8 +198,8 @@ Resources:
         Properties:
             Environment:
                 Variables:
-                    solodevBucket:  !Ref solodevBucket
-                    initSolodev: 'https://s3.amazonaws.com/solodev-aws-ha/config/solodev-runner.zip'
+                    solodevBucket:  !Ref SolodevBucket
+                    initSolodev: 'https://s3.amazonaws.com/solodev-aws/config/solodev-runner.zip'
                     lambdaZip: 'solodev-runner.zip'
             Code:
                 ZipFile: !Join 
@@ -362,8 +360,10 @@ Resources:
             AWS::CloudFormation::Init:
                 configSets:
                     standard:
-                    - "standard"
-                standard:
+                    - "init"
+                    - "efs" 
+                    - "mongo"
+                init:
                     files:
                         "/etc/cfn/cfn-hup.conf":
                             mode: 000400
@@ -389,24 +389,79 @@ Resources:
                                     - /etc/cfn/cfn-hup.conf
                                     - /etc/cfn/hooks.d/cfn-auto-reloader.conf
                     commands:
-                        1_install_docker:
-                            command: !Sub sudo yum -y install docker
-                        2_change_cluster_storage_driver:
-                            command: !Sub echo 'DOCKER_STORAGE_OPTIONS="--storage-driver overlay2"' > /etc/sysconfig/docker-storage
-                        3_space_sshd_config:
-                            command: !Sub echo '' >> /etc/ssh/sshd_config
-                        4_edit_sshd_config:
-                            command: !Sub echo 'AllowTcpForwarding yes' >> /etc/ssh/sshd_config
-                        5_edit_sshd_config2:
-                            command: !Sub echo 'PermitTunnel yes' >> /etc/ssh/sshd_config
-                        6_add_user_to_docker:
-                            command: !Sub usermod -a -G docker solodev-user
-                        7_update_docker_service:
-                            command: !Sub echo "MountFlags=shared" >> /usr/lib/systemd/system/docker.service
-                        8_start_docker:
-                            command: !Sub service docker start
-                        9_restart_sshd:
-                            command: !Sub service sshd restart
+                        1-init-swap:
+                            command: !Sub |
+                                touch /root/mkswap.txt
+                                /bin/dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
+                                chown root:root /mnt/swapfile
+                                chmod 600 /mnt/swapfile
+                                /sbin/mkswap /mnt/swapfile
+                                /sbin/swapon /mnt/swapfile
+                efs:
+                    packages:
+                        yum:
+                            nfs-utils: []
+                    commands:
+                        1-init-efs:
+                            command: !Sub |
+                                mkdir -p ${MountPoint}
+                                mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ${EFS}.efs.${AWS::Region}.amazonaws.com:/ ${MountPoint}
+                                chown ec2-user:ec2-user ${MountPoint}
+                mongo:
+                    files:
+                        /etc/mongod.conf
+                            content: !Sub | 
+                                # MongoDB config
+                                dbpath=/mongo/data
+                                logpath=/mongo/log/mongod.log
+                                pidfilepath = /var/run/mongodb/mongod.pid
+                                logappend=true
+                                replSet=<%= node[:install][:StackName] %>
+                                fork=true
+                                # Enable webserver REST
+                                rest = true
+                            mode: "000644"
+                            owner: "root"
+                            group: "root"
+                        /etc/yum.repos.d/10gen.repo
+                            content: !Sub | 
+                                [10gen]
+                                name=10gen Repository
+                                baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+                                gpgcheck=0
+                                enabled=1
+                            mode: "000644"
+                            owner: "root" 
+                            group: "root"
+                        /etc/security/limits.conf
+                            content: !Sub | 
+                                mongod  soft  nofile  64000
+                                mongod  soft  nproc 32000
+                            mode: "000644"
+                            owner: "root"
+                            group: "root"   
+                    commands:
+                        1-install-mongo:
+                            command: !Sub |
+                                yum install mongo-10gen mongo-10gen-server mongodb-org-shell -y
+                                mongo --eval "db.getSiblingDB('admin').shutdownServer()"
+                                echo 'echo 300 > /proc/sys/net/ipv4/tcp_keepalive_time' >> /etc/rc.local
+                                echo 'touch /var/lock/subsys/local' >> /etc/rc.local
+                        2-init-mongo-volume:
+                            command: !Sub |
+                                mkfs.ext4 /dev/sdm
+                                mkdir -p /mongo
+                                echo '/dev/sdm /mongo ext4 defaults,auto,noexec 0 0' >> /etc/fstab
+                                mount -a
+                                blockdev --setra 32 /dev/sdm
+                        3-start-mongo:
+                            command: !Sub |
+                                mkdir -p /mongo/data/journal /mongo/log
+                                chown -Rf mongod:mongod /mongo
+                                chown -Rv mongod:mongod /var/lib/mongo
+                                chkconfig mongod on
+                                service mongod start
+                                service mongod status
     EC2Role:
         Type: AWS::IAM::Role
         Properties: 
@@ -432,10 +487,6 @@ Resources:
                                 "autoscaling:Describe*",
                                 "logs:CreateLogStream",
                                 "logs:PutLogEvents",
-                                "ecr:BatchCheckLayerAvailability",
-                                "ecr:BatchGetImage",
-                                "ecr:GetDownloadUrlForLayer",
-                                "ecr:GetAuthorizationToken",
                                 "ec2:Describe*",
                                 "ec2:AttachVolume",
                                 "ec2:DetachVolume",
@@ -536,9 +587,9 @@ Outputs:
         Description: A reference to the EC2HostSecurityGroup
         Value: !Ref EC2HostSecurityGroup
 
-    solodevBucket:
+    SolodevBucket:
         Description: A reference to the S3 bucket for rke
-        Value: !Ref solodevBucket
+        Value: !Ref SolodevBucket
 
     LambdaExecutionRole:
         Description: A reference to the lambda execution role

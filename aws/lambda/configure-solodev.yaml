@@ -24,9 +24,25 @@ Parameters:
       Type: String
       Description: Fully qualified URL for using app.  DNS of FQDN must be pointed to CNAME of ALB.
 
-    solodevBucket:
+    SolodevBucket:
       Type: String
-      Description: A reference to the S3 bucket for rke
+      Description: A reference to the S3 bucket for solodev
+
+    DatabaseHost:
+      Type: String
+      Description: The database host
+
+    DatabaseName:
+      Type: String
+      Description: The database name
+
+    DatabaseUsername:
+      Type: String
+      Description: The database user name
+
+    DatabasePassword:
+      Type: String
+      Description: The database user password
 
     LambdaExecutionRole:
       Type: String
@@ -88,15 +104,18 @@ Resources:
     Properties:
       Environment:
         Variables:
-          CLUSTER: !Ref AutoScalingGroup
-          KeyName: !Ref KeyName
-          InstanceUser: !Ref InstanceUser
-          solodevBucket:  !Ref solodevBucket
+          cluster: !Ref AutoScalingGroup
+          instance_user: !Ref InstanceUser
+          bucket:  !Ref SolodevBucket
           FQDN: !Ref FQDN
-      Handler: rke.run
+          database_name: !Ref DatabaseName
+          database_host: !Ref DatabaseHost
+          database_user: !Ref DatabaseUsername
+          database_password: !Ref DatabasePassword
+      Handler: solodev.run
       Role: !Ref LambdaExecutionRole
       Code: 
-        S3Bucket: !Ref solodevBucket
+        S3Bucket: !Ref SolodevBucket
         S3Key: 'solodev-runner.zip'
       Runtime: python3.6
       Timeout: 300

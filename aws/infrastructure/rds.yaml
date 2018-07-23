@@ -11,16 +11,16 @@ Parameters:
     Type: 'AWS::EC2::VPC::Id'
     Description: Choose which VPC the Application Load Balancer should be deployed to
 
-  ECSHostSecurityGroup:
-    Description: Select the ECS Host Security Group to use to connect to RDS
+  EC2HostSecurityGroup:
+    Description: Select the EC2 Host Security Group to use to connect to RDS
     Type: AWS::EC2::SecurityGroup::Id
 
   Subnets:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: 'List<AWS::EC2::Subnet::Id>'
 
-  DBName:
-    Default: datacenter
+  DatabaseName:
+    Default: solodev
     Description: The database name
     Type: String
     MinLength: '1'
@@ -28,8 +28,8 @@ Parameters:
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
     ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
 
-  DBUsername:
-    Default: root1
+  DatabaseUsername:
+    Default: solodevsql
     NoEcho: 'true'
     Description: The database admin account username
     Type: String
@@ -38,8 +38,8 @@ Parameters:
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
     ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
 
-  DBPassword:
-    Default: password
+  DatabasePassword:
+    Default: solodevpassword
     NoEcho: 'true'
     Description: The database admin account password
     Type: String
@@ -48,12 +48,12 @@ Parameters:
     AllowedPattern: '[a-zA-Z0-9]*'
     ConstraintDescription: must contain only alphanumeric characters.
 
-  DBPort:
+  DatabasePort:
     Default: '3306'
     Description: Database Port
     Type: Number
 
-  DBClass:
+  DatabaseClass:
     Default: db.m3.medium
     Description: Database instance class
     Type: String
@@ -76,7 +76,7 @@ Parameters:
     ConstraintDescription: must be either true or false.
 
   DBAllocatedStorage:
-    Default: '5'
+    Default: '10'
     Description: The size of the database (Gb)
     Type: Number
     MinValue: '5'
@@ -106,7 +106,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
-          SourceSecurityGroupId: !Ref ECSHostSecurityGroup
+          SourceSecurityGroupId: !Ref EC2HostSecurityGroup
       Tags:
         - Key: Name
           Value: !Join 
@@ -117,8 +117,9 @@ Resources:
   RDS:
     Type: 'AWS::RDS::DBInstance'
     Properties:
-      DBName: !Ref DBName
+      DBName: !Ref DatabaseName
       MultiAZ: !Ref MultiAZDatabase
+      StorageEncrypted: true
       DBInstanceIdentifier: !Join 
         - '-'
         - - !Ref 'AWS::StackName'
@@ -127,10 +128,10 @@ Resources:
       BackupRetentionPeriod: '7'
       PreferredBackupWindow: '01:30-03:00'
       PreferredMaintenanceWindow: 'sat:04:00-sat:05:30'
-      DBInstanceClass: !Ref DBClass
+      DBInstanceClass: !Ref DatabaseClass
       Engine: MySQL
-      MasterUsername: !Ref DBUsername
-      MasterUserPassword: !Ref DBPassword
+      MasterUsername: !Ref DatabaseUsername
+      MasterUserPassword: !Ref DatabasePassword
       DBSubnetGroupName: !Ref DBSubnetGroup
       VPCSecurityGroups:
         - !GetAtt 
@@ -149,3 +150,14 @@ Outputs:
     Value: !GetAtt 
             - RDS
             - Endpoint.Address
+  DatabaseName:
+    Value: !Ref DatabaseName
+    Description: The database name
+
+  DatabaseUsername:
+    Value: !Ref DatabaseUsername
+    Description: The database user name
+
+  DatabasePassword:
+    Value: !Ref DatabasePassword
+    Description: The database user password

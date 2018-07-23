@@ -1,6 +1,6 @@
 Description: >
 
-    This template deploys a HA Solodev Cluster
+    This template deploys a Solodev Server Instance
 
 Parameters:
 
@@ -41,16 +41,7 @@ Resources:
     ALB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/alb.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPC
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-
-    EFS:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/efs.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPC
@@ -59,7 +50,7 @@ Resources:
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/services/solodev.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
@@ -67,41 +58,26 @@ Resources:
                 VPC: !Ref VPC
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
-                EFS: !GetAtt EFS.Outputs.EFS
                 CertificateArn: !Ref CertificateArn
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
-    RDS:
+    RKE:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/rds.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPC
-                EC2HostSecurityGroup: !GetAtt EC2.Outputs.EC2HostSecurityGroup
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-
-    SOLODEV:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/lambda/configure-solodev.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/lambda/configure-solodev.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 AutoScalingGroup: !GetAtt EC2.Outputs.AutoScalingGroup
                 KeyName: !Ref KeyName
-                InstanceUser: 'solodev-user'
+                InstanceUser: 'sd-user'
                 FQDN: !Ref FQDN
-                SolodevBucket: !GetAtt EC2.Outputs.SolodevBucket
-                DatabaseName: !GetAtt RDS.Outputs.DatabaseName
-                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
-                DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
-                DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
+                solodevBucket: !GetAtt EC2.Outputs.solodevBucket
                 LambdaExecutionRole: !GetAtt EC2.Outputs.LambdaExecutionRole
 
 Outputs:
 
-    AdminUrl: 
-        Description: The URL endpoint for the website application
+    RancherServiceUrl: 
+        Description: The URL endpoint for the website service
         Value: !Join ["", [ "https://", !GetAtt ALB.Outputs.LoadBalancerUrl, "/" ]]
