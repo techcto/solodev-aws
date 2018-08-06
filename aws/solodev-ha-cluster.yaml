@@ -41,7 +41,7 @@ Resources:
     ALB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/alb.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPC
@@ -50,7 +50,7 @@ Resources:
     EFS:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/efs.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPC
@@ -59,7 +59,7 @@ Resources:
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/services/solodev.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
@@ -76,7 +76,7 @@ Resources:
     RDS:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/infrastructure/rds.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPC
@@ -86,7 +86,7 @@ Resources:
     SOLODEV:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws/aws/lambda/configure-solodev.yaml
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/lambda/configure-solodev.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 AutoScalingGroup: !GetAtt EC2.Outputs.AutoScalingGroup
@@ -98,6 +98,7 @@ Resources:
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
                 DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
+                MongoHost: "instance['private_ip']"
                 LambdaExecutionRole: !GetAtt EC2.Outputs.LambdaExecutionRole
 
 Outputs:

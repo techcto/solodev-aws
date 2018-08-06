@@ -121,20 +121,20 @@ Mappings:
     AWSRegionToAMI:
         us-east-1:
             AMI: ami-b70554c8
-        us-east-2:
-            AMI: ami-8c122be9
-        us-west-1:
-            AMI: ami-e0ba5c83
-        us-west-2:
-            AMI: ami-a9d09ed1
-        eu-west-1:
-            AMI: ami-466768ac
-        eu-west-2:
-            AMI: ami-b8b45ddf
-        eu-central-1:
-            AMI: ami-7c4f7097
-        ca-central-1:
-            AMI: ami-0ee86a6a
+        # us-east-2:
+        #     AMI: ami-8c122be9
+        # us-west-1:
+        #     AMI: ami-e0ba5c83
+        # us-west-2:
+        #     AMI: ami-a9d09ed1
+        # eu-west-1:
+        #     AMI: ami-466768ac
+        # eu-west-2:
+        #     AMI: ami-b8b45ddf
+        # eu-central-1:
+        #     AMI: ami-7c4f7097
+        # ca-central-1:
+        #     AMI: ami-0ee86a6a
         # ap-northeast-1:
         #     AMI: ami-c393d6a4
         # ap-southeast-1:
@@ -587,7 +587,7 @@ Outputs:
         Value: !Ref EC2HostSecurityGroup
 
     SolodevBucket:
-        Description: A reference to the S3 bucket for rke
+        Description: A reference to the S3 bucket for solodev
         Value: !Ref SolodevBucket
 
     LambdaExecutionRole:
