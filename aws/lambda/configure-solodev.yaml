@@ -44,6 +44,10 @@ Parameters:
       Type: String
       Description: The database user password
 
+    MongoHost:
+      Type: String
+      Description: The mongo host
+
     LambdaExecutionRole:
       Type: String
       Description: A reference to the lambda execution role
@@ -112,6 +116,7 @@ Resources:
           database_host: !Ref DatabaseHost
           database_user: !Ref DatabaseUsername
           database_password: !Ref DatabasePassword
+          mongo_host: !Ref MongoHost
       Handler: solodev.run
       Role: !Ref LambdaExecutionRole
       Code: 

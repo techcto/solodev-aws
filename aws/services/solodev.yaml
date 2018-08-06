@@ -198,9 +198,9 @@ Resources:
         Properties:
             Environment:
                 Variables:
-                    solodevBucket:  !Ref SolodevBucket
-                    initSolodev: 'https://s3.amazonaws.com/solodev-aws/config/solodev-runner.zip'
-                    lambdaZip: 'solodev-runner.zip'
+                    Bucket:  !Ref SolodevBucket
+                    Runner: 'https://s3.amazonaws.com/solodev-aws-ha/config/solodev-runner.zip'
+                    Zip: 'solodev-runner.zip'
             Code:
                 ZipFile: !Join 
                 - ''
@@ -216,9 +216,9 @@ Resources:
                         subprocess.check_call(cmdline)
 
                     def handler(event, context):
-                        url = os.environ['initSolodev']
-                        bucket = os.environ['solodevBucket']
-                        key = os.environ['lambdaZip']
+                        url = os.environ['Runner']
+                        bucket = os.environ['Bucket']
+                        key = os.environ['Zip']
                         responseData = {}
 
                         #Upload Lambda
@@ -331,28 +331,10 @@ Resources:
               Ebs:
                 VolumeSize: !Ref HostVolumeSize
                 DeleteOnTermination: 'true'
-            # - DeviceName: /dev/xvdb
-            #   Ebs:
-            #     VolumeSize: !Ref BlockVolumeSize
-            #     DeleteOnTermination: 'true'
             UserData: 
                 "Fn::Base64": !Sub |
                     #!/bin/bash
                     yum install -y aws-cfn-bootstrap
-                    mount --make-shared /
-                    adduser solodev-user
-                    usermod -a -G wheel solodev-user
-                    cd /home/solodev-user
-                    mkdir .ssh
-                    chmod 700 .ssh
-                    echo "${ExecuteInitSolodev.private}"
-                    echo "${ExecuteInitSolodev.private}" > /tmp/private.pem
-                    chmod 600 /tmp/private.pem
-                    echo "Convert SSL key file to SSH"
-                    (ssh-keygen -y -P "x" -f /tmp/private.pem | sed -n '1p' | sed '$s/$/ solodev-user/') > .ssh/authorized_keys
-                    chmod 600 .ssh/authorized_keys
-                    chown -Rf solodev-user.solodev-user .ssh
-                    rm -f /tmp/private.pem
                     /opt/aws/bin/cfn-init -v -c standard --region ${AWS::Region} --stack ${AWS::StackName} --resource EC2LaunchConfiguration
                     /opt/aws/bin/cfn-signal -e $? --region ${AWS::Region} --stack ${AWS::StackName} --resource EC2AutoScalingGroup
 
@@ -397,6 +379,23 @@ Resources:
                                 chmod 600 /mnt/swapfile
                                 /sbin/mkswap /mnt/swapfile
                                 /sbin/swapon /mnt/swapfile
+                        2-add-solodev-user:
+                            command: !Sub |
+                                adduser solodev-user
+                                usermod -a -G wheel solodev-user
+                        3-add-solodev-user-keys:
+                            command: !Sub |
+                                cd /home/solodev-user
+                                mkdir .ssh
+                                chmod 700 .ssh
+                                echo "${ExecuteRkeRunner.private}"
+                                echo "${ExecuteRkeRunner.private}" > /tmp/private.pem
+                                chmod 600 /tmp/private.pem
+                                echo "Convert SSL key file to SSH"
+                                (ssh-keygen -y -P "x" -f /tmp/private.pem | sed -n '1p' | sed '$s/$/ solodev-user/') > .ssh/authorized_keys
+                                chmod 600 .ssh/authorized_keys
+                                chown -Rf solodev-user.solodev-user .ssh
+                                rm -f /tmp/private.pem
                 efs:
                     packages:
                         yum:
