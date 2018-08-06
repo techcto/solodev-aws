@@ -4,6 +4,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - chmod 700 scripts/php72.sh
+      - scripts/php72.sh
       - echo "Installing HashiCorp Packer..."
       - curl -qL -o packer.zip https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip && unzip packer.zip
       - echo "Installing jq..."
@@ -12,8 +14,6 @@ phases:
       - ./packer validate config/amazon-linux_packer-template.json
   build:
     commands:
-      - chmod 700 scripts/php72.sh
-      - scripts/php72.sh
       ### HashiCorp Packer cannot currently obtain the AWS CodeBuild-assigned role and its credentials
       ### Manually capture and configure the AWS CLI to provide HashiCorp Packer with AWS credentials
       ### More info here: https://github.com/mitchellh/packer/issues/4279
