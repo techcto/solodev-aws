@@ -6,7 +6,7 @@ phases:
     commands:
       - yum install -y tar wget initscripts
       - chmod 700 scripts/aws-linux-php72.sh
-      - scripts/php72.sh
+      - scripts/aws-linux-php72.sh
       - echo "Installing HashiCorp Packer..."
       - curl -qL -o packer.zip https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip && unzip packer.zip
       - echo "Installing jq..."
