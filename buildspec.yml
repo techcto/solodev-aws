@@ -15,6 +15,9 @@ phases:
       - ./packer validate config/amazon-linux_packer-template.json
   build:
     commands:
+      - echo "Configuring AWS credentials"
+      - AWS_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/\(.*\)[a-z]/\1/'
+      - aws configure set region $AWS_REGION
       - echo "Building HashiCorp Packer template, amazon-linux_packer-template.json"
       - ./packer build config/amazon-linux_packer-template.json
   post_build:
