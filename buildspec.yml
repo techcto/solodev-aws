@@ -4,7 +4,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - yum install -y tar wget service deltarpm
+      - yum install -y tar wget initscripts deltarpm
       - chmod 700 scripts/php72.sh
       - scripts/php72.sh
       - echo "Installing HashiCorp Packer..."
