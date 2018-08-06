@@ -1,16 +1,13 @@
 #Install Package Repos (REMI, EPEL)
 yum -y remove php* httpd*
 yum install -y yum-utils
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-wget http://rpms.remirepo.net/enterprise/remi-release-6.rpm
-rpm -Uvh epel-release-latest-6.noarch.rpm
-rpm -Uvh remi-release-6.rpm
-yum-config-manager --enable remi-php72
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+rpm -Uvh epel-release-latest-7.noarch.rpm
+rpm -Uvh remi-release-7.rpm
 yum update -y
 
 #Install Required Devtools
-wget http://195.220.108.108/linux/epel/6/x86_64/Packages/s/scl-utils-20120229-1.el6.x86_64.rpm
-rpm -Uvh scl-utils-20120229-1.el6.x86_64.rpm
 yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git ruby
 
 #Install AWS CodeDeploy Agent
@@ -21,17 +18,18 @@ service codedeploy-agent start
 chkconfig codedeploy-agent on
 
 #Install Apache 2.4
-yum --enablerepo=epel,remi install -y httpd24
+yum install -y httpd
 sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
 sed -i 's/#LoadModule mpm_event_module/LoadModule mpm_event_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
 service httpd start
 chkconfig httpd on
 
 #Install SSL
-yum -y install openssl-devel mod24_ssl
+yum -y install openssl-devel mod_ssl
 sed -i 's/SSLProtocol all -SSLv2$/SSLProtocol all -SSLv2 -SSLv3/g' /etc/httpd/conf.d/ssl.conf
 
 #Install PHP-FPM 7.2
+yum-config-manager --enable remi-php72
 yum --enablerepo=epel --disablerepo=amzn-main -y install libwebp
 yum --enablerepo=remi-php72 install -y php72-php-fpm php72-php-common \
 php72-php-devel php72-php-mysqli php72-php-mysqlnd php72-php-pdo_mysql \
