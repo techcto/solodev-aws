@@ -51,8 +51,3 @@ tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF
 runcmd:
  - /tmp/configure-solodev.sh
 EOF
-
-#Cleanup
-usermod -a -G apache wheel
-rm -Rf /root/.ssh
-rm -Rf /home/ec2-user/.ssh

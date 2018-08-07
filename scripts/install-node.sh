@@ -1,6 +1,5 @@
 #Install Node
-mkdir -p /var/www/.npm
-mkdir -p /var/www/.npmrc
+mkdir -p /var/www
 echo 'export NODE_PATH=/var/www/.npm-global/lib/node_modules' >> /var/www/.npmrc
 echo 'export PATH=$PATH:/var/www/.npm-global/bin' >> /var/www/.npmrc
 export PATH=/var/www/.npm-global/bin:$PATH
