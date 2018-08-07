@@ -16,11 +16,3 @@ chmod +x ./install
 ./install auto
 service codedeploy-agent start
 chkconfig codedeploy-agent on
-
-# Add Swap
-/bin/dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048 &
-wait $!
-chown root:root /mnt/swapfile
-chmod 600 /mnt/swapfile
-/sbin/mkswap /mnt/swapfile
-/sbin/swapon /mnt/swapfile
