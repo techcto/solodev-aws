@@ -33,6 +33,7 @@
         {
             "type": "shell",
             "inline": [
+                "ls -al /tmp",
                 "chmod 700 /tmp/*",
                 "/tmp/install-base.sh",
                 "/tmp/install-httpd.sh",
