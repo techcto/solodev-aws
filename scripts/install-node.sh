@@ -6,7 +6,7 @@ export PATH=/var/www/.npm-global/bin:$PATH
 curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
 yum install -y --enablerepo=nodesource nodejs
 npm install -g autoprefixer clean-css-cli nodemon npm-run-all postcss-cli postcss-discard-empty shx uglify-js
-npm install -g -f --unsafe-perm node-sass
+sudo npm install -g -f --unsafe-perm node-sass
 npm config set prefix '/var/www/.npm-global'
 chmod 2770 /var/www/.npmrc
 chown apache.apache /var/www/.npmrc
