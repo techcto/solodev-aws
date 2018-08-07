@@ -7,7 +7,7 @@ rpm -Uvh epel-release-latest-7.noarch.rpm
 rpm -Uvh remi-release-7.rpm
 yum-config-manager --enable remi-php72
 yum --enablerepo=epel --disablerepo=amzn2-core -y install libwebp
-# yum update -y
+yum update -y
 
 #Install Required Devtools
 yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git
