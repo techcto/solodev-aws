@@ -11,7 +11,7 @@
         "instance_type": "t2.small",
         "ssh_username": "ec2-user",
         "ami_name": "{{user `aws_ami_name`}}",
-        "ami_description": "Solodev Amazon Linux",
+        "ami_description": "Packer Builder",
         "associate_public_ip_address": "true",
         "source_ami_filter": {
             "filters": {
@@ -26,14 +26,28 @@
 
     "provisioners": [
         {
+            "type": "file",
+            "source": "scripts",
+            "destination": "/tmp"
+        },
+        {
             "type": "shell",
             "inline": [
-                "sudo yum update -y",
-				"sudo /usr/sbin/update-motd --disable",
-                "echo 'No unauthorized access permitted' | sudo tee /etc/motd",
-                "sudo rm /etc/issue",
-                "sudo ln -s /etc/motd /etc/issue",
-                "sudo yum install -y elinks screen"
+                "chmod 700 /tmp/*",
+                "/tmp/install-base.sh",
+                "/tmp/install-httpd.sh",
+                "/tmp/install-phpfpm.sh",
+                "/tmp/install-node.sh",
+                "/tmp/install-mongo.sh",
+                "/tmp/install-solodev.sh",
+                "/tmp/install-mysql.sh",
+                "/tmp/configure-single-ami.sh"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+              "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
             ]
         }
     ]

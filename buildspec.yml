@@ -18,23 +18,14 @@ phases:
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
   build:
     commands:
-      - chmod 700 scripts/*
-      - scripts/install-base.sh
-      - scripts/install-httpd.sh
-      - scripts/install-phpfpm.sh
-      - scripts/install-node.sh
-      - scripts/install-mongo.sh
-      - scripts/install-solodev.sh
       - echo "Validating solodev-cluster-packer.json"
       - ./packer validate config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"
       - ./packer build config/solodev-cluster-packer.json
-  post_build:
-    commands:
-      - scripts/install-mysql.sh
-      - scripts/configure-single-ami.sh
       - echo "Validating solodev-single-packer.json"
       - ./packer validate config/solodev-single-packer.json
       - echo "Building HashiCorp Packer template, solodev-single-packer.json"
       - ./packer build config/solodev-single-packer.json
+  post_build:
+    commands:
       - echo "HashiCorp Packer build completed on `date`"
