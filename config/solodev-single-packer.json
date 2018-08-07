@@ -38,22 +38,21 @@
         {
             "type": "shell",
             "inline": [
-                "sudo su",
-                "chmod 700 /tmp/scripts/*",
-                "/tmp/scripts/install-base.sh",
-                "/tmp/scripts/install-httpd.sh",
-                "/tmp/scripts/install-phpfpm.sh",
-                "/tmp/scripts/install-node.sh",
-                "/tmp/scripts/install-mongo.sh",
-                "/tmp/scripts/configure-solodev.sh",
-                "/tmp/scripts/install-mysql.sh",
-                "/tmp/scripts/configure-single-ami.sh"
+                "sudo chmod 700 /tmp/scripts/*",
+                "sudo /tmp/scripts/install-base.sh",
+                "sudo /tmp/scripts/install-httpd.sh",
+                "sudo /tmp/scripts/install-phpfpm.sh",
+                "sudo /tmp/scripts/install-node.sh",
+                "sudo /tmp/scripts/install-mongo.sh",
+                "sudo /tmp/scripts/configure-solodev.sh",
+                "sudo /tmp/scripts/install-mysql.sh",
+                "sudo /tmp/scripts/configure-single-ami.sh"
             ]
         },
         {
             "type": "shell",
             "inline": [
-              "rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
+              "sudo rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
             ]
         }
     ]
