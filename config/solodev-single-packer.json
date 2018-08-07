@@ -31,6 +31,11 @@
             "destination": "/tmp"
         },
         {
+            "type": "file",
+            "source": "/tmp/Solodev",
+            "destination": "/var/www/Solodev"
+        },
+        {
             "type": "shell",
             "inline": [
                 "chmod 700 /tmp/*",
@@ -39,7 +44,7 @@
                 "/tmp/install-phpfpm.sh",
                 "/tmp/install-node.sh",
                 "/tmp/install-mongo.sh",
-                "/tmp/install-solodev.sh",
+                "/tmp/configure-solodev.sh",
                 "/tmp/install-mysql.sh",
                 "/tmp/configure-single-ami.sh"
             ]
