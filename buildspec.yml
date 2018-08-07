@@ -6,8 +6,8 @@ phases:
     commands:
       - yum install -y tar wget initscripts python34
       - curl -O https://bootstrap.pypa.io/get-pip.py
-      - python get-pip.py --user
-      - python -m pip install awscli --upgrade --user
+      - python get-pip.py
+      - pip install awscli --upgrade --user
       - chmod 700 scripts/aws-linux-php72.sh
       - scripts/aws-linux-php72.sh
       - echo "Installing HashiCorp Packer..."
