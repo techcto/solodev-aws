@@ -35,12 +35,12 @@
             "inline": [
                 "ls -al /tmp",
                 "chmod 700 /tmp/*",
-                "/tmp/install-base.sh",
-                "/tmp/install-httpd.sh",
-                "/tmp/install-phpfpm.sh",
-                "/tmp/install-node.sh",
-                "/tmp/install-mongo.sh",
-                "/tmp/install-solodev.sh"
+                "/tmp/scripts/install-base.sh",
+                "/tmp/scripts/install-httpd.sh",
+                "/tmp/scripts/install-phpfpm.sh",
+                "/tmp/scripts/install-node.sh",
+                "/tmp/scripts/install-mongo.sh",
+                "/tmp/scripts/install-solodev.sh"
             ]
         },
         {

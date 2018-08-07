@@ -39,20 +39,20 @@
             "type": "shell",
             "inline": [
                 "chmod 700 /tmp/*",
-                "/tmp/install-base.sh",
-                "/tmp/install-httpd.sh",
-                "/tmp/install-phpfpm.sh",
-                "/tmp/install-node.sh",
-                "/tmp/install-mongo.sh",
-                "/tmp/configure-solodev.sh",
-                "/tmp/install-mysql.sh",
-                "/tmp/configure-single-ami.sh"
+                "/tmp/scripts/install-base.sh",
+                "/tmp/scripts/install-httpd.sh",
+                "/tmp/scripts/install-phpfpm.sh",
+                "/tmp/scripts/install-node.sh",
+                "/tmp/scripts/install-mongo.sh",
+                "/tmp/scripts/configure-solodev.sh",
+                "/tmp/scripts/install-mysql.sh",
+                "/tmp/scripts/configure-single-ami.sh"
             ]
         },
         {
             "type": "shell",
             "inline": [
-              "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+              "rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
             ]
         }
     ]
