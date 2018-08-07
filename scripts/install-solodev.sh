@@ -5,3 +5,4 @@ aws s3 cp s3://solodev-bamboo/$fn /tmp/Solodev/Solodev.zip
 cd /tmp/Solodev/
 unzip Solodev.zip
 rm -Rf Solodev.zip
+ls -al

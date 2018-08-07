@@ -32,7 +32,7 @@
         },
         {
             "type": "file",
-            "source": "/tmp/Solodev/Solodev",
+            "source": "/tmp/Solodev",
             "destination": "/var/www"
         },
         {
