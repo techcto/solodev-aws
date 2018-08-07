@@ -21,6 +21,7 @@ phases:
       - echo "Installing jq..."
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   install_dependencies:
+    commands:
       - chmod 700 scripts/*
       - scripts/install-base.sh
       - scripts/install-httpd.sh
@@ -28,16 +29,20 @@ phases:
       - scripts/install-node.sh
       - scripts/install-mongo.sh
   install_solodev:
+    commands:
       - scripts/install_solodev.sh
   pack_solodev_cluster_ami:
+    commands:
       - echo "Validating solodev-cluster-packer.json"
       - ./packer validate config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"
       - ./packer build config/solodev-cluster-packer.json
   install_solodev_single_dependencies:
+    commands:
       - scripts/install-mysql.sh
       - scripts/configure-single-ami.sh
   pack_solodev_single_ami:
+    commands:
       - echo "Validating solodev-single-packer.json"
       - ./packer validate config/solodev-single-packer.json
       - echo "Building HashiCorp Packer template, solodev-single-packer.json"
