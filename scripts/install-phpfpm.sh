@@ -1,3 +1,15 @@
+#Install Tidy
+TIDY_VERSION=5.1.25
+RUN mkdir -p /usr/local/src
+cd /usr/local/src
+curl -q https://codeload.github.com/htacg/tidy-html5/tar.gz/$TIDY_VERSION | tar -xz
+cd tidy-html5-$TIDY_VERSION/build/cmake
+cmake ../.. && make install
+ln -s tidybuffio.h ../../../../include/buffio.h
+cd /usr/local/src
+rm -rf /usr/local/src/tidy-html5-$TIDY_VERSION
+yum -y install tidy
+
 #Install PHP-FPM 7.2
 yum-config-manager --enable remi-php72
 yum --enablerepo=epel --disablerepo=amzn-main -y install libwebp
@@ -30,18 +42,6 @@ echo "listen.mode = 0660" >> //etc/opt/remi/php72/php-fpm.d/www.conf
 #Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
-
-#Install Tidy
-TIDY_VERSION=5.1.25
-RUN mkdir -p /usr/local/src
-cd /usr/local/src
-curl -q https://codeload.github.com/htacg/tidy-html5/tar.gz/$TIDY_VERSION | tar -xz
-cd tidy-html5-$TIDY_VERSION/build/cmake
-cmake ../.. && make install
-ln -s tidybuffio.h ../../../../include/buffio.h
-cd /usr/local/src
-rm -rf /usr/local/src/tidy-html5-$TIDY_VERSION
-yum -y install tidy
 
 #Install IonCube
 wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
