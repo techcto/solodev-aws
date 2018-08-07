@@ -11,10 +11,3 @@ yum update -y
 
 #Install Required Devtools
 yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git
-
-#Install AWS CodeDeploy Agent
-wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
-chmod +x ./install
-./install auto
-service codedeploy-agent start
-chkconfig codedeploy-agent on
