@@ -24,7 +24,7 @@ phases:
       - scripts/install-phpfpm.sh
       - scripts/install-node.sh
       - scripts/install-mongo.sh
-      - scripts/install_solodev.sh
+      - scripts/install-solodev.sh
       - echo "Validating solodev-cluster-packer.json"
       - ./packer validate config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"

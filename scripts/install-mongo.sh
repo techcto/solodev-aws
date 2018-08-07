@@ -9,7 +9,6 @@ EOF
 yum install mongo-10gen mongo-10gen-server mongodb-org-shell -y
 
 #Mongo Config
-mongo --eval "db.getSiblingDB('admin').shutdownServer()"
 echo 'echo 300 > /proc/sys/net/ipv4/tcp_keepalive_time' >> /etc/rc.local
 echo 'touch /var/lock/subsys/local' >> /etc/rc.local
       
