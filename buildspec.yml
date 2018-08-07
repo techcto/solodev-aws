@@ -2,7 +2,7 @@
 version: 0.2
 
 phases:
-  init:
+  pre_build:
     commands:
       - yum install -y tar wget initscripts
       - curl -O https://bootstrap.pypa.io/get-pip.py
@@ -14,13 +14,11 @@ phases:
       - aws configure set aws_access_key_id `./jq -r '.AccessKeyId' aws_credentials.json`
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
-  install_packer:
-    commands:
       - echo "Installing HashiCorp Packer..."
       - curl -qL -o packer.zip https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip && unzip packer.zip
       - echo "Installing jq..."
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
-  install_dependencies:
+  build:
     commands:
       - chmod 700 scripts/*
       - scripts/install-base.sh
@@ -28,25 +26,17 @@ phases:
       - scripts/install-phpfpm.sh
       - scripts/install-node.sh
       - scripts/install-mongo.sh
-  install_solodev:
-    commands:
       - scripts/install_solodev.sh
-  pack_solodev_cluster_ami:
-    commands:
       - echo "Validating solodev-cluster-packer.json"
       - ./packer validate config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"
       - ./packer build config/solodev-cluster-packer.json
-  install_solodev_single_dependencies:
+  post_build:
     commands:
       - scripts/install-mysql.sh
       - scripts/configure-single-ami.sh
-  pack_solodev_single_ami:
-    commands:
       - echo "Validating solodev-single-packer.json"
       - ./packer validate config/solodev-single-packer.json
       - echo "Building HashiCorp Packer template, solodev-single-packer.json"
       - ./packer build config/solodev-single-packer.json
-  post_build:
-    commands:
       - echo "HashiCorp Packer build completed on `date`"
