@@ -11,8 +11,6 @@ rm -rf /usr/local/src/tidy-html5-$TIDY_VERSION
 yum -y install tidy
 
 #Install PHP-FPM 7.2
-yum-config-manager --enable remi-php72
-yum --enablerepo=epel --disablerepo=amzn-main -y install libwebp
 yum --enablerepo=remi-php72 install -y php72-php-fpm php72-php-common \
 php72-php-devel php72-php-mysqli php72-php-mysqlnd php72-php-pdo_mysql \
 php72-php-gd php72-php-mbstring php72-php-pear php72-php-soap php72-php-zip php72-php-tidy \

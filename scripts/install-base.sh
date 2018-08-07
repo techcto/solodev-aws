@@ -5,11 +5,11 @@ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 rpm -Uvh epel-release-latest-7.noarch.rpm
 rpm -Uvh remi-release-7.rpm
-yum update -y
+yum-config-manager --enable remi-php72
+yum --enablerepo=epel --disablerepo=amzn2-core -y install libwebp
+# yum update -y
 
 #Install Required Devtools
-wget http://195.220.108.108/linux/epel/6/x86_64/Packages/s/scl-utils-20120229-1.el6.x86_64.rpm
-rpm -Uvh scl-utils-20120229-1.el6.x86_64.rpm
 yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git
 
 #Install AWS CodeDeploy Agent
