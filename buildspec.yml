@@ -7,7 +7,7 @@ phases:
       - yum install -y tar wget initscripts
       - curl -O https://bootstrap.pypa.io/get-pip.py
       - python get-pip.py
-      - pip install awscli --upgrade --user
+      - pip install awscli
       - aws --version
       - chmod 700 scripts/aws-linux-php72.sh
       - scripts/aws-linux-php72.sh
