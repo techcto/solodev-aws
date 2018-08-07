@@ -1,8 +1,7 @@
 {
     "variables": {
         "aws_region": "{{env `AWS_REGION`}}",
-        "aws_ami_name": "solodev-amazon-linux_{{isotime \"02Jan2006\"}}",
-        "aws_profile": "{{env `AWS_PROFILE`}}"
+        "aws_ami_name": "solodev-amazon-linux_{{isotime \"02Jan2006\"}}"
     },
 
     "builders": [{
