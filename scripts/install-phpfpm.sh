@@ -1,33 +1,3 @@
-#Install Package Repos (REMI, EPEL)
-yum -y remove php* httpd*
-yum install -y yum-utils
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-rpm -Uvh epel-release-latest-7.noarch.rpm
-rpm -Uvh remi-release-7.rpm
-yum update -y
-
-#Install Required Devtools
-yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git ruby
-
-#Install AWS CodeDeploy Agent
-wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
-chmod +x ./install
-./install auto
-service codedeploy-agent start
-chkconfig codedeploy-agent on
-
-#Install Apache 2.4
-yum install -y httpd
-sed -i 's/LoadModule mpm_prefork_module/#LoadModule mpm_prefork_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
-sed -i 's/#LoadModule mpm_event_module/LoadModule mpm_event_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
-service httpd start
-chkconfig httpd on
-
-#Install SSL
-yum -y install openssl-devel mod_ssl
-sed -i 's/SSLProtocol all -SSLv2$/SSLProtocol all -SSLv2 -SSLv3/g' /etc/httpd/conf.d/ssl.conf
-
 #Install PHP-FPM 7.2
 yum-config-manager --enable remi-php72
 yum --enablerepo=epel --disablerepo=amzn-main -y install libwebp
@@ -57,23 +27,6 @@ echo "security.limit_extensions = .php .stml" >> /etc/opt/remi/php72/php-fpm.d/w
 echo "listen = /run/php-fpm/www.sock" >> /etc/opt/remi/php72/php-fpm.d/www.conf
 echo "listen.owner = apache" >> /etc/opt/remi/php72/php-fpm.d/www.conf
 echo "listen.mode = 0660" >> //etc/opt/remi/php72/php-fpm.d/www.conf
-
-#Install Node
-mkdir -p /var/www/.npm
-echo 'export NODE_PATH=/var/www/.npm-global/lib/node_modules' >> /var/www/.npmrc
-echo 'export PATH=$PATH:/var/www/.npm-global/bin' >> /var/www/.npmrc
-export PATH=/var/www/.npm-global/bin:$PATH
-curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
-yum install -y --enablerepo=nodesource nodejs
-npm install -g autoprefixer clean-css-cli nodemon npm-run-all postcss-cli postcss-discard-empty shx uglify-js
-npm install -g -f --unsafe-perm node-sass
-npm config set prefix '/var/www/.npm-global'
-chmod 2770 /var/www/.npmrc
-chown apache.apache /var/www/.npmrc
-chmod -Rf 2770 /var/www/.npm
-chown -Rf apache.apache /var/www/.npm
-chmod -Rf 2770 /var/www/.npm-global
-chown -Rf apache.apache /var/www/.npm-global
 
 #Install Composer
 curl -sS https://getcomposer.org/installer | php
@@ -123,34 +76,3 @@ echo "opcache.memory_consumption=128" >>/etc/opt/remi/php72/php.ini
 echo "opcache.max_accelerated_files=4000" >>/etc/opt/remi/php72/php.ini
 echo "opcache_revalidate_freq = 240" >>/etc/opt/remi/php72/php.ini
 echo "zend_extension=/opt/remi/php72/root/usr/lib64/php/modules/ioncube_loader_lin_7.2.so" >>/etc/opt/remi/php72/php.ini
-
-###### Solodev Install Script
-
-tee /tmp/solodev.sh <<EOF
-
-#Install Solodev
-mkdir -p /home/ec2-user/Solodev
-fn="$(aws s3 ls s3://solodev-bamboo | sort | tail -n 1 | awk '{print $4}')"
-aws s3 cp s3://solodev-bamboo/$fn /home/ec2-user/Solodev/Solodev.zip
-cd /home/ec2-user/Solodev/
-unzip Solodev.zip
-rm -Rf Solodev.zip
-cd /home/ec2-user/
-chown -Rf apache.apache Solodev
-chmod -Rf 2770 Solodev
-mv Solodev /var/www/
-
-EOF
-
-#Install Cloud Init script
-tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF
-#install-config
-runcmd:
- - /tmp/solodev.sh
-EOF
-
-
-#Cleanup
-usermod -a -G apache wheel
-rm -Rf /root/.ssh
-rm -Rf /home/ec2-user/.ssh
