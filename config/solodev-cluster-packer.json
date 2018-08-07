@@ -40,7 +40,7 @@
             "inline": [
                 "ls -al /tmp",
                 "ls -al /tmp/Solodev",
-                "chmod 700 /tmp/*",
+                "chmod 700 /tmp/scripts/*",
                 "/tmp/scripts/install-base.sh",
                 "/tmp/scripts/install-httpd.sh",
                 "/tmp/scripts/install-phpfpm.sh",
