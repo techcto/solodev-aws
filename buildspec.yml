@@ -5,7 +5,6 @@ phases:
   pre_build:
     commands:
       - yum install -y tar wget initscripts
-      - easy_install pip
       - pip install awscli --upgrade --user
       - chmod 700 scripts/aws-linux-php72.sh
       - scripts/aws-linux-php72.sh

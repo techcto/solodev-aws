@@ -1,6 +1,4 @@
 #Install Package Repos (REMI, EPEL)
-easy_install pip
-pip install awscli --upgrade --user
 yum -y remove php* httpd*
 yum install -y yum-utils
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
