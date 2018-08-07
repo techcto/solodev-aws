@@ -11,7 +11,7 @@
         "instance_type": "t2.small",
         "ssh_username": "ec2-user",
         "ami_name": "{{user `aws_ami_name`}}",
-        "ami_description": "Solodev WXP - Amazon Linux",
+        "ami_description": "Solodev Amazon Linux",
         "associate_public_ip_address": "true",
         "source_ami_filter": {
             "filters": {

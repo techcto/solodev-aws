@@ -151,6 +151,6 @@ EOF
 
 
 #Cleanup
-usermod -a -G apache ec2-user
+usermod -a -G apache wheel
 rm -Rf /root/.ssh
 rm -Rf /home/ec2-user/.ssh
