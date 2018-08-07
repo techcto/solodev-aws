@@ -1,4 +1,3 @@
-yum install mysql mysql-server -y
-
-chkconfig mysqld on
-service mysqld start
+yum -y install mariadb-server mariadb
+systemctl start mariadb.service
+systemctl enable mariadb.service
