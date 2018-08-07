@@ -4,7 +4,9 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - yum install -y tar wget initscripts
+      - yum install -y tar wget initscripts python34
+      - curl -O https://bootstrap.pypa.io/get-pip.py
+      - python3 get-pip.py --user
       - pip install awscli --upgrade --user
       - chmod 700 scripts/aws-linux-php72.sh
       - scripts/aws-linux-php72.sh
