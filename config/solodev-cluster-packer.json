@@ -40,6 +40,7 @@
             "inline": [
                 "ls -al /tmp",
                 "ls -al /tmp/Solodev",
+                "sudo su",
                 "chmod 700 /tmp/scripts/*",
                 "/tmp/scripts/install-base.sh",
                 "/tmp/scripts/install-httpd.sh",
@@ -52,7 +53,7 @@
         {
             "type": "shell",
             "inline": [
-              "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+              "rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
             ]
         }
     ]
