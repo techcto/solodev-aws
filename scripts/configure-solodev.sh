@@ -1,3 +1,5 @@
+mv /tmp/Solodev /var/www/Solodev
+ls -al /var/www/Solodev
 chown -Rf apache.apache /var/www/Solodev
 chmod -Rf 2770 /var/www/Solodev
 

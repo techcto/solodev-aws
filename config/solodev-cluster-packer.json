@@ -33,20 +33,20 @@
         {
             "type": "file",
             "source": "/tmp/Solodev",
-            "destination": "/var/www"
+            "destination": "/tmp/Solodev"
         },
         {
             "type": "shell",
             "inline": [
                 "ls -al /tmp",
-                "ls -al /var/www/Solodev",
+                "ls -al /tmp/Solodev",
                 "chmod 700 /tmp/*",
                 "/tmp/scripts/install-base.sh",
                 "/tmp/scripts/install-httpd.sh",
                 "/tmp/scripts/install-phpfpm.sh",
                 "/tmp/scripts/install-node.sh",
                 "/tmp/scripts/install-mongo.sh",
-                "/tmp/scripts/install-solodev.sh"
+                "/tmp/scripts/configure-solodev.sh"
             ]
         },
         {
