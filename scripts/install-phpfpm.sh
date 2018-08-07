@@ -7,7 +7,6 @@ php72-php-gd php72-php-mbstring php72-php-pear php72-php-soap php72-php-zip php7
 php72-php-pecl-mongodb php72-php-pecl-apcu php72-php-pecl-oauth php72-php-pecl-xdebug
 scl enable php72 'php -v'
 ln -s /usr/bin/php72 /usr/bin/php
-service php72-php-fpm start
 chkconfig php72-php-fpm on
 
 #Configure PHP-FPM conf for Apache (php72-php.conf)
