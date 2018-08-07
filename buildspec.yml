@@ -16,10 +16,10 @@ phases:
       - aws configure set aws_access_key_id `./jq -r '.AccessKeyId' aws_credentials.json`
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
-  build:
-    commands:
       - chmod 700 scripts/install-solodev.sh
       - scripts/install-solodev.sh
+  build:
+    commands:
       - echo "Validating solodev-cluster-packer.json"
       - ./packer validate config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"
