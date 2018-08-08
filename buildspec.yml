@@ -16,8 +16,8 @@ phases:
       - aws configure set aws_access_key_id `./jq -r '.AccessKeyId' aws_credentials.json`
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
-      - chmod 700 scripts/install-solodev.sh
-      - scripts/install-solodev.sh
+      - chmod 700 hashicorp/solodev-phpfpm-72/scripts/install-solodev.sh
+      - hashicorp/solodev-phpfpm-72/scripts/install-solodev.sh
   build:
     commands:
       - echo "Validating solodev-cluster-packer.json"
