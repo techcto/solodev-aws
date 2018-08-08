@@ -1,6 +1,6 @@
 #Install Tidy
 TIDY_VERSION=5.1.25
-RUN mkdir -p /usr/local/src
+mkdir -p /usr/local/src
 cd /usr/local/src
 curl -q https://codeload.github.com/htacg/tidy-html5/tar.gz/$TIDY_VERSION | tar -xz
 cd tidy-html5-$TIDY_VERSION/build/cmake

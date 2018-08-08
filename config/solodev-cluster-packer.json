@@ -31,9 +31,15 @@
             "destination": "/tmp"
         },
         {
+            "type": "file",
+            "source": "/tmp/Solodev",
+            "destination": "/tmp/Solodev"
+        },
+        {
             "type": "shell",
             "inline": [
                 "ls -al /tmp",
+                "ls -al /tmp/Solodev",
                 "sudo chmod 700 /tmp/scripts/*",
                 "sudo /tmp/scripts/install-base.sh",
                 "sudo /tmp/scripts/install-httpd.sh",
