@@ -14,3 +14,6 @@ yum --enablerepo=epel --disablerepo=amzn2-core -y install libwebp
 
 #Update all libs
 yum update -y
+
+#Clear cache dir
+rm -Rf /var/cache/yum/base/packages
