@@ -29,6 +29,11 @@
                 "device_name": "/dev/xvda",
                 "volume_size": 50,
                 "delete_on_termination": true
+            },
+            {
+                "device_name": "/dev/xvdb",
+                "volume_size": 50,
+                "delete_on_termination": true
             }
         ],
         "ami_block_device_mappings": [
@@ -74,7 +79,9 @@
         {
             "type": "shell",
             "inline": [
-              "sudo rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
+                "sudo rm .ssh/authorized_keys",
+                "sudo rm /root/.ssh/authorized_keys",
+                "sudo rm -Rf /tmp/*"
             ]
         }
     ]
