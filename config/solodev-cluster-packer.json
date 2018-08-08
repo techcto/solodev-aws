@@ -13,7 +13,6 @@
         "ami_name": "{{user `aws_ami_name`}}",
         "ami_description": "Packer Cluster Builder",
         "associate_public_ip_address": "true",
-        "shutdown_behavior": "stop",
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
