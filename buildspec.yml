@@ -24,10 +24,10 @@ phases:
       - ./packer validate hashicorp/solodev-phpfpm-72/config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template, solodev-cluster-packer.json"
       - ./packer build hashicorp/solodev-phpfpm-72/config/solodev-cluster-packer.json
-    #   - echo "Validating solodev-single-packer.json"
-    #   - ./packer validate hashicorp/solodev-phpfpm-72/config/solodev-single-packer.json
-    #   - echo "Building HashiCorp Packer template, solodev-single-packer.json"
-    #   - ./packer build hashicorp/solodev-phpfpm-72/config/solodev-single-packer.json
+      - echo "Validating solodev-single-packer.json"
+      - ./packer validate hashicorp/solodev-phpfpm-72/config/solodev-single-packer.json
+      - echo "Building HashiCorp Packer template, solodev-single-packer.json"
+      - ./packer build hashicorp/solodev-phpfpm-72/config/solodev-single-packer.json
   post_build:
     commands:
       - echo "HashiCorp Packer build completed on `date`"

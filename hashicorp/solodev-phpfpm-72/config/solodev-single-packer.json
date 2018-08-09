@@ -11,7 +11,7 @@
         "instance_type": "t2.small",
         "ssh_username": "ec2-user",
         "ami_name": "{{user `aws_ami_name`}}",
-        "ami_description": "Packer Builder",
+        "ami_description": "Packer Single Builder",
         "associate_public_ip_address": "true",
         "source_ami_filter": {
             "filters": {
@@ -19,9 +19,35 @@
                 "name": "amzn2-ami*-ebs",
                 "root-device-type": "ebs"
             },
+
+
             "owners": [],
             "most_recent": true
-        }
+        },
+        "launch_block_device_mappings": [
+            {
+                "device_name": "/dev/xvda",
+                "volume_size": 50,
+                "delete_on_termination": true
+            },
+            {
+                "device_name": "/dev/xvdb",
+                "volume_size": 50,
+                "delete_on_termination": true
+            }
+        ],
+        "ami_block_device_mappings": [
+            {
+                "device_name": "/dev/xvda",
+                "volume_size": 50,
+                "delete_on_termination": true
+            },
+            {
+                "device_name": "/dev/xvdb",
+                "volume_size": 50,
+                "delete_on_termination": true
+            }
+        ]
     }],
 
     "provisioners": [
@@ -38,7 +64,10 @@
         {
             "type": "shell",
             "inline": [
+                "ls -al /tmp",
+                "ls -al /tmp/Solodev",
                 "sudo chmod 700 /tmp/scripts/*",
+                "sudo /tmp/scripts/mount-drives.sh",
                 "sudo /tmp/scripts/install-base.sh",
                 "sudo /tmp/scripts/install-httpd.sh",
                 "sudo /tmp/scripts/install-phpfpm.sh",
@@ -52,7 +81,9 @@
         {
             "type": "shell",
             "inline": [
-              "sudo rm .ssh/authorized_keys; sudo rm /root/.ssh/authorized_keys"
+                "sudo rm .ssh/authorized_keys",
+                "sudo rm /root/.ssh/authorized_keys",
+                "sudo rm -Rf /tmp/*"
             ]
         }
     ]
