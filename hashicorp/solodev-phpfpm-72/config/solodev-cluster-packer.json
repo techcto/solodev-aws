@@ -76,14 +76,6 @@
                 "sudo /tmp/scripts/configure-solodev.sh",
                 "sudo /tmp/scripts/install-aws.sh"
             ]
-        },
-        {
-            "type": "shell",
-            "inline": [
-                "sudo rm .ssh/authorized_keys",
-                "sudo rm /root/.ssh/authorized_keys",
-                "sudo rm -Rf /tmp/*"
-            ]
         }
     ]
 }
