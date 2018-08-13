@@ -6,3 +6,6 @@ cd /tmp/Solodev/
 unzip Solodev.zip
 rm -Rf Solodev.zip
 ls -al
+
+#Add Solodev to Crontab
+(crontab -l 2>/dev/null; echo "*/2 * * * * php /var/www/Solodev/core/utils/restart.php") | crontab -

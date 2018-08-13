@@ -28,11 +28,22 @@ echo "# Compress Backups" >> /root/dumpmysql.sh
 echo 'for i in \`cat \$DBFILE\` ; do gzip -f \$PWD/\$i.sql ; done' >> /root/dumpmysql.sh
 chmod 700 /root/dumpmysql.sh
 
+#Add Mysql dump to Crontab
+(crontab -l 2>/dev/null; echo "30 13 * * * /root/dumpmysql.sh") | crontab -
+
 #Configure Mongo			          
-echo 'use solodev_views;' >> /root/mongouser.js
-echo 'db.createUser({"user": "solodevsql", "pwd": "\$EC2_INSTANCE_ID", "roles": [ { role: "readWrite", db: "solodev_views" } ] })' >> /root/mongouser.js
-mongo < /root/mongouser.js
-rm -Rf /root/mongouser.js
+echo 'use solodev_views;' >> /tmp/mongouser.js
+echo 'db.createUser({"user": "solodevsql", "pwd": "\$EC2_INSTANCE_ID", "roles": [ { role: "readWrite", db: "solodev_views" } ] })' >> /tmp/mongouser.js
+mongo < /tmp/mongouser.js
+rm -Rf /tmp/mongouser.js
+
+# Make / Copy required files		
+mkdir -p /var/www/Solodev/clients/solodev/Vhosts		
+mkdir -p /var/www/Solodev/clients/solodev/s.Vhosts				
+mkdir -p /var/www/Solodev/clients/solodev/Main
+chmod -Rf 2770 /var/www/Solodev/clients
+chown -Rf apache.apache /var/www/Solodev/clients
+mv /var/www/Solodev/core/aws/Client_Settings.xml /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 # Configure CLIENT_SETTINGS.XML - set references to the database			
 sed -i "s/REPLACE_WITH_DATABASE/solodev/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
@@ -41,7 +52,7 @@ sed -i "s/REPLACE_WITH_DBHOST/127.0.0.1/g" /var/www/Solodev/clients/solodev/Clie
 sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
-php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID
+php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID >> /root/phpinstall.log
 rm -f /tmp/configure-solodev.sh
 EOF
 

@@ -8,3 +8,6 @@ service httpd start
 #Install SSL
 yum -y install openssl-devel mod_ssl
 sed -i 's/SSLProtocol all -SSLv2$/SSLProtocol all -SSLv2 -SSLv3/g' /etc/httpd/conf.d/ssl.conf
+
+#Permissions
+usermod -a -G apache ec2-user
