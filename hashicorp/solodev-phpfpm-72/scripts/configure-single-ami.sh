@@ -56,6 +56,8 @@ php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID >> /root/php
 rm -f /root/init-solodev.sh
 EOF
 
+chmod 700 /root/init-solodev.sh
+
 #Install Cloud Init script
 tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF
 #install-config
