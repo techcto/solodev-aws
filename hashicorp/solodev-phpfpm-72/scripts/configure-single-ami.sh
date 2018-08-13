@@ -1,5 +1,5 @@
 #Custom Install for Single Servers
-tee /tmp/configure-solodev.sh <<EOF
+tee /root/init-solodev.sh <<EOF
 #!/bin/bash
 EC2_INSTANCE_ID="\`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id || die \"wget instance-id has failed: $?\"\`"
 test -n "\$EC2_INSTANCE_ID" || die 'cannot obtain instance-id'
@@ -53,12 +53,12 @@ sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Cli
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID >> /root/phpinstall.log
-rm -f /tmp/configure-solodev.sh
+rm -f /root/init-solodev.sh
 EOF
 
 #Install Cloud Init script
 tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF
 #install-config
 runcmd:
- - /tmp/configure-solodev.sh
+ - /root/init-solodev.sh
 EOF
