@@ -20,7 +20,7 @@ phases:
       - hashicorp/solodev-phpfpm-72/scripts/install-solodev.sh
   build:
     commands:
-      - echo "Validating solodev-cluster-packer.json"
+      - echo "Validating - solodev-cluster-packer.json"
       - ./packer validate hashicorp/solodev-phpfpm-72/config/solodev-cluster-packer.json
       - echo "Building HashiCorp Packer template - solodev-cluster-packer.json"
       - ./packer build hashicorp/solodev-phpfpm-72/config/solodev-cluster-packer.json
