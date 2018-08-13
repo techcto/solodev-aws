@@ -82,12 +82,14 @@
         {
             "type": "file",
             "source": "/tmp/configure-solodev.sh",
-            "destination": "/tmp/configure-solodev.sh"
+            "destination": "/tmp/configure-solodev.sh",
+            "generated": true
         },
         {
             "type": "file",
             "source": "/etc/cloud/cloud.cfg.d/install.cfg",
-            "destination": "/etc/cloud/cloud.cfg.d/install.cfg"
+            "destination": "/etc/cloud/cloud.cfg.d/install.cfg",
+            "generated": true
         },
         {
             "type": "shell",
