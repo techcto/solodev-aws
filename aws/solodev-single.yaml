@@ -38,15 +38,6 @@ Parameters:
 
 Resources:
 
-    ALB:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPC
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
@@ -54,16 +45,14 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                ClusterSize: 3
+                ClusterSize: 1
                 VPC: !Ref VPC
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
-    RKE:
+    SOLODEV:
         Type: AWS::CloudFormation::Stack
         Properties:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/lambda/configure-solodev.yaml
@@ -71,9 +60,14 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 AutoScalingGroup: !GetAtt EC2.Outputs.AutoScalingGroup
                 KeyName: !Ref KeyName
-                InstanceUser: 'sd-user'
+                InstanceUser: 'solodev-user'
                 FQDN: !Ref FQDN
-                solodevBucket: !GetAtt EC2.Outputs.solodevBucket
+                SolodevBucket: !GetAtt EC2.Outputs.SolodevBucket
+                DatabaseName: !GetAtt RDS.Outputs.DatabaseName
+                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
+                DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
+                MongoHost: "instance['private_ip']"
                 LambdaExecutionRole: !GetAtt EC2.Outputs.LambdaExecutionRole
 
 Outputs:

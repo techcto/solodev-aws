@@ -11,7 +11,7 @@
         "instance_type": "t2.small",
         "ssh_username": "ec2-user",
         "ami_name": "{{user `aws_ami_name`}}",
-        "ami_description": "Packer Single Builder",
+        "ami_description": "Solodev CMS - Single Server Edition",
         "associate_public_ip_address": "true",
         "source_ami_filter": {
             "filters": {
@@ -75,8 +75,19 @@
                 "sudo /tmp/scripts/install-mongo.sh",
                 "sudo /tmp/scripts/configure-solodev.sh",
                 "sudo /tmp/scripts/install-mysql.sh",
-                "sudo /tmp/scripts/configure-single-ami.sh"
+                "sudo /tmp/scripts/configure-single-ami.sh",
+                "sudo /tmp/scripts/install-aws.sh"
             ]
+        },
+        {
+            "type": "file",
+            "source": "/tmp/configure-solodev.sh",
+            "destination": "/tmp/configure-solodev.sh"
+        },
+        {
+            "type": "file",
+            "source": "/etc/cloud/cloud.cfg.d/install.cfg",
+            "destination": "/etc/cloud/cloud.cfg.d/install.cfg"
         },
         {
             "type": "shell",
