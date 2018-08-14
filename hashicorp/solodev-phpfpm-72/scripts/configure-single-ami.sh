@@ -51,7 +51,7 @@ sed -i "s/REPLACE_WITH_DBHOST/127.0.0.1/g" /var/www/Solodev/clients/solodev/Clie
 sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
-php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID >> /root/phpinstall.log
+php /var/www/Solodev/core/update.php admin \$EC2_INSTANCE_ID >> /root/phpinstall.log
 #rm -f /root/init-solodev.sh
 EOF
 
