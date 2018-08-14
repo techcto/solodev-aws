@@ -19,10 +19,10 @@ mysql -u root --password=\$EC2_INSTANCE_ID < /tmp/setup.mysql
 echo '#!/bin/bash' >> /root/dumpmysql.sh
 echo "mkdir -p /var/www/Solodev/clients/solodev/dbdumps" >> /root/dumpmysql.sh
 echo "PWD=/var/www/Solodev/clients/solodev/dbdumps" >> /root/dumpmysql.sh
-echo "DBFILE=\\$PWD/databases.txt" >> /root/dumpmysql.sh
-echo "rm -f \\$DBFILE" >> /root/dumpmysql.sh
-echo "/usr/bin/mysql -u root -p\$EC2_INSTANCE_ID mysql -Ns -e \"show databases\" > \\$DBFILE" >> /root/dumpmysql.sh
-echo "for i in \`cat \$DBFILE\` ; do mysqldump --opt --single-transaction -u root -p\$EC2_INSTANCE_ID \$i > \$PWD/\$i.sql ; done" >> /root/dumpmysql.sh
+echo 'DBFILE=\$PWD/databases.txt' >> /root/dumpmysql.sh
+echo 'rm -f \$DBFILE' >> /root/dumpmysql.sh
+echo '/usr/bin/mysql -u root -p$EC2_INSTANCE_ID mysql -Ns -e "show databases" > \$DBFILE' >> /root/dumpmysql.sh
+echo 'for i in \`cat \$DBFILE\` ; do mysqldump --opt --single-transaction -u root -p$EC2_INSTANCE_ID \$i > \$PWD/\$i.sql ; done' >> /root/dumpmysql.sh
 echo "# Compress Backups" >> /root/dumpmysql.sh
 echo 'for i in \`cat \$DBFILE\` ; do gzip -f \$PWD/\$i.sql ; done' >> /root/dumpmysql.sh
 chmod 700 /root/dumpmysql.sh
@@ -52,7 +52,7 @@ sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Cli
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 php /var/www/Solodev/core/update.php solodevadmin \$EC2_INSTANCE_ID >> /root/phpinstall.log
-rm -f /root/init-solodev.sh
+#rm -f /root/init-solodev.sh
 EOF
 
 chmod 700 /root/init-solodev.sh
