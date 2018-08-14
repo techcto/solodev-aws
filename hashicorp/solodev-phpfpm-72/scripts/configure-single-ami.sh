@@ -56,7 +56,6 @@ rm -f /root/init-solodev.sh
 EOF
 
 chmod 700 /root/init-solodev.sh
-mkdir -p /run/php-fpm
 
 #Install Cloud Init script
 tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF
