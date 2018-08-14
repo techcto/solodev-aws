@@ -17,13 +17,12 @@ mysql -u root --password=\$EC2_INSTANCE_ID < /tmp/setup.mysql
 
 #Create mysql backup script
 echo '#!/bin/bash' >> /root/dumpmysql.sh
-echo "# Example root cronjob:" >> /root/dumpmysql.sh
 echo "mkdir -p /var/www/Solodev/clients/solodev/dbdumps" >> /root/dumpmysql.sh
 echo "PWD=/var/www/Solodev/clients/solodev/dbdumps" >> /root/dumpmysql.sh
-echo "DBFILE=\$PWD/databases.txt" >> /root/dumpmysql.sh
+echo "DBFILE=\\$PWD/databases.txt" >> /root/dumpmysql.sh
 echo "rm -f \\$DBFILE" >> /root/dumpmysql.sh
 echo "/usr/bin/mysql -u root -p\$EC2_INSTANCE_ID mysql -Ns -e \"show databases\" > \\$DBFILE" >> /root/dumpmysql.sh
-echo 'for i in \`cat \$DBFILE\` ; do mysqldump --opt --single-transaction -u root -p\$EC2_INSTANCE_ID \$i > \$PWD/\$i.sql ; done' >> /root/dumpmysql.sh
+echo "for i in \`cat \$DBFILE\` ; do mysqldump --opt --single-transaction -u root -p\$EC2_INSTANCE_ID \$i > \$PWD/\$i.sql ; done" >> /root/dumpmysql.sh
 echo "# Compress Backups" >> /root/dumpmysql.sh
 echo 'for i in \`cat \$DBFILE\` ; do gzip -f \$PWD/\$i.sql ; done' >> /root/dumpmysql.sh
 chmod 700 /root/dumpmysql.sh
