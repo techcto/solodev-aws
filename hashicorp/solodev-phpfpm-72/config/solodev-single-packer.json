@@ -1,7 +1,7 @@
 {
     "variables": {
         "aws_region": "{{env `AWS_REGION`}}",
-        "aws_ami_name": "solodev-single-{{env `CODEBUILD_SOURCE_VERSION`}}"
+        "aws_ami_name": "solodev-single-v{{env `SOLODEV_RELEASE`}}"
     },
 
     "builders": [{
