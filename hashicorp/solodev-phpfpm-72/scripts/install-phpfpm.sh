@@ -17,7 +17,6 @@ php72-php-gd php72-php-mbstring php72-php-pear php72-php-soap php72-php-zip php7
 php72-php-pecl-mongodb php72-php-pecl-apcu php72-php-pecl-oauth php72-php-pecl-xdebug
 scl enable php72 'php -v'
 ln -s /usr/bin/php72 /usr/bin/php
-chkconfig php72-php-fpm on
 
 #Configure PHP-FPM conf for Apache (php72-php.conf)
 rm -Rf /etc/httpd/conf.d/php.conf
@@ -73,3 +72,7 @@ echo "opcache.memory_consumption=128" >>/etc/opt/remi/php72/php.ini
 echo "opcache.max_accelerated_files=4000" >>/etc/opt/remi/php72/php.ini
 echo "opcache_revalidate_freq = 240" >>/etc/opt/remi/php72/php.ini
 echo "zend_extension=/opt/remi/php72/root/usr/lib64/php/modules/ioncube_loader_lin_7.2.so" >>/etc/opt/remi/php72/php.ini
+
+#Start
+chkconfig php72-php-fpm on
+service php72-php-fpm start
