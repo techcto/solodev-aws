@@ -52,10 +52,11 @@ sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Cli
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 php /var/www/Solodev/core/update.php admin \$EC2_INSTANCE_ID >> /root/phpinstall.log
-#rm -f /root/init-solodev.sh
+rm -f /root/init-solodev.sh
 EOF
 
 chmod 700 /root/init-solodev.sh
+mkdir -p /run/php-fpm
 
 #Install Cloud Init script
 tee /etc/cloud/cloud.cfg.d/install.cfg <<EOF

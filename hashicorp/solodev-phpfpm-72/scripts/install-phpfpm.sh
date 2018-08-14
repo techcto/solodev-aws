@@ -21,6 +21,8 @@ ln -s /usr/bin/php72 /usr/bin/php
 #Configure PHP-FPM conf for Apache (php72-php.conf)
 rm -Rf /etc/httpd/conf.d/php.conf
 mkdir -p /run/php-fpm
+touch /run/php-fpm/tmp.txt
+
 echo '<Files ".user.ini">' >> /etc/httpd/conf.d/php72-php.conf
 echo 'Require all denied' >> /etc/httpd/conf.d/php72-php.conf
 echo '</Files>' >> /etc/httpd/conf.d/php72-php.conf
@@ -34,7 +36,7 @@ echo "</FilesMatch>" >> /etc/httpd/conf.d/php72-php.conf
 echo "security.limit_extensions = .php .stml" >> /etc/opt/remi/php72/php-fpm.d/www.conf
 echo "listen = /run/php-fpm/www.sock" >> /etc/opt/remi/php72/php-fpm.d/www.conf
 echo "listen.owner = apache" >> /etc/opt/remi/php72/php-fpm.d/www.conf
-echo "listen.mode = 0660" >> //etc/opt/remi/php72/php-fpm.d/www.conf
+echo "listen.mode = 0660" >> /etc/opt/remi/php72/php-fpm.d/www.conf
 
 #Install Composer
 curl -sS https://getcomposer.org/installer | php
