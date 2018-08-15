@@ -9,25 +9,25 @@ Text
 
 Single Server                                  | High Availability Cluster  
 -----------------------------------------------|-----------------------------------------------
-[![Feature Included](pages/images/single.jpg)] | [![Feature Included](pages/images/ha-cluster.jpg)]
+[![single-server](pages/images/single.jpg)] | [![high-availability-cluster](pages/images/ha-cluster.jpg)]
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
 
 Feature                            | Single                                            | HA Cluster  
 -----------------------------------|---------------------------------------------------|--------------------------------------------------
-Web Studio                         | [![Feature Included](pages/images/checkmark.jpg)] | [![Feature Included](pages/images/checkmark.jpg)]
-Modules + Forms                    | [![Feature Included](pages/images/checkmark.jpg)] | [![Feature Included](pages/images/checkmark.jpg)]
-Users + Permissions                | [![Feature Included](pages/images/checkmark.jpg)] | [![Feature Included](pages/images/checkmark.jpg)]
-Scheduling + Versioning            | [![Feature Included](pages/images/checkmark.jpg)] | [![Feature Included](pages/images/checkmark.jpg)]
-Landing Pages + Blog + Experiments | [![Feature Included](pages/images/checkmark.jpg)] | [![Feature Included](pages/images/checkmark.jpg)]
-Staging Server                     |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-CDN                                |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Load Balancing                     |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Workflows                          |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Integrations                       |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Tasks                              |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Theme Builder                      |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-API Access                         |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Payment Processing                 |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
-Dedicated Account Manager          |                                                   | [![Feature Included](pages/images/checkmark.jpg)]
+Web Studio                         | [![feature-included](pages/images/checkmark.jpg)] | [![feature-included](pages/images/checkmark.jpg)]
+Modules + Forms                    | [![feature-included](pages/images/checkmark.jpg)] | [![feature-included](pages/images/checkmark.jpg)]
+Users + Permissions                | [![feature-included](pages/images/checkmark.jpg)] | [![feature-included](pages/images/checkmark.jpg)]
+Scheduling + Versioning            | [![feature-included](pages/images/checkmark.jpg)] | [![feature-included](pages/images/checkmark.jpg)]
+Landing Pages + Blog + Experiments | [![feature-included](pages/images/checkmark.jpg)] | [![feature-included](pages/images/checkmark.jpg)]
+Staging Server                     |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+CDN                                |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Load Balancing                     |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Workflows                          |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Integrations                       |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Tasks                              |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Theme Builder                      |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+API Access                         |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Payment Processing                 |                                                   | [![feature-included](pages/images/checkmark.jpg)]
+Dedicated Account Manager          |                                                   | [![feature-included](pages/images/checkmark.jpg)]
