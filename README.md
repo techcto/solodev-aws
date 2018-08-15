@@ -37,7 +37,8 @@ API Access                                                                   |  
 
 ## Case Studies
 
-[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
+Single Server |Single Server |Single Server |
+:------------:|:------------:|:------------:|
 [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
 
 ## Support
