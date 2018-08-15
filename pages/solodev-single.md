@@ -8,16 +8,6 @@ Text
 Text
 
 ## Steps to Run
-# Solodev AWS on a High Availability Cluster
-Text
-
-## Overview
-Text
-
-## Prerequisites
-Text
-
-## Steps to Run
 To launch the entire stack and deploy on AWS, click on one of the ***Launch Stack*** links below or download the Master template and launch it locally.
 
 You can launch this CloudFormation stack, using your account, in the following AWS Regions:
@@ -32,12 +22,6 @@ You can launch this CloudFormation stack, using your account, in the following A
 | eu-west-2 |EU (London)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#) |
 | eu-central-1 |EU (Frankfurt)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#) |
 | ca-central-1 |Canada (Central)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#) |
-
-## Parameters
-Text
-
-
-
 
 ## Parameters
 Text
