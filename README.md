@@ -40,11 +40,11 @@ We’re launching our partners to new worlds of digital success. Read how in our
 
 [OneBlood](https://www.solodev.com/resources/case-studies/oneblood.stml) | [Seminole County Public Schools](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml) | [Miami Beach VCA](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
 :------------------------------:|:------------------------------:|:------------------------------:
-[![oneblood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![seminole-county-public-schools](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml) | [![mieami-beach-vca](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
+[![oneblood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![scps](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml) | [![mbvca](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
 
 [CNL Financial](https://www.solodev.com/resources/case-studies/cnl-financial.stml) | [Bridgeway Community Church](https://www.solodev.com/resources/case-studies/bridgeway-community-church.stml) | [Florida Dairy Farmers](https://www.solodev.com/resources/case-studies/florida-dairy-farmers.stml)       
 :------------------------------:|:------------------------------:|:------------------------------:
-[![cnl-fincancial](https://www.solodev.com/resources/case-studies/cnl-financial.stml) | [![bridgeway-community-church](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/bridgeway-community-church.stml) | [![florida-dairy-farmers](https://www.solodev.com/resources/case-studies/florida-dairy-farmers.stml)
+[![cnl](https://www.solodev.com/resources/case-studies/cnl-financial.stml) | [![bwcc](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/bridgeway-community-church.stml) | [![fdf](https://www.solodev.com/resources/case-studies/florida-dairy-farmers.stml)
 
 ## Support
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
