@@ -9,8 +9,6 @@ User-friendly for non-technical administrators and advanced enough for developer
 ## Built For AWS
 Focus on your business, not the technological infrastructure that powers it. Solodev and AWS free you up to focus on your customers, not the heavy lifting of racking, stacking and powering servers. Solodev is built on top of Amazon's rock solid infrastructure and makes use of: CloudFormation, CloudFront, EC2, S3 and much more.
 
----
-
 ## Launch Options
 For AWS users, see the two available launch options below: 
 
@@ -18,8 +16,6 @@ Single Server                                                                   
 :------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:
 [![single-server](http://via.placeholder.com/425x425)](pages/solodev-single.md) | [![high-availability-cluster](http://via.placeholder.com/425x425)](pages/solodev-ha-cluster.md)
 [![single-server-launch](pages/images/launch-btn.png)](pages/solodev-single.md) | [![ha-cluster-launch](pages/images/launch-btn.png)](pages/solodev-ha-cluster.md)
-
----
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
@@ -39,14 +35,9 @@ Tasks                                                                        |  
 Theme Builder                                                                |                                                                 | ![feature-included](pages/images/checkmark.png)
 API Access                                                                   |                                                                 | ![feature-included](pages/images/checkmark.png)
 
----
-
 ## Case Studies
-* [OneBlood](https://www.solodev.com/resources/case-studies/oneblood.stml)
-* [Seminole County Public Schools](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)
-* [Miami Beach VCA](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
 
----
+[![one-blood](https://www.solodev.com/resources/case-studies/oneblood.stml)](http://via.placeholder.com/425x425) | [![scps](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)](http://via.placeholder.com/425x425) | [![Miami Beach VCA](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)](http://via.placeholder.com/425x425)
 
 ## Support
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
