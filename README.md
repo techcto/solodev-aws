@@ -9,7 +9,7 @@ Text
 
 Single Server                             | High Availability Cluster  
 ------------------------------------------|------------------------------------------
-![single-server](http://via.placeholder.com/400x400) | ![high-availability-cluster](http://via.placeholder.com/350x350)
+![single-server](http://via.placeholder.com/425x425) | ![high-availability-cluster](http://via.placeholder.com/425x425)
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
