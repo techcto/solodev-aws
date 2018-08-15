@@ -1,11 +1,14 @@
 # Solodev AWS
-Text
+Solodev allows organizations to create amazing websites with unparalleled levels of security, scalability and total design freedom. Featuring enterprise web content and experience management, Solodev was developed to truly support the custom design requirements that customers demand - beautiful, engaging websites without compromise.
 
-## Overview
-Text
+## One Platform for Creators, Developers & Marketers
+User-friendly for non-technical administrators and advanced enough for developers, Solodev enables you to rapidly publish content and engage your audience. The wide range of enterprise features and functionality within Solodev empowers your organization to control every aspect of your online presence. With the Solodev, you can build virtually any type of custom web application suited to the exact needs of your business.
+
+## Built On and For AWS
+Focus on your business, not the technological infrastructure that powers it. Solodev and AWS free you up to focus on your customers, not the heavy lifting of racking, stacking and powering servers. Solodev is built on top of Amazon's rock solid infrastructure and makes use of: CloudFormation, CloudFront, EC2, S3 and much more.
 
 ## Launch Options
-Text 
+For AWS users, see the two available launch options below: 
 
 Single Server                                                                   | High Availability Cluster  
 :------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:
