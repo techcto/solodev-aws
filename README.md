@@ -7,15 +7,16 @@ Text
 ## Launch Options
 Text 
 
-Single Server                             | High Availability Cluster  
-------------------------------------------|------------------------------------------
+Single Server                                        | High Availability Cluster  
+:---------------------------------------------------:|:-----------------------------------------:
 ![single-server](http://via.placeholder.com/425x425) | ![high-availability-cluster](http://via.placeholder.com/425x425)
+Launch                                               | Launch
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
 
-Feature                            | Single                                           | HA Cluster  
------------------------------------|--------------------------------------------------|-------------------------------------------------
+Feature                            | Single                                          | HA Cluster  
+-----------------------------------|:-----------------------------------------------:|:-----------------------------------------------:
 Web Studio                         | ![feature-included](pages/images/checkmark.jpg) | ![feature-included](pages/images/checkmark.jpg)
 Modules + Forms                    | ![feature-included](pages/images/checkmark.jpg) | ![feature-included](pages/images/checkmark.jpg)
 Users + Permissions                | ![feature-included](pages/images/checkmark.jpg) | ![feature-included](pages/images/checkmark.jpg)
