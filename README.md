@@ -37,10 +37,8 @@ API Access                                                                   |  
 
 ## Case Studies
 
-:-------------------------------:|:-------------------------------:|:-------------------------------:
-[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![scps](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml) | [![scps](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)
-:-------------------------------:|:-------------------------------:|:-------------------------------:
-[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![scps](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml) | [![scps](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)
+[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
+[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
 
 ## Support
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
