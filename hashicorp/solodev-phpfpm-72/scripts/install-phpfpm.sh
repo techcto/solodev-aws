@@ -76,4 +76,3 @@ echo "zend_extension=/opt/remi/php72/root/usr/lib64/php/modules/ioncube_loader_l
 
 #Start
 chkconfig php72-php-fpm on
-# service php72-php-fpm start
