@@ -40,8 +40,6 @@ rm -Rf /tmp/mongouser.js
 mkdir -p /var/www/Solodev/clients/solodev/Vhosts		
 mkdir -p /var/www/Solodev/clients/solodev/s.Vhosts				
 mkdir -p /var/www/Solodev/clients/solodev/Main
-chmod -Rf 2770 /var/www/Solodev/clients
-chown -Rf apache.apache /var/www/Solodev/clients
 mv /var/www/Solodev/core/aws/Client_Settings.xml /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 # Configure CLIENT_SETTINGS.XML - set references to the database			
@@ -52,6 +50,8 @@ sed -i "s/REPLACE_WITH_DBUSER/solodevsql/g" /var/www/Solodev/clients/solodev/Cli
 sed -i "s/REPLACE_WITH_DBPASSWORD/\$EC2_INSTANCE_ID/g" /var/www/Solodev/clients/solodev/Client_Settings.xml
 
 php /var/www/Solodev/core/update.php admin \$EC2_INSTANCE_ID >> /root/phpinstall.log
+chmod -Rf 2770 /var/www/Solodev/clients
+chown -Rf apache.apache /var/www/Solodev/clients
 rm -f /root/init-solodev.sh
 EOF
 

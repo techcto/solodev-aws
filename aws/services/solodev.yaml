@@ -1,6 +1,6 @@
 Description: >
-    This template deploys a Solodev HA EC2 cluster to the provided VPC and subnets 
-    using an Auto Scaling Group
+    This template deploys Solodev to the provided VPC and subnets using an Auto Scaling Group.  
+    This template creates a Lambda function for the management of the CMS (Install, Update, Backup, Restore)
 
 Parameters:
 
@@ -32,6 +32,10 @@ Parameters:
         Default: ''
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
         Type: 'AWS::EC2::KeyPair::KeyName'
+
+    AMI:
+        Description: Build AMI - This should be passed in
+        Type: String
 
     Subnets:
         Description: Choose which subnets this cluster should be deployed to
@@ -113,34 +117,6 @@ Parameters:
         Description: The mount point for the EFS volume
         Type: String
         Default: "/var/www/Solodev/clients/solodev"
-
-Mappings:
-    #We use default AWS Amazon AMI and install docker.
-    #Amazon AMI: https://aws.amazon.com/amazon-linux-ami/
-
-    AWSRegionToAMI:
-        us-east-1:
-            AMI: ami-b70554c8
-        # us-east-2:
-        #     AMI: ami-8c122be9
-        # us-west-1:
-        #     AMI: ami-e0ba5c83
-        # us-west-2:
-        #     AMI: ami-a9d09ed1
-        # eu-west-1:
-        #     AMI: ami-466768ac
-        # eu-west-2:
-        #     AMI: ami-b8b45ddf
-        # eu-central-1:
-        #     AMI: ami-7c4f7097
-        # ca-central-1:
-        #     AMI: ami-0ee86a6a
-        # ap-northeast-1:
-        #     AMI: ami-c393d6a4
-        # ap-southeast-1:
-        #     AMI: ami-a88530cb
-        # ap-southeast-2:
-        #     AMI: ami-8af8ffe9
 
 Resources:
 
@@ -302,16 +278,17 @@ Resources:
         Type: AWS::EC2::SecurityGroup
         Properties: 
             VpcId: !Ref VPC
-            GroupDescription: Access to the hosts and the tasks/containers that run on them
+            GroupDescription: Access to the hosts
             SecurityGroupIngress:
                 - IpProtocol: tcp
                   FromPort: 0
                   ToPort: 65535
-                  CidrIp: "0.0.0.0/0"
-                - IpProtocol: udp
-                  FromPort: 0
-                  ToPort: 65535
-                  CidrIp: "0.0.0.0/0"
+                  #CidrIp: "0.0.0.0/0"
+                  SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
+                - IpProtocol: tcp
+                  FromPort: 22
+                  ToPort: 22
+                  CidrIp: !Ref SSHFrom
             Tags: 
                 - Key: Name
                   Value: !Sub ${EnvironmentName}-Hosts
@@ -319,7 +296,7 @@ Resources:
     EC2LaunchConfiguration:
         Type: AWS::AutoScaling::LaunchConfiguration
         Properties:
-            ImageId:  !FindInMap [AWSRegionToAMI, !Ref "AWS::Region", AMI]
+            ImageId:  !Ref AMI
             InstanceType: !Ref InstanceType
             SecurityGroups: 
                 - !Ref EC2HostSecurityGroup
