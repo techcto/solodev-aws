@@ -47,5 +47,6 @@ Version 8.8.1
 © 2018 Solodev. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Solodev. Commercial copying, lending, or selling is prohibited.
 
 Errors or corrections? Email us at help@solodev.com.
+
 ---
 Visit [solodev.com](https://www.solodev.com/) to learn more.
