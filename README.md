@@ -1,5 +1,5 @@
 # Solodev AWS
-Solodev allows organizations to create amazing websites with unparalleled levels of security, scalability and total design freedom. Featuring enterprise web content and experience management, Solodev was developed to truly support the custom design requirements that customers demand - beautiful, engaging websites without compromise.
+Solodev is the world's first on-demand web experience platform created by developers for developers. It empowers organizations to create amazing websites with unparalleled levels of security, scalability and total design freedom. Featuring enterprise web content and experience management, Solodev was developed to truly support the custom design requirements that customers demand - beautiful, engaging websites without compromise.
 
 ## One Platform for Creators, Developers & Marketers
 User-friendly for non-technical administrators and advanced enough for developers, Solodev enables you to rapidly publish content and engage your audience. The wide range of enterprise features and functionality within Solodev empowers your organization to control every aspect of your online presence. With the Solodev, you can build virtually any type of custom web application suited to the exact needs of your business.
@@ -41,5 +41,11 @@ Dedicated Account Manager                                                    |  
 * [Seminole County Public Schools](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)
 * [Miami Beach VCA](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
 
+---
+Version 8.8.1
+
+© 2018 Solodev. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Solodev. Commercial copying, lending, or selling is prohibited.
+
+Errors or corrections? Email us at help@solodev.com.
 ---
 Visit [solodev.com](https://www.solodev.com/) to learn more.
