@@ -1,4 +1,4 @@
-![single-server](http://via.placeholder.com/898x425)]
+![single-server](http://via.placeholder.com/898x425)
 
 # Solodev Web Experience Platform
 Solodev is the world's first on-demand web experience platform created by developers for developers. It empowers organizations to create amazing websites with unparalleled levels of security, scalability and total design freedom. Featuring enterprise web content and experience management, Solodev was developed to truly support the custom design requirements that customers demand - beautiful, engaging websites without compromise.
@@ -9,6 +9,8 @@ User-friendly for non-technical administrators and advanced enough for developer
 ## Built For AWS
 Focus on your business, not the technological infrastructure that powers it. Solodev and AWS free you up to focus on your customers, not the heavy lifting of racking, stacking and powering servers. Solodev is built on top of Amazon's rock solid infrastructure and makes use of: CloudFormation, CloudFront, EC2, S3 and much more.
 
+---
+
 ## Launch Options
 For AWS users, see the two available launch options below: 
 
@@ -16,6 +18,8 @@ Single Server                                                                   
 :------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:
 [![single-server](http://via.placeholder.com/425x425)](pages/solodev-single.md) | [![high-availability-cluster](http://via.placeholder.com/425x425)](pages/solodev-ha-cluster.md)
 [![single-server-launch](pages/images/launch-btn.png)](pages/solodev-single.md) | [![ha-cluster-launch](pages/images/launch-btn.png)](pages/solodev-ha-cluster.md)
+
+---
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
@@ -35,12 +39,17 @@ Tasks                                                                        |  
 Theme Builder                                                                |                                                                 | ![feature-included](pages/images/checkmark.png)
 API Access                                                                   |                                                                 | ![feature-included](pages/images/checkmark.png)
 
+---
+
 ## Case Studies
 * [OneBlood](https://www.solodev.com/resources/case-studies/oneblood.stml)
 * [Seminole County Public Schools](https://www.solodev.com/resources/case-studies/seminole-county-public-schools.stml)
 * [Miami Beach VCA](https://www.solodev.com/resources/case-studies/miami-beach-visitor-and-convention-authority.stml)
 
+---
+
 ## Support
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ---
 © 2018 Solodev. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Solodev. Commercial copying, lending, or selling is prohibited.
