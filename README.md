@@ -37,8 +37,12 @@ API Access                                                                   |  
 
 ## Case Studies
 
-Single Server |Single Server |Single Server |
-:------------:|:------------:|:------------:|
+OneBlood                        | Seminole County Public Schools | Miami Beach VCA        
+:------------------------------:|:------------------------------:|:------------------------------:
+[![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
+
+OneBlood                        | Seminole County Public Schools | Miami Beach VCA        
+:------------------------------:|:------------------------------:|:------------------------------:
 [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml) | [![one-blood](http://via.placeholder.com/425x425)](https://www.solodev.com/resources/case-studies/oneblood.stml)
 
 ## Support
