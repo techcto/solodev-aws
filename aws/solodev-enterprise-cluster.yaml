@@ -105,7 +105,6 @@ Parameters:
         Type: String
         MinLength: 1
         MaxLength: 41
-        AllowedPattern: ^[a-zA-Z0-9]*$
 
     DatabasePassword:
         Description: Database Password
@@ -115,7 +114,6 @@ Parameters:
         Type: String
         MinLength: 1
         MaxLength: 41
-        AllowedPattern: ^[a-zA-Z0-9]*$
 
     DevOpsFlavor:
         Description: Which DevOps tools would you like to use to manage auto scaling

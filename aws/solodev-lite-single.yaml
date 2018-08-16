@@ -51,35 +51,6 @@ Parameters:
         - '2048'
         - '4096'
 
-    AdminUser:
-        Description: CMS Admin User
-        Type: String
-
-    AdminPassword:
-        Description: CMS Admin Password
-        Type: String
-        NoEcho: true
-        Description: The solodev admin account password
-        Type: String
-        MinLength: 1
-        MaxLength: 41
-        AllowedPattern: ^[a-zA-Z0-9]*$
-
-    DatabasePassword:
-        Description: Database Password
-        Type: String
-        NoEcho: true
-        Description: The database root account password
-        Type: String
-        MinLength: 1
-        MaxLength: 41
-        AllowedPattern: ^[a-zA-Z0-9]*$
-
-    RestoreBucketName:
-        Default: ''
-        Description: Name of bucket containing files for restore
-        Type: String
-
     SSHFrom:
         Description: Lockdown SSH access to the bastion host
         Type: String
@@ -92,7 +63,7 @@ Parameters:
 Mappings:
     AWSRegionToAMI:
       us-east-1:
-        AMI: "ami-0184d5d2093920f30"
+        AMI: "ami-023a8b243d2763712"
       us-west-1:
         AMI: ""
       us-west-2:
@@ -154,8 +125,8 @@ Resources:
                     Principal: 
                         Service: 
                             - "ec2.amazonaws.com"
-                        Action: 
-                            - "sts:AssumeRole"
+                    Action: 
+                        - "sts:AssumeRole"
             Path: "/"
             Policies: 
                 - 
