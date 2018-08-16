@@ -4,6 +4,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 ## Overview
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
+*AWS Reference Architectures*
 ![AWS Diagram](http://via.placeholder.com/898x450)
 
 ## Prerequisites
@@ -28,6 +29,7 @@ eu-central-1                | EU (Frankfurt)             | [![cloudformation-lau
 ca-central-1                | Canada (Central)           | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
 
 ## Parameters
+*Parameters/Configuration Screenshot*
 ![Parameters](http://via.placeholder.com/898x450)
 
 Parameter             | Description
