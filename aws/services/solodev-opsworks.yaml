@@ -188,7 +188,7 @@ Resources:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
             GroupDescription: Allow inbound requests from the ELB to the OpsWorks instances
-            VPC: !Ref VPC
+            VpcId: !Ref VPC
             SecurityGroupIngress:
                 - 
                     IpProtocol: tcp
@@ -292,8 +292,8 @@ Resources:
                         Effect: Allow
                         Principal:
                             Service: opsworks.amazonaws.com
-                            Action:
-                                - 'sts:AssumeRole'
+                        Action:
+                            - 'sts:AssumeRole'
             Path: /
             Policies:
                 - 
