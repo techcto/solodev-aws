@@ -100,6 +100,22 @@ Parameters:
     AdminPassword:
         Description: CMS Admin Password
         Type: String
+        NoEcho: true
+        Description: The solodev admin account password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: ^[a-zA-Z0-9]*$
+
+    DatabasePassword:
+        Description: Database Password
+        Type: String
+        NoEcho: true
+        Description: The database root account password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: ^[a-zA-Z0-9]*$
 
     DevOpsFlavor:
         Description: Which DevOps tools would you like to use to manage auto scaling
@@ -145,6 +161,7 @@ Resources:
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                DatabasePassword: !Ref DatabasePassword
 
     EC2:
         Type: AWS::CloudFormation::Stack
