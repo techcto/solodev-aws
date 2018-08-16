@@ -145,7 +145,7 @@ Resources:
               - RDS
 Outputs:
 
-  RDSEndpointAddress:
+  DatabaseHost:
     Description: A reference to RDS
     Value: !GetAtt 
             - RDS

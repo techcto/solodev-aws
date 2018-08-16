@@ -1,5 +1,5 @@
 Description: >
-    This template deploys an Application Load Balancer
+    This template deploys a Application Load Balancer
 
 Parameters:
 

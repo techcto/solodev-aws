@@ -1,5 +1,5 @@
 Description: >
-    This template deploys an Classic Elastic Load Balancer
+    This template deploys a Classic Elastic Load Balancer
 
 Parameters:
 
