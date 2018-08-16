@@ -1,0 +1,102 @@
+Description: >
+    This template deploys an Classic Elastic Load Balancer
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VPC:
+        Type: AWS::EC2::VPC::Id
+        Description: Choose which VPC the Application Load Balancer should be deployed to
+
+    Subnets:
+        Description: Choose which subnets the Application Load Balancer should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
+Resources:
+
+  LoadBalancerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow inbound access to the ELB
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Join 
+            - '-'
+            - - !Ref EnvironmentName
+              - LoadBalancerSecurityGroup
+
+  LoadBalancer:
+    Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
+    Properties:
+      CrossZone: 'true'
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+      Subnets: !Ref Subnets
+      Listeners:
+        - LoadBalancerPort: '80'
+          InstancePort: !Ref WebServerPort
+          Protocol: HTTP
+          PolicyNames:
+            - !Join 
+              - '-'
+              - - !Ref EnvironmentName
+                - StickyLoadBalancer
+      HealthCheck:
+        Target: !Join 
+          - ''
+          - - 'HTTP:'
+            - !Ref WebServerPort
+            - /
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '2'
+        Interval: '30'
+        Timeout: '25'
+      LBCookieStickinessPolicy:
+        - PolicyName: !Join 
+            - '-'
+            - - !Ref EnvironmentName
+              - StickyLoadBalancer
+      Tags:
+        - Key: Name
+          Value: !Join 
+            - '-'
+            - - !Ref EnvironmentName
+              - ElasticLoadBalancer
+
+Outputs:
+
+    LoadBalancer:
+        Description: A reference to the Application Load Balancer
+        Value: !Ref LoadBalancer
+
+    LoadBalancerUrl:
+        Description: The URL of the ELB
+        Value: !GetAtt LoadBalancer.DNSName
+
+    LoadBalancerSecurityGroup:
+        Description: A reference to LoadBalancerSecurityGroup
+        Value: !Ref LoadBalancerSecurityGroup 
+
+    

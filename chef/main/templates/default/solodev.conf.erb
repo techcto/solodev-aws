@@ -1,0 +1,19 @@
+<Directory "<%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>">
+Options -Indexes
+Options FollowSymLinks
+#AllowOverride None
+AllowOverride All
+Order allow,deny
+Allow from all
+</Directory>
+
+<VirtualHost *:80>
+Alias /core <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/core/html_core
+Alias /CK <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/core/CK
+Alias /api <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/core/api
+ServerName <%= node[:install][:StackName] %>.<%= node[:install][:HostedZoneName] %>
+DocumentRoot <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/core/<%= node[:install][:CMSDir] %>/www
+</VirtualHost>
+
+IncludeOptional <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/clients/<%= node[:install][:client_name] %>/Vhosts/*.*
+IncludeOptional <%= node[:install][:document_root] %>/<%= node[:install][:software_name] %>/clients/<%= node[:install][:client_name] %>/s.Vhosts/*.*

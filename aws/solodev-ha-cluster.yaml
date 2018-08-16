@@ -18,7 +18,7 @@ Metadata:
           - CertificateArn
       - 
         Label: 
-          default: "Amazon EC2 Configuration"
+          default: "Server Configuration"
         Parameters: 
           - InstanceType
           - KeyName
@@ -26,7 +26,11 @@ Metadata:
         Label: 
           default: "Solodev Configuration"
         Parameters: 
-          - AMI
+            - AdminUser
+            - AdminPassword
+            - DevOpsFlavor
+            - RestoreBucketName
+            - AMI
     ParameterLabels: 
       VPCID: 
         default: "Which VPC should this be deployed to?"
@@ -89,15 +93,35 @@ Parameters:
         Default: ''
         Type: String
 
+    AdminUser:
+        Description: CMS Admin User
+        Type: String
+
+    AdminPassword:
+        Description: CMS Admin Password
+        Type: String
+
+    DevOpsFlavor:
+        Description: Which DevOps tools would you like to use to manage auto scaling
+        Type: String
+        Default: Opsworks
+        AllowedValues: [Opsworks, AutoScalingGroup]
+
+    RestoreBucketName:
+        Default: ''
+        Description: Name of bucket containing files for restore
+        Type: String
+
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    UseOpsworks: !Equals [ !Ref DevOpsFlavor, "Opsworks" ]
 
 Resources:
 
-    ALB:
+    LB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
+            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml"]
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
@@ -112,10 +136,20 @@ Resources:
                 VPC: !Ref VPCID
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
+    RDS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml
+            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml"]
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
@@ -126,40 +160,18 @@ Resources:
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-
-    RDS:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPCID
-                EC2HostSecurityGroup: !GetAtt EC2.Outputs.EC2HostSecurityGroup
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-
-    SOLODEV:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/lambda/configure-solodev.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                AutoScalingGroup: !GetAtt EC2.Outputs.AutoScalingGroup
-                KeyName: !Ref KeyName
-                InstanceUser: 'solodev-user'
-                FQDN: !Ref FQDN
-                SolodevBucket: !GetAtt EC2.Outputs.SolodevBucket
+                LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
+                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
                 DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
-                MongoHost: "instance['private_ip']"
-                LambdaExecutionRole: !GetAtt EC2.Outputs.LambdaExecutionRole
+                DeploymentType: "SolodevProduction"
+                RestoreBucketName: ""
 
 Outputs:
 
     AdminUrl: 
-        Description: The URL endpoint for ALB load balancer. You should create a CNAME or alias to this name.
-        Value: !Join ["", [ "https://", !GetAtt ALB.Outputs.LoadBalancerUrl, "/" ]]
+        Description: The URL endpoint for load balancer. You should create a CNAME or alias to this name.
+        Value: !Join ["", [ "https://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]

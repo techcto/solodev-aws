@@ -1,0 +1,9 @@
+# MongoDB config
+dbpath=/mongo/data
+logpath=/mongo/log/mongod.log
+pidfilepath = /var/run/mongodb/mongod.pid
+logappend=true
+replSet=<%= node[:install][:StackName] %>
+fork=true
+# Enable webserver REST
+rest = true

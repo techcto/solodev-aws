@@ -42,7 +42,7 @@ Parameters:
         Type: List<AWS::EC2::Subnet::Id>
 
     LoadBalancer:
-        Description: The VPC that the ECS cluster is deployed to
+        Description: The load balancer for the cluster hosts
         Type: String
 
     LoadBalancerSecurityGroup:
@@ -117,6 +117,27 @@ Parameters:
         Description: The mount point for the EFS volume
         Type: String
         Default: "/var/www/Solodev/clients/solodev"
+
+    DatabaseHost:
+        Type: String
+        Description: The database host
+
+    DatabaseName:
+        Type: String
+        Description: The database name
+
+    DatabaseUsername:
+        Type: String
+        Description: The database user name
+
+    DatabasePassword:
+        Type: String
+        Description: The database user password
+
+    RestoreBucketName:
+        Default: ''
+        Description: Name of bucket containing files for restore
+        Type: String
 
 Conditions:
     UseSSL: !Equals [ !Ref CertificateArn, "" ]
@@ -351,20 +372,10 @@ Resources:
                                     - /etc/cfn/cfn-hup.conf
                                     - /etc/cfn/hooks.d/cfn-auto-reloader.conf
                     commands:
-                        1-init-swap:
-                            command: !Sub |
-                                touch /root/mkswap.txt
-                                /bin/dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
-                                chown root:root /mnt/swapfile
-                                chmod 600 /mnt/swapfile
-                                /sbin/mkswap /mnt/swapfile
-                                /sbin/swapon /mnt/swapfile
-                        2-add-solodev-user:
+                        1-add-solodev-user:
                             command: !Sub |
                                 adduser solodev-user
                                 usermod -a -G wheel solodev-user
-                        3-add-solodev-user-keys:
-                            command: !Sub |
                                 cd /home/solodev-user
                                 mkdir .ssh
                                 chmod 700 .ssh
@@ -536,6 +547,23 @@ Resources:
                 - TargetGroupArn: !Ref TargetGroup
                   Type: forward
 
+    ConfigureSolodevLambda:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/lambda/configure-solodev.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                AutoScalingGroup: !Ref EC2AutoScalingGroup
+                KeyName: !Ref KeyName
+                InstanceUser: 'solodev-user'
+                FQDN: !Ref FQDN
+                SolodevBucket: !Ref SolodevBucket
+                DatabaseName: !Ref DatabaseName
+                DatabaseHost: !Ref DatabaseHost
+                DatabaseUsername: !Ref DatabaseUsername
+                DatabasePassword: !Ref DatabasePassword
+                MongoHost: "instance['private_ip']"
+                LambdaExecutionRole: !Ref LambdaExecutionRole
 
 Outputs:
 

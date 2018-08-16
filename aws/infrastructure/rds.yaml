@@ -11,8 +11,8 @@ Parameters:
     Type: 'AWS::EC2::VPC::Id'
     Description: Choose which VPC the Application Load Balancer should be deployed to
 
-  EC2HostSecurityGroup:
-    Description: Select the EC2 Host Security Group to use to connect to RDS
+  LoadBalancerSecurityGroup:
+    Description: Select the Load Balancer Security Group to use for the cluster hosts
     Type: AWS::EC2::SecurityGroup::Id
 
   Subnets:
@@ -106,7 +106,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
-          SourceSecurityGroupId: !Ref EC2HostSecurityGroup
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
       Tags:
         - Key: Name
           Value: !Join 
