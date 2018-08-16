@@ -8,35 +8,33 @@ User-friendly for non-technical administrators and advanced enough for developer
 ## Built For AWS
 Focus on your business, not the technological infrastructure that powers it. Solodev and AWS free you up to focus on your customers, not the heavy lifting of racking, stacking and powering servers. Solodev is built on top of Amazon's rock solid infrastructure and makes use of: CloudFormation, CloudFront, EC2, S3 and much more.
 
-Solodev deployed on AWS (shown below) uses a set of YAML templates including [Amazon Virtual Private Cloud (Amazon VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html), [Amazon Elastic Compute Cloud (Amazon EC2)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html), [Auto Scaling](http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html), [Elastic Load Balancing (Application Load Balancer)](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html), [Amazon Relational Database Service (Amazon RDS)](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html), [Amazon ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/WhatIs.html), [Amazon Elastic File System (Amazon EFS)](http://docs.aws.amazon.com/efs/latest/ug/whatisefs.html), [Amazon CloudFront](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html), [Amazon Route 53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html), [Amazon Certificate Manager (Amazon ACM)](http://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html)  with [AWS CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html).
-
-![AWS Diagram](pages/images/solodev-aws.jpg)
+Solodev deployed on AWS uses a set of YAML templates including [Amazon Virtual Private Cloud (Amazon VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html), [Amazon Elastic Compute Cloud (Amazon EC2)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html), [Auto Scaling](http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html), [Elastic Load Balancing (Application Load Balancer)](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html), [Amazon Relational Database Service (Amazon RDS)](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html), [Amazon ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/WhatIs.html), [Amazon Elastic File System (Amazon EFS)](http://docs.aws.amazon.com/efs/latest/ug/whatisefs.html), [Amazon CloudFront](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html), [Amazon Route 53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html), [Amazon Certificate Manager (Amazon ACM)](http://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html)  with [AWS CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html).
 
 ## Launch Options
 For AWS users, see the two available launch options below: 
 
 Single Server                                                                   | High Availability Cluster  
 :------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:
-[![single-server](pages/images/launch-single.jpg)](pages/solodev-single.md) | [![high-availability-cluster](pages/images/launch-cluster.jpg)](pages/solodev-ha-cluster.md)
+[![single-server](pages/images/launch-single.jpg)](pages/solodev-single.md)     | [![high-availability-cluster](pages/images/launch-cluster.jpg)](pages/solodev-ha-cluster.md)
 [![single-server-launch](pages/images/launch-btn.png)](pages/solodev-single.md) | [![ha-cluster-launch](pages/images/launch-btn.png)](pages/solodev-ha-cluster.md)
 
 ## Features
 Enterprise Website Software, Hosting & Support. It's all here in the cloud.
 
------------------------------- Feature  ------------------------------------ | -------- Single --------                                        | ------- HA Cluster ------  
------------------------------------------------------------------------------|:---------------------------------------------------------------:|:---------------------------------------------------------------:
-Web Studio                                                                   | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
-Modules + Forms                                                              | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
-Users + Permissions                                                          | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
-Scheduling + Versioning                                                      | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
-Landing Pages + Blog + Experiments                                           | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
-Staging Server                                                               |                                                                 | ![feature-included](pages/images/checkmark.png)
-Load Balancing                                                               |                                                                 | ![feature-included](pages/images/checkmark.png)
-Workflows                                                                    |                                                                 | ![feature-included](pages/images/checkmark.png)
-Integrations                                                                 |                                                                 | ![feature-included](pages/images/checkmark.png)
-Tasks                                                                        |                                                                 | ![feature-included](pages/images/checkmark.png)
-Theme Builder                                                                |                                                                 | ![feature-included](pages/images/checkmark.png)
-API Access                                                                   |                                                                 | ![feature-included](pages/images/checkmark.png)
+------------------------------ Feature  ------------------------------ | -------- Single --------                                        | ------- HA Cluster ------  
+-----------------------------------------------------------------------|:---------------------------------------------------------------:|:---------------------------------------------------------------:
+Web Studio                                                             | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
+Modules + Forms                                                        | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
+Users + Permissions                                                    | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
+Scheduling + Versioning                                                | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
+Landing Pages + Blog + Experiments                                     | ![feature-included](pages/images/checkmark.png)                 | ![feature-included](pages/images/checkmark.png)
+Staging Server                                                         |                                                                 | ![feature-included](pages/images/checkmark.png)
+Load Balancing                                                         |                                                                 | ![feature-included](pages/images/checkmark.png)
+Workflows                                                              |                                                                 | ![feature-included](pages/images/checkmark.png)
+Integrations                                                           |                                                                 | ![feature-included](pages/images/checkmark.png)
+Tasks                                                                  |                                                                 | ![feature-included](pages/images/checkmark.png)
+Theme Builder                                                          |                                                                 | ![feature-included](pages/images/checkmark.png)
+API Access                                                             |                                                                 | ![feature-included](pages/images/checkmark.png)
 
 ## Case Studies
 We’re launching our partners to new worlds of digital success. Read how in our mission case studies. [View all case studies...](https://www.solodev.com/resources/case-studies/)
