@@ -19,5 +19,11 @@ mkdir -p /mongo/data/journal /mongo/log
 chown -Rf mongod:mongod /mongo
 chown -Rv mongod:mongod /var/lib/mongo
 
+# #Init Drive
+# mkfs.ext4 /dev/xvdb
+# echo '/dev/sdm /mongo ext4 defaults,auto,noexec 0 0' >> /etc/fstab
+# mount -a
+# blockdev --setra 32 /dev/sdm
+
 chkconfig mongod on
 service mongod start

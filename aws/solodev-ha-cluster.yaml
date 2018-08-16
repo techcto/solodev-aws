@@ -34,7 +34,7 @@ Metadata:
 Mappings:
   AWSRegionToAMI:
     us-east-1:
-      AMI: "ami-07e6efa19d61bf75e"
+      AMI: "ami-0184d5d2093920f30"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -91,7 +91,6 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
-    UseSSL: !Equals [ !Ref CertificateArn, "" ]
 
 Resources:
 
@@ -126,7 +125,7 @@ Resources:
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
-                CertificateArn: !If [UseSSL, !Ref CertificateArn, ""]
+                CertificateArn: !Ref CertificateArn
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]

@@ -67,7 +67,6 @@
                 "ls -al /tmp",
                 "ls -al /tmp/Solodev",
                 "sudo chmod 700 /tmp/scripts/*",
-                "sudo /tmp/scripts/mount-drives.sh",
                 "sudo /tmp/scripts/install-base.sh",
                 "sudo /tmp/scripts/install-httpd.sh",
                 "sudo /tmp/scripts/install-phpfpm.sh",

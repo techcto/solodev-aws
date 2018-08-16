@@ -118,6 +118,9 @@ Parameters:
         Type: String
         Default: "/var/www/Solodev/clients/solodev"
 
+Conditions:
+    UseSSL: !Equals [ !Ref CertificateArn, "" ]
+
 Resources:
 
     SolodevBucket:
@@ -365,8 +368,8 @@ Resources:
                                 cd /home/solodev-user
                                 mkdir .ssh
                                 chmod 700 .ssh
-                                echo "${ExecuteRkeRunner.private}"
-                                echo "${ExecuteRkeRunner.private}" > /tmp/private.pem
+                                echo "${ExecuteInitSolodev.private}"
+                                echo "${ExecuteInitSolodev.private}" > /tmp/private.pem
                                 chmod 600 /tmp/private.pem
                                 echo "Convert SSL key file to SSH"
                                 (ssh-keygen -y -P "x" -f /tmp/private.pem | sed -n '1p' | sed '$s/$/ solodev-user/') > .ssh/authorized_keys
@@ -392,52 +395,13 @@ Resources:
                                 logpath=/mongo/log/mongod.log
                                 pidfilepath = /var/run/mongodb/mongod.pid
                                 logappend=true
-                                replSet=<%= node[:install][:StackName] %>
+                                replSet=${AWS::StackName}
                                 fork=true
                                 # Enable webserver REST
                                 rest = true
                             mode: "000644"
                             owner: "root"
-                            group: "root"
-                        /etc/yum.repos.d/10gen.repo
-                            content: !Sub | 
-                                [10gen]
-                                name=10gen Repository
-                                baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
-                                gpgcheck=0
-                                enabled=1
-                            mode: "000644"
-                            owner: "root" 
-                            group: "root"
-                        /etc/security/limits.conf
-                            content: !Sub | 
-                                mongod  soft  nofile  64000
-                                mongod  soft  nproc 32000
-                            mode: "000644"
-                            owner: "root"
-                            group: "root"   
-                    commands:
-                        1-install-mongo:
-                            command: !Sub |
-                                yum install mongo-10gen mongo-10gen-server mongodb-org-shell -y
-                                mongo --eval "db.getSiblingDB('admin').shutdownServer()"
-                                echo 'echo 300 > /proc/sys/net/ipv4/tcp_keepalive_time' >> /etc/rc.local
-                                echo 'touch /var/lock/subsys/local' >> /etc/rc.local
-                        2-init-mongo-volume:
-                            command: !Sub |
-                                mkfs.ext4 /dev/sdm
-                                mkdir -p /mongo
-                                echo '/dev/sdm /mongo ext4 defaults,auto,noexec 0 0' >> /etc/fstab
-                                mount -a
-                                blockdev --setra 32 /dev/sdm
-                        3-start-mongo:
-                            command: !Sub |
-                                mkdir -p /mongo/data/journal /mongo/log
-                                chown -Rf mongod:mongod /mongo
-                                chown -Rv mongod:mongod /var/lib/mongo
-                                chkconfig mongod on
-                                service mongod start
-                                service mongod status
+                            group: "root" 
     EC2Role:
         Type: AWS::IAM::Role
         Properties: 
@@ -500,24 +464,36 @@ Resources:
         Type: AWS::ElasticLoadBalancingV2::TargetGroup
         Properties:
             VpcId: !Ref VPC
-            Port: 443
-            Protocol: HTTPS
+            Port:
+                !If
+                - UseSSL
+                - 443
+                - 80
+            Protocol:
+                !If
+                - UseSSL
+                - HTTPS
+                - HTTP
             Matcher: 
                 HttpCode: 200-299
             HealthCheckIntervalSeconds: 60
             HealthCheckPath: /test.php
-            HealthCheckProtocol: HTTP
-            HealthCheckPort: 80
+            HealthCheckProtocol: 
+                !If
+                - UseSSL
+                - HTTPS
+                - HTTP
+            HealthCheckPort:
+                !If
+                - UseSSL
+                - 443
+                - 80
             HealthCheckTimeoutSeconds: 30
             TargetGroupAttributes:
-                - Key: deregistration_delay.timeout_seconds
-                  Value: '60'
                 - Key: stickiness.type
                   Value: lb_cookie
                 - Key: stickiness.enabled
                   Value: 'true'
-                - Key: stickiness.lb_cookie.duration_seconds
-                  Value: '1860'
             Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
@@ -527,13 +503,25 @@ Resources:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
         Properties:
             Certificates: 
-                - CertificateArn: !Ref CertificateArn
+                - CertificateArn: 
+                    - !If
+                    - UseSSL
+                    - CertificateArn: !Ref CertificateArn
+                    - !Ref AWS::NoValue
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
             LoadBalancerArn: !Ref LoadBalancer
-            Port: '443'
-            Protocol: HTTPS
+            Port: 
+                !If
+                - UseSSL
+                - 443
+                - 80
+            Protocol:
+                !If
+                - UseSSL
+                - HTTPS
+                - HTTP
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
