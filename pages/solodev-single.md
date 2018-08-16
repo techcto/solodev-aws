@@ -16,7 +16,7 @@ To launch the entire stack and deploy on AWS, click on one of the ***Launch Stac
 
 You can launch this CloudFormation stack, using your account, in the following AWS Regions:
 
------ AWS Region Code ----- | ---------- Name ---------- | ---------- Launch ----------
+AWS Region Code             | Name                       | Launch 
 ----------------------------|----------------------------|:-------------------------:
 us-east-1                   | US East (N. Virginia)      | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=solodev-aws&templateURL=https://s3.amazonaws.com/techcto-datacenter/aws/solodev-aws-single.yaml)
 us-east-2                   | US East (Ohio)             | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
@@ -30,7 +30,7 @@ ca-central-1                | Canada (Central)           | [![cloudformation-lau
 ## Parameters
 ![Parameters](http://via.placeholder.com/898x450)
 
------ Parameter ----- | ----- Description -----
+Parameter             | Description
 --------------------- | ---------------------
 Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
