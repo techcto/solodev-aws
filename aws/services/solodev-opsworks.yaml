@@ -119,6 +119,11 @@ Parameters:
         - '2048'
         - '4096'
 
+    EFS:
+        Description: Choose which EFS this ECS cluster should use for filestorage
+        Type: String
+        Default: ""
+
     DatabaseHost:
       Type: String
       Description: The database host
@@ -182,423 +187,410 @@ Resources:
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
-        GroupDescription: Allow inbound requests from the ELB to the OpsWorks instances
-        VPC: !Ref VPC
-        SecurityGroupIngress:
-            - IpProtocol: tcp
-            FromPort: '80'
-            ToPort: '80'
-            SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '443'
-            ToPort: '443'
-            SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
-        Tags:
-            - Key: Name
-            Value: !Join 
-                - '-'
-                - - !Ref 'AWS::StackName'
-                - WebServerSecurityGroup
+            GroupDescription: Allow inbound requests from the ELB to the OpsWorks instances
+            VPC: !Ref VPC
+            SecurityGroupIngress:
+                - 
+                    IpProtocol: tcp
+                    FromPort: '80'
+                    ToPort: '80'
+                    SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '443'
+                    ToPort: '443'
+                    SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+            Tags:
+                - 
+                    Key: Name
+                    Value: !Join ['-', [!Ref 'EnvironmentName', 'WebServerSecurityGroup']]
 
     ControlServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
-        GroupDescription: Allow inbound requests from the ELB to the OpsWorks instances
-        VPC: !Ref VPC
-        SecurityGroupIngress:
-            - IpProtocol: tcp
-            FromPort: '80'
-            ToPort: '80'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '443'
-            ToPort: '443'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '27017'
-            ToPort: '27017'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '28017'
-            ToPort: '28017'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '38465'
-            ToPort: '38468'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '24007'
-            ToPort: '24107'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
-            - IpProtocol: tcp
-            FromPort: '111'
-            ToPort: '111'
-            SourceSecurityGroupId: !Ref WebServerSecurityGroup
+            GroupDescription: Allow inbound requests from the ELB to the OpsWorks instances
+            VPC: !Ref VPC
+            SecurityGroupIngress:
+                - 
+                    IpProtocol: tcp
+                    FromPort: '80'
+                    ToPort: '80'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '443'
+                    ToPort: '443'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '27017'
+                    ToPort: '27017'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '28017'
+                    ToPort: '28017'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '38465'
+                    ToPort: '38468'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '24007'
+                    ToPort: '24107'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
+                - 
+                    IpProtocol: tcp
+                    FromPort: '111'
+                    ToPort: '111'
+                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
 
     BackupUser:
         Type: 'AWS::IAM::User'
         Properties:
-        Path: /
-        Policies:
-            - PolicyName: root
-            PolicyDocument:
-                Statement:
-                - Effect: Allow
-                    Action:
-                    - 'cloudformation:DescribeStackResource'
-                    - 's3:GetObject'
-                    Resource: '*'
-            - PolicyName: backupdef
-            PolicyDocument:
-                Statement:
-                - Effect: Allow
-                    Action: 's3:ListAllMyBuckets'
-                    Resource: 'arn:aws:s3:::*'
-                - Effect: Allow
-                    Action:
-                    - 's3:*'
-                    Resource:
-                    - !Join 
-                        - ''
-                        - - 'arn:aws:s3:::'
-                        - !Join 
-                            - '-'
-                            - - !Ref ClientName
-                            - !Ref 'AWS::StackName'
-                    - !Join 
-                        - ''
-                        - - 'arn:aws:s3:::'
-                        - !Join 
-                            - '-'
-                            - - !Ref ClientName
-                            - !Ref 'AWS::StackName'
-                        - /*
-                - Effect: Allow
-                    Action:
-                    - 's3:*'
-                    Resource:
-                    - !Join 
-                        - ''
-                        - - 'arn:aws:s3:::'
-                        - !Join 
-                            - '-'
-                            - - !Ref ClientName
-                            - !Ref 'AWS::StackName'
-                            - backup
-                    - !Join 
-                        - ''
-                        - - 'arn:aws:s3:::'
-                        - !Join 
-                            - '-'
-                            - - !Ref ClientName
-                            - !Ref 'AWS::StackName'
-                            - backup
-                        - /*
+            Path: /
+            Policies:
+                - 
+                    PolicyName: root
+                    PolicyDocument:
+                        Statement:
+                            - 
+                                Effect: Allow
+                                Action:
+                                    - 'cloudformation:DescribeStackResource'
+                                Resource: '*'
+                - 
+                    PolicyName: backupdef
+                    PolicyDocument:
+                        Statement: 
+                            - 
+                                Action: 
+                                    - 's3:*'
+                                Effect: "Allow"
+                                Resource: 
+                                    Fn::Join: 
+                                    - ""
+                                    - 
+                                        - "arn:aws:s3:::"
+                                        - !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
+                                        - "/*"
+                                Principal: "*"
 
     BackupUserKeys:
         Type: 'AWS::IAM::AccessKey'
         Properties:
-        UserName: !Ref BackupUser
+            UserName: !Ref BackupUser
 
     OpsWorksServiceRole:
         Type: 'AWS::IAM::Role'
         Properties:
-        AssumeRolePolicyDocument:
-            Statement:
-            - Effect: Allow
-                Principal:
-                Service: opsworks.amazonaws.com
-                Action:
-                - 'sts:AssumeRole'
-        Path: /
-        Policies:
-            - PolicyName: opsworks-service
-            PolicyDocument:
+            AssumeRolePolicyDocument:
                 Statement:
-                - Effect: Allow
-                    Action:
-                    - 'rds:*'
-                    - 'ec2:*'
-                    - 'iam:PassRole'
-                    - 'cloudwatch:GetMetricStatistics'
-                    - 'elasticloadbalancing:*'
-                    Resource: '*'
+                    - 
+                        Effect: Allow
+                        Principal:
+                            Service: opsworks.amazonaws.com
+                            Action:
+                                - 'sts:AssumeRole'
+            Path: /
+            Policies:
+                - 
+                    PolicyName: opsworks-service
+                    PolicyDocument:
+                        Statement:
+                            - 
+                                Effect: Allow
+                                Action:
+                                    - 'rds:*'
+                                    - 'ec2:*'
+                                    - 'iam:PassRole'
+                                    - 'cloudwatch:GetMetricStatistics'
+                                    - 'elasticloadbalancing:*'
+                                Resource: '*'
 
     SolodevInstanceRole:
         Type: 'AWS::IAM::Role'
         Properties:
-        AssumeRolePolicyDocument:
-            Statement:
-            - Effect: Allow
-                Principal:
-                Service:
-                    - ec2.amazonaws.com
-                Action:
-                - 'sts:AssumeRole'
-        Path: /
-        Policies:
-            - PolicyName: PowerUserPolicy
-            PolicyDocument:
+            AssumeRolePolicyDocument:
                 Statement:
-                - Sid: PowerUserStmt
-                    Effect: Allow
-                    NotAction: 'iam:*'
-                    Resource: '*'
+                    - 
+                        Effect: Allow
+                        Principal:
+                            Service:
+                                - ec2.amazonaws.com
+                        Action:
+                            - 'sts:AssumeRole'
+            Path: /
+            Policies:
+                - 
+                    PolicyName: PowerUserPolicy
+                    PolicyDocument:
+                        Statement:
+                        - Sid: PowerUserStmt
+                        Effect: Allow
+                        NotAction: 'iam:*'
+                        Resource: '*'
 
     SolodevInstanceProfile:
         Type: 'AWS::IAM::InstanceProfile'
         Properties:
-        Path: /
-        Roles:
-            - !Ref SolodevInstanceRole
+            Path: /
+            Roles:
+                - !Ref SolodevInstanceRole
 
     SolodevApp:
         Type: 'AWS::OpsWorks::App'
         Properties:
-        StackId: !Ref SolodevStack
-        Name: Solodev
-        Type: other
-        Attributes:
-            DocumentRoot: ' '
+            StackId: !Ref SolodevStack
+            Name: Solodev
+            Type: other
+            Attributes:
+                DocumentRoot: ' '
 
     SolodevStack:
         Type: 'AWS::OpsWorks::Stack'
         Properties:
-        Name: !Ref 'AWS::StackName'
-        ConfigurationManager:
-            Name: Chef
-            Version: '12'
-        ServiceRoleArn: !GetAtt 
-            - OpsWorksServiceRole
-            - Arn
-        DefaultInstanceProfileArn: !GetAtt 
-            - SolodevInstanceProfile
-            - Arn
-        VPC: !Ref VPC
-        DefaultSubnetId: !Select 
-            - '0'
-            - !Ref Subnets
-        UseCustomCookbooks: 'true'
-        CustomCookbooksSource:
-            Revision: master
-            Type: s3
-            Url: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
-        CustomJson:
-            install:
-                StackName: !Ref 'EnvironmentName'
-                HostedZoneName: !Ref FQDN
-                Region: !Ref 'AWS::Region'
-                VolumeName: solodev
-                ReplicaNum: 2
-                document_root: /var/www
-                control_root: /var/www/Solodev/clients/solodev
-                mongo_nodes: !Ref DeploymentType
-                software_name: Solodev
-                client_name: solodev
-                apache_conf_dir: /etc/httpd/conf.d
-                AWSAccessKeyId: !Ref BackupUserKeys
-                AWSSecretKey: !GetAtt 
-                    - BackupUserKeys
-                    - SecretAccessKey
-                InstallBucketName: solodev-install
-                RestoreBucketName: !Ref RestoreBucketName
-                BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
-                CMSDir: solodevX
-                DBName: !Ref DatabaseName
-                DBHOST: !Ref DatabaseHost
-                DBUSER: !Ref DatabaseUsername
-                DBPASSWORD: !Ref DatabasePassword
-                ADMINUSER: !Ref AdminUser
-                ADMINPASSWORD: !Ref AdminPassword
-                EFSHOST: !Ref EFS
-                THEME: ''
-                WEBSITE: ''
+            Name: !Ref 'EnvironmentName'
+            ConfigurationManager:
+                Name: Chef
+                Version: '12'
+            ServiceRoleArn: !GetAtt 
+                - OpsWorksServiceRole
+                - Arn
+            DefaultInstanceProfileArn: !GetAtt 
+                - SolodevInstanceProfile
+                - Arn
+            VPC: !Ref VPC
+            DefaultSubnetId: !Select 
+                - '0'
+                - !Ref Subnets
+            UseCustomCookbooks: 'true'
+            CustomCookbooksSource:
+                Revision: master
+                Type: s3
+                Url: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
+            CustomJson:
+                install:
+                    StackName: !Ref 'EnvironmentName'
+                    HostedZoneName: !Ref FQDN
+                    Region: !Ref 'AWS::Region'
+                    VolumeName: solodev
+                    ReplicaNum: 2
+                    document_root: /var/www
+                    control_root: /var/www/Solodev/clients/solodev
+                    mongo_nodes: !Ref DeploymentType
+                    software_name: Solodev
+                    client_name: solodev
+                    apache_conf_dir: /etc/httpd/conf.d
+                    AWSAccessKeyId: !Ref BackupUserKeys
+                    AWSSecretKey: !GetAtt 
+                        - BackupUserKeys
+                        - SecretAccessKey
+                    InstallBucketName: solodev-install
+                    RestoreBucketName: !Ref RestoreBucketName
+                    BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
+                    CMSDir: solodevX
+                    DBName: !Ref DatabaseName
+                    DBHOST: !Ref DatabaseHost
+                    DBUSER: !Ref DatabaseUsername
+                    DBPASSWORD: !Ref DatabasePassword
+                    ADMINUSER: !Ref AdminUser
+                    ADMINPASSWORD: !Ref AdminPassword
+                    EFSHOST: !Ref EFS
+                    THEME: ''
+                    WEBSITE: ''
 
     ControlServerLayer:
         Type: 'AWS::OpsWorks::Layer'
         DependsOn:
             - SolodevInstance1
         Properties:
-        StackId: !Ref SolodevStack
-        Name: SolodevControl
-        Type: custom
-        Shortname: solodev-control
-        EnableAutoHealing: 'true'
-        AutoAssignElasticIps: 'false'
-        AutoAssignPublicIps: 'true'
-        CustomSecurityGroupIds:
-            - !Ref ControlServerSecurityGroup
-            - !Ref WebServerSecurityGroup
-        CustomRecipes:
-            Setup:
-                - 'main::setup'
-                - 'main::mountEFS'
-                - 'storage::deploy_mongo'
-                - 'storage::deploy_mongo_cluster'
-                - 'main::client_settings'
-                - 'main::deploy_duplicity'
-            Configure:
-                - 'storage::heal_mongo'
-            Deploy: []
-            Undeploy: []
-            Shutdown: []
+            StackId: !Ref SolodevStack
+            Name: SolodevControl
+            Type: custom
+            Shortname: solodev-control
+            EnableAutoHealing: 'true'
+            AutoAssignElasticIps: 'false'
+            AutoAssignPublicIps: 'true'
+            CustomSecurityGroupIds:
+                - !Ref ControlServerSecurityGroup
+                - !Ref WebServerSecurityGroup
+            CustomRecipes:
+                Setup:
+                    - 'main::setup'
+                    - 'main::mountEFS'
+                    - 'storage::deploy_mongo'
+                    - 'storage::deploy_mongo_cluster'
+                    - 'main::client_settings'
+                    - 'main::deploy_duplicity'
+                Configure:
+                    - 'storage::heal_mongo'
+                Deploy: []
+                Undeploy: []
+                Shutdown: []
 
     WebServerLayer:
         Type: 'AWS::OpsWorks::Layer'
         DependsOn:
             - SolodevApp
         Properties:
-        StackId: !Ref SolodevStack
-        Name: !Ref DeploymentType
-        Type: custom
-        Shortname: solodev-web
-        EnableAutoHealing: 'true'
-        AutoAssignElasticIps: 'false'
-        AutoAssignPublicIps: 'true'
-        LoadBasedAutoScaling:
-            DownScaling:
-                CpuThreshold: 50
-                IgnoreMetricsTime: 10
-                InstanceCount: 1
-                LoadThreshold: 50
-                MemoryThreshold: 50
-                ThresholdsWaitTime: 1
-            Enable: 'true'
-            UpScaling:
-                CpuThreshold: 90
-                IgnoreMetricsTime: 10
-                InstanceCount: 1
-                LoadThreshold: 90
-                MemoryThreshold: 90
-                ThresholdsWaitTime: 1
-        CustomSecurityGroupIds:
-            - !Ref ControlServerSecurityGroup
-            - !Ref WebServerSecurityGroup
-        CustomRecipes:
-            Setup:
-                - 'main::setup'
-                - 'main::mountEFS'
-                - 'main::deploy_base'
-                - 'storage::deploy_mongo'
-                - 'storage::deploy_mongo_brick'
-                - 'main::client_settings'
-                - 'main::deploy_scripts'
-            Configure: []
-            Deploy:
-                - 'main::deploy_solodev'
-            Shutdown: []
-            Undeploy: []
-        VolumeConfigurations:
-            - MountPoint: /mongo
-            Size: !Ref BlockVolumeSize
-            NumberOfDisks: 1
+            StackId: !Ref SolodevStack
+            Name: !Ref DeploymentType
+            Type: custom
+            Shortname: solodev-web
+            EnableAutoHealing: 'true'
+            AutoAssignElasticIps: 'false'
+            AutoAssignPublicIps: 'true'
+            LoadBasedAutoScaling:
+                DownScaling:
+                    CpuThreshold: 50
+                    IgnoreMetricsTime: 10
+                    InstanceCount: 1
+                    LoadThreshold: 50
+                    MemoryThreshold: 50
+                    ThresholdsWaitTime: 1
+                Enable: 'true'
+                UpScaling:
+                    CpuThreshold: 90
+                    IgnoreMetricsTime: 10
+                    InstanceCount: 1
+                    LoadThreshold: 90
+                    MemoryThreshold: 90
+                    ThresholdsWaitTime: 1
+            CustomSecurityGroupIds:
+                - !Ref ControlServerSecurityGroup
+                - !Ref WebServerSecurityGroup
+            CustomRecipes:
+                Setup:
+                    - 'main::setup'
+                    - 'main::mountEFS'
+                    - 'main::deploy_base'
+                    - 'storage::deploy_mongo'
+                    - 'storage::deploy_mongo_brick'
+                    - 'main::client_settings'
+                    - 'main::deploy_scripts'
+                Configure: []
+                Deploy:
+                    - 'main::deploy_solodev'
+                Shutdown: []
+                Undeploy: []
+            VolumeConfigurations:
+                - 
+                    MountPoint: /mongo
+                    Size: !Ref BlockVolumeSize
+                    NumberOfDisks: 1
 
     ELBAttachment:
         Type: 'AWS::OpsWorks::ElasticLoadBalancerAttachment'
         Properties:
-        ElasticLoadBalancerName: !Ref LB
-        LayerId: !Ref WebServerLayer
+            ElasticLoadBalancerName: !Ref LoadBalancer
+            LayerId: !Ref WebServerLayer
 
     SolodevInstance1:
         Type: 'AWS::OpsWorks::Instance'
         Properties:
-        AmiId: !Ref AMI
-        Os: Custom
-        StackId: !Ref SolodevStack
-        LayerIds:
-            - !Ref WebServerLayer
-        SubnetId: !Select 
-            - '0'
-            - !Ref Subnets
-        InstanceType: !Ref InstanceType
-        RootDeviceType: ebs
-        SshKeyName: !Ref KeyName
+            AmiId: !Ref AMI
+            Os: Custom
+            StackId: !Ref SolodevStack
+            LayerIds:
+                - !Ref WebServerLayer
+            SubnetId: !Select 
+                - '0'
+                - !Ref Subnets
+            InstanceType: !Ref InstanceType
+            RootDeviceType: ebs
+            SshKeyName: !Ref KeyName
 
     SolodevInstance2:
         Type: 'AWS::OpsWorks::Instance'
         Properties:
-        AmiId: !Ref AMI
-        Os: Custom
-        StackId: !Ref SolodevStack
-        LayerIds:
-            - !Ref WebServerLayer
-        SubnetId: !Select 
-            - '1'
-            - !Ref Subnets
-        InstanceType: !Ref InstanceType
-        RootDeviceType: ebs
-        SshKeyName: !Ref KeyName
+            AmiId: !Ref AMI
+            Os: Custom
+            StackId: !Ref SolodevStack
+            LayerIds:
+                - !Ref WebServerLayer
+            SubnetId: !Select 
+                - '1'
+                - !Ref Subnets
+            InstanceType: !Ref InstanceType
+            RootDeviceType: ebs
+            SshKeyName: !Ref KeyName
 
     SolodevInstance3:
         Type: 'AWS::OpsWorks::Instance'
         Properties:
-        AmiId: !Ref AMI
-        Os: Custom
-        StackId: !Ref SolodevStack
-        LayerIds:
-            - !Ref WebServerLayer
-        SubnetId: !Select 
-            - '2'
-            - !Ref Subnets
-        InstanceType: !Ref InstanceType
-        RootDeviceType: ebs
-        SshKeyName: !Ref KeyName
+            AmiId: !Ref AMI
+            Os: Custom
+            StackId: !Ref SolodevStack
+            LayerIds:
+                - !Ref WebServerLayer
+            SubnetId: !Select 
+                - '2'
+                - !Ref Subnets
+            InstanceType: !Ref InstanceType
+            RootDeviceType: ebs
+            SshKeyName: !Ref KeyName
 
     ControlInstance:
         Type: 'AWS::OpsWorks::Instance'
         Properties:
-        AmiId: !Ref AMI
-        Os: Custom
-        StackId: !Ref SolodevStack
-        LayerIds:
-            - !Ref ControlServerLayer
-        InstanceType: !Ref ConntrolInstanceType
-        RootDeviceType: ebs
-        SshKeyName: !Ref KeyName
+            AmiId: !Ref AMI
+            Os: Custom
+            StackId: !Ref SolodevStack
+            LayerIds:
+                - !Ref ControlServerLayer
+            InstanceType: !Ref ConntrolInstanceType
+            RootDeviceType: ebs
+            SshKeyName: !Ref KeyName
 
     IPAddress:
         Type: 'Custom::PublicIpLookUp'
         Properties:
-        ServiceToken: !GetAtt 
-            - IPLookup
-            - Arn
-        OWInstanceId: !Ref SolodevInstance1
+            ServiceToken: !GetAtt 
+                - IPLookup
+                - Arn
+            OWInstanceId: !Ref SolodevInstance1
 
     IPLookup:
         Type: 'AWS::Lambda::Function'
         Properties:
-        Handler: cfn_python_opsworks.lambda_handler
-        Role: !GetAtt 
-            - LambdaExecutionRole
-            - Arn
-        Code:
-            S3Bucket: solodev-install
-            S3Key: opsworks_getip.zip
-        Runtime: python2.7
-        Timeout: '25'
+            Handler: cfn_python_opsworks.lambda_handler
+            Role: !GetAtt 
+                - LambdaExecutionRole
+                - Arn
+            Code:
+                S3Bucket: solodev-install
+                S3Key: opsworks_getip.zip
+            Runtime: python2.7
+            Timeout: '25'
 
     LambdaExecutionRole:
         Type: 'AWS::IAM::Role'
         Properties:
-        AssumeRolePolicyDocument:
-            Version: 2012-10-17
-            Statement:
-            - Effect: Allow
-                Principal:
-                Service:
-                    - lambda.amazonaws.com
-                Action:
-                - 'sts:AssumeRole'
-        Path: /
-        Policies:
-            - PolicyName: LambdaExecutionRole
-            PolicyDocument:
+            AssumeRolePolicyDocument:
                 Version: 2012-10-17
                 Statement:
-                - Sid: LambdaExecutionStmt
-                    Effect: Allow
-                    NotAction: 'iam:*'
-                    Resource: '*'
+                    - 
+                        Effect: Allow
+                        Principal:
+                            Service:
+                                - lambda.amazonaws.com
+                            Action:
+                                - 'sts:AssumeRole'
+            Path: /
+            Policies:
+                - 
+                    PolicyName: LambdaExecutionRole
+                    PolicyDocument:
+                        Version: 2012-10-17
+                        Statement:
+                            - 
+                                Sid: LambdaExecutionStmt
+                                Effect: Allow
+                                NotAction: 'iam:*'
+                                Resource: '*'
 
 Outputs:
 
@@ -606,7 +598,4 @@ Outputs:
         Value: !GetAtt 
         - IPAddress
         - PublicIp
-        Description: >-
-        Point DNS A records to this IP and server will redirect to the server
-        CNAME.  If your DNS supports pointing A records to CNAME's please use
-        CNAME instead.
+        Description: Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead.

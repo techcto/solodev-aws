@@ -113,6 +113,11 @@ Parameters:
         - '2048'
         - '4096'
 
+    EFS:
+        Description: Choose which EFS this ECS cluster should use for filestorage
+        Type: String
+        Default: ""
+
     MountPoint:
         Description: The mount point for the EFS volume
         Type: String
@@ -399,8 +404,11 @@ Resources:
                                 chown ec2-user:ec2-user ${MountPoint}
                 mongo:
                     files:
-                        /etc/mongod.conf
-                            content: !Sub | 
+                        "/etc/mongod.conf":
+                            mode: 000644
+                            owner: root
+                            group: root
+                            content: !Sub |
                                 # MongoDB config
                                 dbpath=/mongo/data
                                 logpath=/mongo/log/mongod.log
@@ -410,9 +418,6 @@ Resources:
                                 fork=true
                                 # Enable webserver REST
                                 rest = true
-                            mode: "000644"
-                            owner: "root"
-                            group: "root" 
     EC2Role:
         Type: AWS::IAM::Role
         Properties: 
@@ -477,28 +482,28 @@ Resources:
             VpcId: !Ref VPC
             Port:
                 !If
-                - UseSSL
-                - 443
-                - 80
+                    - UseSSL
+                    - 443
+                    - 80
             Protocol:
                 !If
-                - UseSSL
-                - HTTPS
-                - HTTP
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
             Matcher: 
                 HttpCode: 200-299
             HealthCheckIntervalSeconds: 60
             HealthCheckPath: /test.php
             HealthCheckProtocol: 
                 !If
-                - UseSSL
-                - HTTPS
-                - HTTP
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
             HealthCheckPort:
                 !If
-                - UseSSL
-                - 443
-                - 80
+                    - UseSSL
+                    - 443
+                    - 80
             HealthCheckTimeoutSeconds: 30
             TargetGroupAttributes:
                 - Key: stickiness.type
@@ -516,23 +521,23 @@ Resources:
             Certificates: 
                 - CertificateArn: 
                     - !If
-                    - UseSSL
-                    - CertificateArn: !Ref CertificateArn
-                    - !Ref AWS::NoValue
+                        - UseSSL
+                        - !Ref CertificateArn
+                        - !Ref AWS::NoValue
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
             LoadBalancerArn: !Ref LoadBalancer
             Port: 
                 !If
-                - UseSSL
-                - 443
-                - 80
+                    - UseSSL
+                    - 443
+                    - 80
             Protocol:
                 !If
-                - UseSSL
-                - HTTPS
-                - HTTP
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
