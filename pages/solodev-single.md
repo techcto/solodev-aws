@@ -28,19 +28,25 @@ eu-west-2                   | EU (London)                | [![cloudformation-lau
 eu-central-1                | EU (Frankfurt)             | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
 ca-central-1                | Canada (Central)           | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
 
+The above links will launch the "Select Template" wizard with the master template preselected. Click "Next" to customize the launch parameters.
+
 ## Parameters
 *Parameters/Configuration Screenshot*
-![Parameters](http://via.placeholder.com/898x450)
+![Parameters](pages/images/parameters-single.jpg)
 
 Parameter             | Description
 --------------------- | ---------------------
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Lorem ipsum dolor     | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Stack name     				          | The name of your stack
+*Network Configuration*     		  | 
+Which VPC should this be deployed to? | Choose which VPC the Application should be deployed to
+Subnets     						  | Choose at least two public subnets for this application
+*Server Configuration*                | 
+InstanceType                          | EC2 instance type
+KeyName                               | Name of an existing EC2 KeyPair to enable SSH access to the instances
+HostVolumeSize                        | Size in GB of root volume
+SSHFrom                               | Lockdown SSH access to the bastion host
+*Solodev Configuration*               | 
+InstanceType                          | Build AMI - Please leave this blank unless told otherwise
 
 ## FAQs
 1. Lorem ipsum dolor sit amet?

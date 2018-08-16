@@ -28,6 +28,8 @@ eu-west-2                   | EU (London)                | [![cloudformation-lau
 eu-central-1                | EU (Frankfurt)             | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
 ca-central-1                | Canada (Central)           | [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](#)
 
+The above links will launch the "Select Template" wizard with the master template preselected. Click "Next" to customize the launch parameters.
+
 ## Parameters
 *Parameters/Configuration Screenshot*
 ![Parameters](http://via.placeholder.com/898x450)
