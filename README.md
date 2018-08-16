@@ -51,7 +51,15 @@ We’re launching our partners to new worlds of digital success. Read how in our
 [![CNL Financial](pages/images/case-study-cnl.jpg)](https://www.solodev.com/resources/case-studies/cnl-financial.stml) | [![Bridgeway Community Church](pages/images/case-study-bcc.jpg)](https://www.solodev.com/resources/case-studies/bridgeway-community-church.stml) | [![Florida Dairy Farmers](pages/images/case-study-fdf.jpg)](https://www.solodev.com/resources/case-studies/florida-dairy-farmers.stml)
 
 ## Support
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Houston, we have no problems – because Solodev has your back at every step, with 24x7x365 U.S. based support. From our world-class HelpDesk, email support, phone access, or face-to-face training sessions, you've got the best team in the business to help your mission succeed.
+* Submit online support tickets
+* Access dedicated support team members who know your business
+* Benefit from in-depth product training from the Solodev Team
+* Benefit from in-depth product training from the Solodev Team
+
+Solodev users come in all shapes and sizes from the Solo-developer (the Solodev) to Fortune 500 companies with a staff of 500+ managing their websites and technological infrastructure.
+
+Solodev is positioned to handle both ends of the spectrum and everything in between through our in-depth training and certification programs. Whether you’re a Solodev or a Fortune 500 company, Solodev has a solution to get you up and running in the Solodev platform in no time!
 
 ---
 © 2018 Solodev. All rights reserved. 
