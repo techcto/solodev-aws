@@ -123,6 +123,14 @@ Parameters:
         Type: String
         Default: "/var/www/Solodev/clients/solodev"
 
+    AdminUser:
+        Description: CMS Admin User
+        Type: String
+
+    AdminPassword:
+        Description: CMS Admin Password
+        Type: String
+
     DatabaseHost:
         Type: String
         Description: The database host
