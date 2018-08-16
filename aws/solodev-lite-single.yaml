@@ -4,6 +4,32 @@ Description: >
 
     This template deploys a Single Solodev Server
 
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Network Configuration"
+        Parameters: 
+          - VPCID
+          - Subnets
+      - 
+        Label: 
+          default: "Server Configuration"
+        Parameters: 
+          - InstanceType
+          - KeyName
+          - HostVolumeSize
+          - SSHFrom
+      - 
+        Label: 
+          default: "Solodev Configuration"
+        Parameters: 
+            - AMI
+    ParameterLabels: 
+        VPCID: 
+            default: "Which VPC should this be deployed to?"
+
 Parameters:
 
     VPCID: 
