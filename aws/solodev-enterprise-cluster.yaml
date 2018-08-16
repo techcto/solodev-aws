@@ -181,7 +181,7 @@ Resources:
                 LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 AdminUser: !Ref AdminUser
-                AdminPassword: !Ref AdminPassword   `   `
+                AdminPassword: !Ref AdminPassword
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
