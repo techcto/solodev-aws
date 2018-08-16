@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: >-
-  Solodev Business for AWS: 1 Web Server with local MySql, local Mongo and S3
-  Backup Bucket
+Description: >
+
+    This template deploys a Single Solodev Server
 
 Parameters:
 
@@ -162,7 +162,7 @@ Resources:
                             - !Ref Subnets
             BlockDeviceMappings:
                 - 
-                    DeviceName: /dev/sdb
+                    DeviceName: /dev/xvda
                     Ebs:
                         VolumeSize: !Ref HostVolumeSize
                         DeleteOnTermination: 'false'

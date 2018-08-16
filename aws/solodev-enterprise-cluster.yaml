@@ -28,12 +28,17 @@ Metadata:
         Parameters: 
             - AdminUser
             - AdminPassword
+            - DatabasePassword
             - DevOpsFlavor
             - RestoreBucketName
             - AMI
     ParameterLabels: 
-      VPCID: 
-        default: "Which VPC should this be deployed to?"
+        VPCID: 
+            default: "Which VPC should this be deployed to?"
+        FQDN:
+            default: "Optional: Fully Qualified Domain Name for app"
+        CertificateArn:
+            default: "Optional: SSL cert for HTTPS listener that matches the FQDN above"
 
 Mappings:
   AWSRegionToAMI:
@@ -61,16 +66,16 @@ Parameters:
         Description: Choose which VPC the Application should be deployed to
 
     Subnets:
-        Description: Choose at least two public subnets for this application
+        Description: Choose at least (2) Public subnets for this application in the same VPC selected above
         Type: List<AWS::EC2::Subnet::Id>
 
     FQDN:
         Type: String
-        Description: Admin URL for app. FQDN must be pointed to CNAME of ALB.
+        Description: URL for app. FQDN must be pointed to CNAME of ALB.
 
     CertificateArn:
         Type: String
-        Description: SSL cert for AWS ALB HTTPS listener
+        Description: SSL cert for HTTPS listener that matches the FQDN above
 
     KeyName:
         Default: ''
@@ -96,6 +101,7 @@ Parameters:
     AdminUser:
         Description: CMS Admin User
         Type: String
+        Default: 'admin'
 
     AdminPassword:
         Description: CMS Admin Password

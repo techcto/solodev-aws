@@ -56,7 +56,7 @@ Resources:
       Subnets: !Ref Subnets
       Listeners:
         - LoadBalancerPort: '80'
-          InstancePort: !Ref WebServerPort
+          InstancePort: 80
           Protocol: HTTP
           PolicyNames:
             - !Join 
@@ -67,7 +67,7 @@ Resources:
         Target: !Join 
           - ''
           - - 'HTTP:'
-            - !Ref WebServerPort
+            - 80
             - /
         HealthyThreshold: '2'
         UnhealthyThreshold: '2'
