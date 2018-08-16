@@ -114,38 +114,35 @@ Resources:
               ToPort: '22'
               CidrIp: !Ref SSHFrom
 
-    RootRole: 
-        Type: "AWS::IAM::Role"
-        Properties: 
-            AssumeRolePolicyDocument: 
-                Version: "2012-10-17"
-                Statement: 
+    PowerUserRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            AssumeRolePolicyDocument:
+                Statement:
+                    - 
+                        Effect: Allow
+                        Principal:
+                            Service:
+                                - ec2.amazonaws.com
+                        Action:
+                        - 'sts:AssumeRole'
+            Path: /
+            Policies:
                 - 
-                    Effect: "Allow"
-                    Principal: 
-                        Service: 
-                            - "ec2.amazonaws.com"
-                    Action: 
-                        - "sts:AssumeRole"
-            Path: "/"
-            Policies: 
-                - 
-                    PolicyName: "root"
-                    PolicyDocument: 
-                        Version: "2012-10-17"
-                        Statement: 
+                    PolicyName: PowerUserPolicy
+                    PolicyDocument:
+                        Statement:
                             - 
-                                Effect: "Allow"
-                                Action: "*"
-                                Resource: "*"
-
-    RootInstanceProfile: 
-        Type: "AWS::IAM::InstanceProfile"
-        Properties: 
-            Path: "/"
-            Roles: 
-                - 
-                    Ref: "RootRole"
+                                Sid: PowerUserStmt
+                                Effect: Allow
+                                NotAction: 'iam:*'
+                                Resource: '*'
+    PowerUserProfile:
+        Type: 'AWS::IAM::InstanceProfile'
+        Properties:
+            Path: /
+            Roles:
+                - !Ref PowerUserRole
 
     WebServerInstance:
         Type: 'AWS::EC2::Instance'
@@ -178,17 +175,7 @@ Resources:
                         -
                             - !Ref 'AWS::StackName'
                             - solodev
-            IamInstanceProfile: !Ref RootInstanceProfile
-
-    WebServerWaitHandle:
-        Type: 'AWS::CloudFormation::WaitConditionHandle'
-
-    WebServerWaitCondition:
-        Type: 'AWS::CloudFormation::WaitCondition'
-        DependsOn: WebServerInstance
-        Properties:
-            Handle: !Ref WebServerWaitHandle
-            Timeout: '300'
+            IamInstanceProfile: !Ref PowerUserProfile
 
 Outputs:
 

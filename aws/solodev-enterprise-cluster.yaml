@@ -135,7 +135,7 @@ Resources:
     LB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml"]
+            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml"]
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
@@ -164,7 +164,7 @@ Resources:
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml"]
+            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml"]
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
