@@ -104,7 +104,6 @@ Parameters:
         Default: 'admin'
 
     AdminPassword:
-        Type: String
         NoEcho: true
         Description: The solodev admin account password
         Type: String
@@ -112,7 +111,6 @@ Parameters:
         MaxLength: 41
 
     DatabasePassword:
-        Type: String
         NoEcho: true
         Description: The database root account password
         Type: String
