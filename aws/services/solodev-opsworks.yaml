@@ -527,7 +527,7 @@ Resources:
             LayerIds:
                 - !Ref WebServerLayer
             SubnetId: !Select 
-                - '2'
+                - '0'
                 - !Ref Subnets
             InstanceType: !Ref InstanceType
             RootDeviceType: ebs
