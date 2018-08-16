@@ -32,20 +32,20 @@ The above links will launch the "Select Template" wizard with the master templat
 
 ## Parameters
 *Parameters/Configuration Screenshot*
-![Parameters](pages/images/parameters-single.jpg)
+![Parameters](images/parameters-single.jpg)
 
-Parameter             | Description
---------------------- | ---------------------
+Parameter                             | Description
+------------------------------------- | ---------------------
 Stack name     				          | The name of your stack
-*Network Configuration*     		  | 
+**Network Configuration**     		  | 
 Which VPC should this be deployed to? | Choose which VPC the Application should be deployed to
 Subnets     						  | Choose at least two public subnets for this application
-*Server Configuration*                | 
+**Server Configuration**              | 
 InstanceType                          | EC2 instance type
 KeyName                               | Name of an existing EC2 KeyPair to enable SSH access to the instances
 HostVolumeSize                        | Size in GB of root volume
 SSHFrom                               | Lockdown SSH access to the bastion host
-*Solodev Configuration*               | 
+**Solodev Configuration**             | 
 InstanceType                          | Build AMI - Please leave this blank unless told otherwise
 
 ## FAQs
