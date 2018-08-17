@@ -364,7 +364,7 @@ Resources:
             DefaultInstanceProfileArn: !GetAtt 
                 - SolodevInstanceProfile
                 - Arn
-            VPC: !Ref VPC
+            VpcId: !Ref VPC
             DefaultSubnetId: !Select 
                 - '0'
                 - !Ref Subnets
