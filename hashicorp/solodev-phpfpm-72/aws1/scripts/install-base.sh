@@ -2,6 +2,8 @@
 yum -y remove php* httpd*
 
 #Install Required Devtools
+wget http://195.220.108.108/linux/epel/6/x86_64/Packages/s/scl-utils-20120229-1.el6.x86_64.rpm
+rpm -Uvh scl-utils-20120229-1.el6.x86_64.rpm
 yum -y install gcc-c++ gcc pcre-devel make zip unzip wget curl cmake git yum-utils
 
 #Install Required Repos
