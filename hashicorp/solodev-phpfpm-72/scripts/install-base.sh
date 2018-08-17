@@ -19,7 +19,6 @@ yum update -y
 rm -Rf /var/cache/yum/base/packages
 
 #Make swap for performance
-mkdir -p /mnt/swapfile
 /bin/dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
 chown root:root /mnt/swapfile
 chmod 600 /mnt/swapfile
