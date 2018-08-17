@@ -8,7 +8,7 @@ template 'Client_Settings.xml' do
 	not_if { ::File.exists?("#{document_root}/#{software_name}/clients/#{client_name}/Client_Settings.xml") }
   path "#{document_root}/#{software_name}/clients/#{client_name}/Client_Settings.xml"
   variables( 
-  	private_ip: "#{instance['private_ip']}"
+  	private_ip: "instance['private_ip']"
   )
   action :create
   source 'Client_Settings.xml.erb'
