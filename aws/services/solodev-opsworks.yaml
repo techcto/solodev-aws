@@ -314,24 +314,26 @@ Resources:
         Type: 'AWS::IAM::Role'
         Properties:
             AssumeRolePolicyDocument:
-                Statement:
+                Version: "2012-10-17"
+                Statement: 
                     - 
-                        Effect: Allow
-                        Principal:
-                            Service:
-                                - ec2.amazonaws.com
-                        Action:
-                            - 'sts:AssumeRole'
+                        Effect: "Allow"
+                        Principal: 
+                            Service: 
+                                - "ec2.amazonaws.com"
+                        Action: 
+                        - "sts:AssumeRole"
             Path: /
             Policies:
                 - 
                     PolicyName: PowerUserPolicy
                     PolicyDocument:
                         Statement:
-                        - Sid: PowerUserStmt
-                        Effect: Allow
-                        NotAction: 'iam:*'
-                        Resource: '*'
+                        - 
+                            Sid: PowerUserStmt
+                            Effect: Allow
+                            NotAction: 'iam:*'
+                            Resource: '*'
 
     SolodevInstanceProfile:
         Type: 'AWS::IAM::InstanceProfile'
