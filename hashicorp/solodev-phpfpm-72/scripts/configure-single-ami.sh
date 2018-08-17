@@ -1,3 +1,8 @@
+#Solodev client mount
+mkfs.ext4 /dev/xvdb
+echo '/dev/xvdb /var/www/Solodev/clients/solodev ext4 defaults,auto,noexec 0 0'
+blockdev --setra 32 /dev/xvdb
+
 #Custom Install for Single Servers
 tee /root/init-solodev.sh <<EOF
 #!/bin/bash
