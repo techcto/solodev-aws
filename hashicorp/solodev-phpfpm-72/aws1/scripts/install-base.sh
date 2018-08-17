@@ -10,7 +10,7 @@ wget http://rpms.remirepo.net/enterprise/remi-release-6.rpm
 rpm -Uvh epel-release-latest-6.noarch.rpm
 rpm -Uvh remi-release-6.rpm
 yum-config-manager --enable remi-php72
-yum --enablerepo=epel -y install libwebp
+yum --enablerepo=epel --disablerepo=amzn-main -y install libwebp
 
 #Update all libs
 yum update -y
