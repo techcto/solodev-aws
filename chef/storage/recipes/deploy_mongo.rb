@@ -16,7 +16,7 @@ end
 
 template 'mongodb-org-4.0.repo' do
   path '/etc/yum.repos.d/mongodb-org-4.0.repo'
-  source '10gen.repo.erb'
+  source 'mongodb-org-4.0.repo'
   owner 'root'
   group 'root'
   mode 0644
