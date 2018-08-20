@@ -428,6 +428,8 @@ Resources:
                     - 'main::client_settings'
                     - 'main::deploy_duplicity'
                 Configure:
+                    - 'main::deploy_solodev'
+                    - 'main::update_software'
                     - 'storage::heal_mongo'
                 Deploy: []
                 Undeploy: []
