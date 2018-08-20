@@ -421,7 +421,6 @@ Resources:
                 - !Ref LoadBalancerSecurityGroup
             CustomRecipes:
                 Setup:
-                    - 'main::setup'
                     - 'main::mountEFS'
                     - 'storage::deploy_mongo'
                     - 'storage::deploy_mongo_cluster'
@@ -469,7 +468,6 @@ Resources:
                 - !Ref LoadBalancerSecurityGroup
             CustomRecipes:
                 Setup:
-                    - 'main::setup'
                     - 'main::mountEFS'
                     - 'main::deploy_base'
                     - 'storage::deploy_mongo'
