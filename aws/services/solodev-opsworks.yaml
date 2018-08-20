@@ -474,7 +474,6 @@ Resources:
                     - 'main::deploy_base'
                     - 'storage::deploy_mongo'
                     - 'storage::deploy_mongo_brick'
-                    - 'main::client_settings'
                     - 'main::deploy_scripts'
                 Configure: []
                 Deploy:
