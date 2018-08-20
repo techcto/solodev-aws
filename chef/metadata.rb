@@ -1,1 +1,0 @@
-name 'solodev_opsworks'
