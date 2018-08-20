@@ -25,9 +25,9 @@ Resources:
         Type: AWS::EC2::SecurityGroup
         Properties: 
             VpcId: !Ref VPC
-            GroupDescription: Access to the load balancer that sits in front of ECS
+            GroupDescription: Access to the load balancer
             SecurityGroupIngress:
-                # Allow access from anywhere to our ECS services
+                # Allow access from anywhere
                 - CidrIp: 0.0.0.0/0
                   IpProtocol: -1
             Tags: 
