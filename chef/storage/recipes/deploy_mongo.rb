@@ -16,7 +16,7 @@ end
 
 template 'mongodb-org-4.0.repo' do
   path '/etc/yum.repos.d/mongodb-org-4.0.repo'
-  source 'mongodb-org-4.0.repo'
+  source 'mongodb-org-4.0.repo.erb'
   owner 'root'
   group 'root'
   mode 0644
@@ -39,7 +39,8 @@ script "install_mongo" do
   code <<-EOH 
   
     yum install -y mongodb-org
-		
+    
+    chkconfig mongod on
 		service mongod status
 		mongo --eval "db.getSiblingDB('admin').shutdownServer()"
 		
@@ -48,9 +49,7 @@ script "install_mongo" do
     chown -Rf mongod:mongod /mongo
     chown -Rv mongod:mongod /var/lib/mongo
     
-    chkconfig mongod on
 		service mongod start
-		service mongod status
 		sleep 20
         
   EOH
