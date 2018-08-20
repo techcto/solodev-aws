@@ -6,14 +6,6 @@ template 'limits.conf' do
   mode 0644
 end
 
-template '90-nproc.conf' do
-  path "/etc/yum.repos.d/10gen.repo"
-  source '90-nproc.conf.erb'
-  owner 'root'
-  group 'root'
-  mode 0644
-end
-
 template 'mongodb-org-4.0.repo' do
   path '/etc/yum.repos.d/mongodb-org-4.0.repo'
   source 'mongodb-org-4.0.repo.erb'
