@@ -213,38 +213,8 @@ Resources:
             SecurityGroupIngress:
                 - 
                     IpProtocol: tcp
-                    FromPort: '80'
-                    ToPort: '80'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
-                    FromPort: '443'
-                    ToPort: '443'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
                     FromPort: '27017'
                     ToPort: '27017'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
-                    FromPort: '28017'
-                    ToPort: '28017'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
-                    FromPort: '38465'
-                    ToPort: '38468'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
-                    FromPort: '24007'
-                    ToPort: '24107'
-                    SourceSecurityGroupId: !Ref WebServerSecurityGroup
-                - 
-                    IpProtocol: tcp
-                    FromPort: '111'
-                    ToPort: '111'
                     SourceSecurityGroupId: !Ref WebServerSecurityGroup
 
     BackupUser:
@@ -405,8 +375,6 @@ Resources:
 
     ControlServerLayer:
         Type: 'AWS::OpsWorks::Layer'
-        DependsOn:
-            - SolodevInstance1
         Properties:
             StackId: !Ref SolodevStack
             Name: SolodevControl
