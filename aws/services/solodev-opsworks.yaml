@@ -441,7 +441,6 @@ Resources:
                     - 'main::mountEFS'
                     - 'main::deploy_base'
                     - 'storage::deploy_mongo'
-                    - 'storage::deploy_mongo_brick'
                     - 'main::deploy_scripts'
                 Configure: []
                 Deploy:
