@@ -1,6 +1,5 @@
 Description: >
-    This template deploys Solodev to the provided VPC and subnets using an Auto Scaling Group.  
-    This template creates a Lambda function for the management of the CMS (Install, Update, Backup, Restore)
+    This template deploys Solodev to the provided VPC and subnets using Opsworks Chef recipes.  
 
 Parameters:
 
