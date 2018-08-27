@@ -398,7 +398,6 @@ Resources:
                     - 'solodev::deploy_duplicity'
                 Configure:
                     - 'solodev::deploy_solodev'
-                    - 'solodev::update_software'
                     - 'mongo::heal_mongo'
                 Deploy: []
                 Undeploy: []
@@ -443,8 +442,7 @@ Resources:
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
                 Configure: []
-                Deploy:
-                    - 'solodev::deploy_solodev'
+                Deploy: []
                 Shutdown: []
                 Undeploy: []
             VolumeConfigurations:
