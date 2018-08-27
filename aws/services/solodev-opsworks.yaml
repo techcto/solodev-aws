@@ -441,7 +441,8 @@ Resources:
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
-                Configure: []
+                Configure: 
+                    - 'solodev::deploy_solodev'
                 Deploy: []
                 Shutdown: []
                 Undeploy: []
