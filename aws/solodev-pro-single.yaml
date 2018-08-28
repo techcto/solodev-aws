@@ -1,1 +1,227 @@
-Coming Soon...
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >
+
+    This template deploys a Single Solodev Server with an external RDS database
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Network Configuration"
+        Parameters: 
+          - VPCID
+          - Subnets
+      - 
+        Label: 
+          default: "Server Configuration"
+        Parameters: 
+          - InstanceType
+          - KeyName
+          - HostVolumeSize
+          - SSHFrom
+      - 
+        Label: 
+          default: "Solodev Configuration"
+        Parameters: 
+            - AMI
+    ParameterLabels: 
+        VPCID: 
+            default: "Which VPC should this be deployed to?"
+
+Parameters:
+
+    VPCID: 
+        Type: AWS::EC2::VPC::Id
+        Description: Choose which VPC the Application should be deployed to
+
+    Subnets:
+        Description: Choose at least two public subnets for this application
+        Type: List<AWS::EC2::Subnet::Id>
+
+    KeyName:
+        Default: ''
+        Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+        Type: 'AWS::EC2::KeyPair::KeyName'
+
+    InstanceType:
+        Description: EC2 instance type
+        Type: String
+        Default: m3.medium
+        AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
+        m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
+        c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, c3.large, c3.xlarge,
+        c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
+        r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
+        ConstraintDescription: Please choose a valid instance type.
+
+    AMI:
+        Description: Build AMI - Please leave this blank unless told otherwise
+        Default: ''
+        Type: String
+
+    HostVolumeSize:
+        Description: Size in GB of root volume
+        Type: String
+        Default: '128'
+        AllowedValues:
+        - '8'
+        - '16'
+        - '32'
+        - '64'
+        - '128'
+        - '256'
+        - '512'
+        - '1024'
+        - '2048'
+        - '4096'
+
+    SSHFrom:
+        Description: Lockdown SSH access to the bastion host
+        Type: String
+        MinLength: '9'
+        MaxLength: '18'
+        Default: 0.0.0.0/0
+        AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+        ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
+
+Mappings:
+    AWSRegionToAMI:
+      us-east-1:
+        AMI: "ami-07f776f79a2456b9d"
+      us-west-1:
+        AMI: ""
+      us-west-2:
+        AMI: ""
+      eu-west-1:
+        AMI: ""
+      sa-east-1:
+        AMI: ""
+      ap-southeast-1:
+        AMI: ""
+      ap-southeast-2:
+        AMI: ""
+      ap-northeast-1:
+        AMI: ""
+
+Conditions:
+    UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+
+Resources:
+
+    SolodevBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: !Join ['-', [!Ref 'AWS::StackName', 'solodev']]
+            AccessControl: 'BucketOwnerFullControl'
+            Tags:
+                -
+                  Key: 'Name'
+                  Value: !Join ['-', [!Ref 'AWS::StackName', 'S3']]
+        DeletionPolicy: Delete
+
+    WebServerSecurityGroup:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+          GroupDescription: Enable access on port 80 and 443
+          VpcId: !Ref VPCID
+          SecurityGroupIngress:
+            - IpProtocol: tcp
+              FromPort: 80
+              ToPort: 80
+              CidrIp: 0.0.0.0/0
+            - IpProtocol: tcp
+              FromPort: 443
+              ToPort: 443
+              CidrIp: 0.0.0.0/0
+            - IpProtocol: tcp
+              FromPort: '22'
+              ToPort: '22'
+              CidrIp: !Ref SSHFrom
+
+    RDS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                DatabasePassword: !Ref DatabasePassword
+
+    PowerUserRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            AssumeRolePolicyDocument:
+                Statement:
+                    - 
+                        Effect: Allow
+                        Principal:
+                            Service:
+                                - ec2.amazonaws.com
+                        Action:
+                        - 'sts:AssumeRole'
+            Path: /
+            Policies:
+                - 
+                    PolicyName: PowerUserPolicy
+                    PolicyDocument:
+                        Statement:
+                            - 
+                                Sid: PowerUserStmt
+                                Effect: Allow
+                                NotAction: 'iam:*'
+                                Resource: '*'
+    PowerUserProfile:
+        Type: 'AWS::IAM::InstanceProfile'
+        Properties:
+            Path: /
+            Roles:
+                - !Ref PowerUserRole
+
+    WebServerInstance:
+        Type: 'AWS::EC2::Instance'
+        Properties:
+            ImageId: !If [UseDefaultAMI, !FindInMap [AWSRegionToAMI, !Ref "AWS::Region", AMI], !Ref AMI]
+            InstanceType: !Ref InstanceType
+            KeyName: !Ref KeyName
+            NetworkInterfaces: 
+                - 
+                    AssociatePublicIpAddress: "true"
+                    DeviceIndex: "0"
+                    GroupSet: 
+                        - !Ref WebServerSecurityGroup
+                    SubnetId: 
+                        !Select 
+                            - '0'
+                            - !Ref Subnets
+            BlockDeviceMappings:
+                - 
+                    DeviceName: /dev/xvda
+                    Ebs:
+                        VolumeSize: !Ref HostVolumeSize
+                        DeleteOnTermination: 'false'
+            Tags:
+                - 
+                    Key: Name
+                    Value: 
+                        !Join 
+                        - ' - '
+                        -
+                            - !Ref 'AWS::StackName'
+                            - solodev
+            IamInstanceProfile: !Ref PowerUserProfile
+
+Outputs:
+
+    WebsiteIP:
+        Value: 
+            !Join 
+            - ''
+            -
+                - 'http://'
+                - !GetAtt WebServerInstance.PublicIp
+                - /
+        Description: Dedicated IP for web server.  Point your DNS to this IP.
