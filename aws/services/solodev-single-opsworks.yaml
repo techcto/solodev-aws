@@ -328,7 +328,8 @@ Resources:
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
-                Configure: []
+                Configure: 
+                    - 'mongo::deploy_mongo_single'
                 Deploy:
                     - 'solodev::deploy_solodev'
                 Shutdown: []
