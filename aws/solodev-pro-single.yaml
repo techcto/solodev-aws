@@ -1,8 +1,9 @@
-AWSTemplateFormatVersion: 2010-09-09
+---
+AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    This template deploys a Single Solodev Server with an external RDS database
+    This template launches a Solodev Enterprise HA Cluster on AWS
 
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -13,22 +14,67 @@ Metadata:
         Parameters: 
           - VPCID
           - Subnets
+          - FQDN
+          - CertificateArn
       - 
         Label: 
           default: "Server Configuration"
         Parameters: 
           - InstanceType
           - KeyName
-          - HostVolumeSize
-          - SSHFrom
       - 
         Label: 
           default: "Solodev Configuration"
         Parameters: 
+            - AdminUser
+            - AdminPassword
+            - DatabasePassword
+            - DevOpsFlavor
+            - RestoreBucketName
             - AMI
     ParameterLabels: 
         VPCID: 
             default: "Which VPC should this be deployed to?"
+        FQDN:
+            default: "Optional: FQDN"
+        CertificateArn:
+            default: "Optional: CertificateArn"
+
+Mappings:
+  Ec2:
+    us-east-1:
+      AMI: "ami-04a629c2911e00956"
+    us-west-1:
+      AMI: ""
+    us-west-2:
+      AMI: ""
+    eu-west-1:
+      AMI: ""
+    sa-east-1:
+      AMI: ""
+    ap-southeast-1:
+      AMI: ""
+    ap-southeast-2:
+      AMI: ""
+    ap-northeast-1:
+      AMI: ""
+  Opsworks:
+    us-east-1:
+      AMI: "ami-021d2addbac002a63"
+    us-west-1:
+      AMI: ""
+    us-west-2:
+      AMI: ""
+    eu-west-1:
+      AMI: ""
+    sa-east-1:
+      AMI: ""
+    ap-southeast-1:
+      AMI: ""
+    ap-southeast-2:
+      AMI: ""
+    ap-northeast-1:
+      AMI: ""
 
 Parameters:
 
@@ -37,8 +83,16 @@ Parameters:
         Description: Choose which VPC the Application should be deployed to
 
     Subnets:
-        Description: Choose at least two public subnets for this application
+        Description: Choose at least (2) Public subnets for this application in the same VPC selected above
         Type: List<AWS::EC2::Subnet::Id>
+
+    FQDN:
+        Type: String
+        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+
+    CertificateArn:
+        Type: String
+        Description: SSL cert for HTTPS listener that matches the FQDN above
 
     KeyName:
         Default: ''
@@ -61,84 +115,71 @@ Parameters:
         Default: ''
         Type: String
 
-    HostVolumeSize:
-        Description: Size in GB of root volume
+    AdminUser:
+        Description: CMS Admin User
         Type: String
-        Default: '128'
-        AllowedValues:
-        - '8'
-        - '16'
-        - '32'
-        - '64'
-        - '128'
-        - '256'
-        - '512'
-        - '1024'
-        - '2048'
-        - '4096'
+        Default: 'admin'
 
-    SSHFrom:
-        Description: Lockdown SSH access to the bastion host
+    AdminPassword:
+        NoEcho: true
+        Description: The solodev admin account password
         Type: String
-        MinLength: '9'
-        MaxLength: '18'
-        Default: 0.0.0.0/0
-        AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
-        ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
+        MinLength: 1
+        MaxLength: 41
 
-Mappings:
-    AWSRegionToAMI:
-      us-east-1:
-        AMI: "ami-07f776f79a2456b9d"
-      us-west-1:
-        AMI: ""
-      us-west-2:
-        AMI: ""
-      eu-west-1:
-        AMI: ""
-      sa-east-1:
-        AMI: ""
-      ap-southeast-1:
-        AMI: ""
-      ap-southeast-2:
-        AMI: ""
-      ap-northeast-1:
-        AMI: ""
+    DatabasePassword:
+        NoEcho: true
+        Description: The database root account password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+
+    DevOpsFlavor:
+        Description: Which DevOps tools would you like to use to manage auto scaling
+        Type: String
+        Default: Opsworks
+        AllowedValues: [Opsworks]
+
+    RestoreBucketName:
+        Default: ''
+        Description: Name of bucket containing files for restore
+        Type: String
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    UseOpsworks: !Equals [ !Ref DevOpsFlavor, "Opsworks" ]
 
 Resources:
-
-    SolodevBucket:
-        Type: AWS::S3::Bucket
-        Properties:
-            BucketName: !Join ['-', [!Ref 'AWS::StackName', 'solodev']]
-            AccessControl: 'BucketOwnerFullControl'
-            Tags:
-                -
-                  Key: 'Name'
-                  Value: !Join ['-', [!Ref 'AWS::StackName', 'S3']]
-        DeletionPolicy: Delete
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
-          GroupDescription: Enable access on port 80 and 443
-          VpcId: !Ref VPCID
-          SecurityGroupIngress:
-            - IpProtocol: tcp
-              FromPort: 80
-              ToPort: 80
-              CidrIp: 0.0.0.0/0
-            - IpProtocol: tcp
-              FromPort: 443
-              ToPort: 443
-              CidrIp: 0.0.0.0/0
-            - IpProtocol: tcp
-              FromPort: '22'
-              ToPort: '22'
-              CidrIp: !Ref SSHFrom
+            GroupDescription: Allow inbound requests to the OpsWorks instance
+            VpcId: !Ref VPC
+            SecurityGroupIngress:
+                - 
+                    IpProtocol: tcp
+                    FromPort: '80'
+                    ToPort: '80'
+                    CidrIp: '0.0.0.0/0'
+                - 
+                    IpProtocol: tcp
+                    FromPort: '443'
+                    ToPort: '443'
+                    CidrIp: '0.0.0.0/0'
+            Tags:
+                - 
+                    Key: Name
+                    Value: !Join ['-', [!Ref 'EnvironmentName', 'WebServerSecurityGroup']]
+
+    EFS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     RDS:
         Type: AWS::CloudFormation::Stack
@@ -151,77 +192,33 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
 
-    PowerUserRole:
-        Type: 'AWS::IAM::Role'
+    EC2:
+        Type: AWS::CloudFormation::Stack
         Properties:
-            AssumeRolePolicyDocument:
-                Statement:
-                    - 
-                        Effect: Allow
-                        Principal:
-                            Service:
-                                - ec2.amazonaws.com
-                        Action:
-                        - 'sts:AssumeRole'
-            Path: /
-            Policies:
-                - 
-                    PolicyName: PowerUserPolicy
-                    PolicyDocument:
-                        Statement:
-                            - 
-                                Sid: PowerUserStmt
-                                Effect: Allow
-                                NotAction: 'iam:*'
-                                Resource: '*'
-    PowerUserProfile:
-        Type: 'AWS::IAM::InstanceProfile'
-        Properties:
-            Path: /
-            Roles:
-                - !Ref PowerUserRole
-
-    WebServerInstance:
-        Type: 'AWS::EC2::Instance'
-        Properties:
-            ImageId: !If [UseDefaultAMI, !FindInMap [AWSRegionToAMI, !Ref "AWS::Region", AMI], !Ref AMI]
-            InstanceType: !Ref InstanceType
-            KeyName: !Ref KeyName
-            NetworkInterfaces: 
-                - 
-                    AssociatePublicIpAddress: "true"
-                    DeviceIndex: "0"
-                    GroupSet: 
-                        - !Ref WebServerSecurityGroup
-                    SubnetId: 
-                        !Select 
-                            - '0'
-                            - !Ref Subnets
-            BlockDeviceMappings:
-                - 
-                    DeviceName: /dev/xvda
-                    Ebs:
-                        VolumeSize: !Ref HostVolumeSize
-                        DeleteOnTermination: 'false'
-            Tags:
-                - 
-                    Key: Name
-                    Value: 
-                        !Join 
-                        - ' - '
-                        -
-                            - !Ref 'AWS::StackName'
-                            - solodev
-            IamInstanceProfile: !Ref PowerUserProfile
+            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-single-opsworks.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-single.yaml"]
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                InstanceType: !Ref InstanceType
+                ClusterSize: 3
+                VPC: !Ref VPCID
+                WebServerSecurityGroup: !Ref WebServerSecurityGroup
+                AMI: !If [UseDefaultAMI, !FindInMap [!Ref DevOpsFlavor, !Ref "AWS::Region", AMI], !Ref AMI]
+                EFS: !GetAtt EFS.Outputs.EFS
+                KeyName: !Ref KeyName
+                FQDN: !Ref FQDN
+                CertificateArn: !Ref CertificateArn
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                AdminUser: !Ref AdminUser
+                AdminPassword: !Ref AdminPassword
+                DatabaseName: !GetAtt RDS.Outputs.DatabaseName
+                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
+                DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
+                DeploymentType: "SolodevProduction"
+                RestoreBucketName: ""
 
 Outputs:
 
-    WebsiteIP:
-        Value: 
-            !Join 
-            - ''
-            -
-                - 'http://'
-                - !GetAtt WebServerInstance.PublicIp
-                - /
-        Description: Dedicated IP for web server.  Point your DNS to this IP.
+    AdminUrl: 
+        Description: Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead.
+        Value: !Join ["", [ "https://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]
