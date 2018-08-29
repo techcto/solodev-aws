@@ -155,7 +155,7 @@ Resources:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
             GroupDescription: Allow inbound requests to the OpsWorks instance
-            VpcId: !Ref VPC
+            VpcId: !Ref VPCID
             SecurityGroupIngress:
                 - 
                     IpProtocol: tcp
@@ -170,7 +170,7 @@ Resources:
             Tags:
                 - 
                     Key: Name
-                    Value: !Join ['-', [!Ref 'EnvironmentName', 'WebServerSecurityGroup']]
+                    Value: !Join ['-', [!Ref 'AWS::StackName', 'WebServerSecurityGroup']]
 
     EFS:
         Type: AWS::CloudFormation::Stack

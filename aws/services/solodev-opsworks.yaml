@@ -395,10 +395,10 @@ Resources:
                     - 'mongo::deploy_mongo_cluster'
                     - 'solodev::client_settings'
                     - 'solodev::deploy_duplicity'
-                Configure:
+                Configure: []
+                Deploy: 
                     - 'solodev::deploy_solodev'
                     - 'mongo::heal_mongo'
-                Deploy: []
                 Undeploy: []
                 Shutdown: []
 
@@ -440,9 +440,9 @@ Resources:
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
-                Configure: 
+                Configure: []
+                Deploy:
                     - 'solodev::deploy_solodev'
-                Deploy: []
                 Shutdown: []
                 Undeploy: []
             VolumeConfigurations:
