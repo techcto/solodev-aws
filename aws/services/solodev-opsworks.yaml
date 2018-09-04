@@ -397,9 +397,11 @@ Resources:
                     - 'solodev::deploy_duplicity'
                 Configure: 
                     - 'solodev::deploy_solodev'
+                    - 'solodev::update_solodev'
                     - 'mongo::heal_mongo'
                 Deploy: 
                     - 'solodev::deploy_solodev'
+                    - 'solodev::update_solodev'
                     - 'mongo::heal_mongo'
                 Undeploy: []
                 Shutdown: []

@@ -331,8 +331,10 @@ Resources:
                 Configure: 
                     - 'mongo::deploy_mongo_single'
                     - 'solodev::deploy_solodev'
+                    - 'solodev::update_solodev'
                 Deploy:
                     - 'solodev::deploy_solodev'
+                    - 'solodev::update_solodev'
                 Shutdown: []
                 Undeploy: []
             VolumeConfigurations:

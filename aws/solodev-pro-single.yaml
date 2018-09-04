@@ -43,7 +43,7 @@ Metadata:
 Mappings:
   Ec2:
     us-east-1:
-      AMI: "ami-04a629c2911e00956"
+      AMI: "ami-041d3fe1089411ab0"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -60,7 +60,7 @@ Mappings:
       AMI: ""
   Opsworks:
     us-east-1:
-      AMI: "ami-021d2addbac002a63"
+      AMI: "ami-0484fd164fac8ac21"
     us-west-1:
       AMI: ""
     us-west-2:
