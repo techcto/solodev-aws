@@ -330,6 +330,7 @@ Resources:
                     - 'solodev::deploy_scripts'
                 Configure: 
                     - 'mongo::deploy_mongo_single'
+                    - 'solodev::deploy_solodev'
                 Deploy:
                     - 'solodev::deploy_solodev'
                 Shutdown: []

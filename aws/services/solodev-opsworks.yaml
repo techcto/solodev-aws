@@ -395,7 +395,9 @@ Resources:
                     - 'mongo::deploy_mongo_cluster'
                     - 'solodev::client_settings'
                     - 'solodev::deploy_duplicity'
-                Configure: []
+                Configure: 
+                    - 'solodev::deploy_solodev'
+                    - 'mongo::heal_mongo'
                 Deploy: 
                     - 'solodev::deploy_solodev'
                     - 'mongo::heal_mongo'
@@ -440,7 +442,8 @@ Resources:
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
-                Configure: []
+                Configure:
+                    - 'solodev::deploy_solodev'
                 Deploy:
                     - 'solodev::deploy_solodev'
                 Shutdown: []
