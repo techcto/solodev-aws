@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    This template launches a Solodev Enterprise HA Cluster on AWS
+    This template launches a Solodev Professional server on AWS with external / encrypted database and filesystem.
 
 Metadata: 
   AWS::CloudFormation::Interface: 
