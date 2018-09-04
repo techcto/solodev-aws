@@ -393,10 +393,10 @@ Resources:
                     - 'solodev::mountEFS'
                     - 'mongo::deploy_mongo'
                     - 'mongo::deploy_mongo_cluster'
-                    - 'solodev::client_settings'
                     - 'solodev::deploy_duplicity'
                 Configure: 
                     - 'solodev::deploy_solodev'
+                    - 'solodev::client_settings'
                     - 'solodev::update_solodev'
                     - 'mongo::heal_mongo'
                 Deploy: 

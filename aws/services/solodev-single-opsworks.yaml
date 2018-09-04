@@ -328,8 +328,10 @@ Resources:
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
+                    - 'solodev::deploy_duplicity'
                 Configure: 
                     - 'mongo::deploy_mongo_single'
+                    - 'solodev::client_settings'
                     - 'solodev::deploy_solodev'
                     - 'solodev::update_solodev'
                 Deploy:
