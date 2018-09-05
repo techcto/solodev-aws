@@ -283,30 +283,32 @@ Resources:
                     StackName: !Ref 'EnvironmentName'
                     HostedZoneName: !Ref FQDN
                     Region: !Ref 'AWS::Region'
-                    VolumeName: solodev
-                    document_root: /var/www
-                    control_root: /var/www/Solodev/clients/solodev
-                    mongo_nodes: !Ref DeploymentType
-                    software_name: Solodev
-                    client_name: solodev
-                    apache_conf_dir: /etc/httpd/conf.d
+
                     AWSAccessKeyId: !Ref BackupUserKeys
                     AWSSecretKey: !GetAtt 
                         - BackupUserKeys
                         - SecretAccessKey
-                    InstallBucketName: solodev-install
+
+                    ClientName: solodev
+                    SoftwareName: Solodev
+                    DocumentRoot: /var/www
+                    ApacheConfDir: /etc/httpd/conf.d
+                    DeploymentType: !Ref DeploymentType
+                    
                     RestoreBucketName: !Ref RestoreBucketName
                     BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
-                    CMSDir: solodevX
+
                     DBName: !Ref DatabaseName
-                    DBHOST: !Ref DatabaseHost
-                    DBUSER: !Ref DatabaseUsername
-                    DBPASSWORD: !Ref DatabasePassword
-                    ADMINUSER: !Ref AdminUser
-                    ADMINPASSWORD: !Ref AdminPassword
-                    EFSHOST: !Ref EFS
-                    THEME: ''
-                    WEBSITE: ''
+                    DBHost: !Ref DatabaseHost
+                    DBUser: !Ref DatabaseUsername
+                    DBPassword: !Ref DatabasePassword
+                    EFSHost: !Ref EFS
+                    MongoHost: "127.0.0.1"
+
+                    SolodevUser: !Ref AdminUser
+                    SolodevPassword: !Ref AdminPassword
+                    SolodevTheme: ''
+                    SolodevWebsite: ''
 
     WebServerLayer:
         Type: 'AWS::OpsWorks::Layer'
@@ -324,7 +326,7 @@ Resources:
                 - !Ref WebServerSecurityGroup
             CustomRecipes:
                 Setup:
-                    - 'solodev::mountEFS'
+                    - 'solodev::mount_EFS'
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
