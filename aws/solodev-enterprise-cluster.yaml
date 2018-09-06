@@ -41,7 +41,7 @@ Metadata:
             default: "Optional: CertificateArn"
 
 Mappings:
-  AutoScalingGroup:
+  Opsworks:
     us-east-1:
       AMI: "ami-0172540509ea64698"
     us-west-1:
@@ -58,9 +58,9 @@ Mappings:
       AMI: ""
     ap-northeast-1:
       AMI: ""
-  Opsworks:
+  AutoScalingGroup:
     us-east-1:
-      AMI: "ami-0484fd164fac8ac21"
+      AMI: "ami-07d102022d706aada"
     us-west-1:
       AMI: ""
     us-west-2:
