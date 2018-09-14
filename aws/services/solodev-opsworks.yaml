@@ -392,6 +392,7 @@ Resources:
             CustomRecipes:
                 Setup:
                     - 'solodev::mount_EFS'
+                    - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'mongo::deploy_mongo_cluster'
                     - 'solodev::deploy_duplicity'
@@ -442,7 +443,6 @@ Resources:
             CustomRecipes:
                 Setup:
                     - 'solodev::mount_EFS'
-                    - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
                 Configure:
