@@ -220,4 +220,4 @@ Outputs:
 
     AdminUrl: 
         Description: Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead.
-        Value: !Join ["", [ "https://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]
+        Value: !Join ["", [ "http://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]

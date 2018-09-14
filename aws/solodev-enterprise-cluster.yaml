@@ -210,4 +210,4 @@ Outputs:
 
     AdminUrl: 
         Description: The URL endpoint for load balancer. You should create a CNAME or alias to this name.
-        Value: !Join ["", [ "https://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]
+        Value: !Join ["", [ "http://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]
