@@ -129,6 +129,15 @@ Resources:
                 VPC: !Ref VPCID
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
+    EFS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+
     ECS:
         Type: AWS::CloudFormation::Stack
         Properties:
@@ -139,6 +148,7 @@ Resources:
                 AMI: !If [UseDefaultAMI, !FindInMap ["ECS", !Ref "AWS::Region", AMI], !Ref AMI]
                 ClusterSize: 2
                 VPC: !Ref VPCID
+                EFS: !GetAtt EFS.Outputs.EFS
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
