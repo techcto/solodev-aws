@@ -92,16 +92,16 @@ Resources:
 
     ECSService:
         Type: 'AWS::ECS::Service'
-        DependsOn: ALBListener
+        DependsOn: Listener
         Properties:
-          Cluster: !Ref ECSCluster
+          Cluster: !Ref Cluster
           ServiceName: nginx-proxy
-          DesiredCount: !Ref DesiredCapacity
+          DesiredCount: !Ref DesiredCount
           LoadBalancers:
             - ContainerName: nginx-proxy
-              ContainerPort: !Ref WebServerPort
-              TargetGroupArn: !Ref ECSTG
-          Role: !Ref ECSServiceRole
+              ContainerPort: 80
+              TargetGroupArn: !Ref TargetGroup
+          Role: !Ref ServiceRole
           TaskDefinition: !Ref ECSTaskDefinition
 
     CloudWatchLogsGroup:
@@ -131,10 +131,6 @@ Resources:
                   Value: 'true'
                 - Key: stickiness.lb_cookie.duration_seconds
                   Value: '1860'
-            Name: !Join 
-                - '-'
-                - - !Ref 'EnvironmentName'
-                  - RancherTG
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
