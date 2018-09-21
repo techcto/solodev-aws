@@ -41,26 +41,10 @@ Parameters:
         Description: Choose which subnets this cluster should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
-    LoadBalancer:
-        Description: The load balancer for the cluster hosts
-        Type: String
-
-    LoadBalancerSecurityGroup:
-        Description: Select the Load Balancer Security Group to use for the cluster hosts
-        Type: AWS::EC2::SecurityGroup::Id
-
     Path: 
         Description: The path to register with the Application Load Balancer
         Type: String
         Default: /
-
-    FQDN:
-        Type: String
-        Description: Fully qualified URL for using app.  DNS of FQDN must be pointed to CNAME of ALB.
-
-    CertificateArn:
-        Type: String
-        Description: SSL cert for AWS ALB HTTPS listener
 
     MinClusterSize:
         Description: Minimum hosts to deploy
@@ -121,31 +105,7 @@ Parameters:
     MountPoint:
         Description: The mount point for the EFS volume
         Type: String
-        Default: "/var/www/Solodev/clients/solodev"
-
-    AdminUser:
-        Description: CMS Admin User
-        Type: String
-
-    AdminPassword:
-        Description: CMS Admin Password
-        Type: String
-
-    DatabaseHost:
-        Type: String
-        Description: The database host
-
-    DatabaseName:
-        Type: String
-        Description: The database name
-
-    DatabaseUsername:
-        Type: String
-        Description: The database user name
-
-    DatabasePassword:
-        Type: String
-        Description: The database user password
+        Default: "/efs"
 
     DeploymentType:
         Type: String
