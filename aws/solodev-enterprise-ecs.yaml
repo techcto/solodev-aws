@@ -29,6 +29,7 @@ Metadata:
             - AdminUser
             - AdminPassword
             - DatabasePassword
+            - AMI
     ParameterLabels: 
         VPCID: 
             default: "Which VPC should this be deployed to?"
@@ -89,6 +90,11 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+
+    AMI:
+        Description: Build AMI - Please leave this blank unless told otherwise
+        Default: ''
+        Type: String
 
     AdminUser:
         Description: CMS Admin User
