@@ -128,6 +128,7 @@ Resources:
                   FromPort: 0
                   ToPort: 65535
                   CidrIp: "0.0.0.0/0"
+                  #SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22

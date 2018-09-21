@@ -162,6 +162,7 @@ Resources:
                 VPC: !Ref VPCID
                 Cluster: !GetAtt ECS.Outputs.Cluster
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 DesiredCount: 2
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: /
