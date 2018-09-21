@@ -147,6 +147,10 @@ Parameters:
         Type: String
         Description: The database user password
 
+    DeploymentType:
+        Type: String
+        Default: efs
+
 Conditions:
     UseSSL: !Equals [ !Ref CertificateArn, "" ]
 
@@ -249,7 +253,7 @@ Resources:
                     #!/bin/bash
                     yum install -y aws-cfn-bootstrap
                     mount --make-shared /
-                    /opt/aws/bin/cfn-init -v -c ${EnvType} --region ${AWS::Region} --stack ${AWS::StackName} --resource ECSLaunchConfiguration
+                    /opt/aws/bin/cfn-init -v -c ${DeploymentType} --region ${AWS::Region} --stack ${AWS::StackName} --resource ECSLaunchConfiguration
                     /opt/aws/bin/cfn-signal -e $? --region ${AWS::Region} --stack ${AWS::StackName} --resource ECSAutoScalingGroup
 
         Metadata:
@@ -276,7 +280,7 @@ Resources:
                                 [cfn-auto-reloader-hook]
                                 triggers=post.update
                                 path=Resources.ECSLaunchConfiguration.Metadata.AWS::CloudFormation::Init
-                                action=/opt/aws/bin/cfn-init -v -c ${EnvType} --region ${AWS::Region} --stack ${AWS::StackName} --resource ECSLaunchConfiguration
+                                action=/opt/aws/bin/cfn-init -v -c ${DeploymentType} --region ${AWS::Region} --stack ${AWS::StackName} --resource ECSLaunchConfiguration
                     services: 
                         sysvinit:
                             cfn-hup: 
@@ -344,7 +348,7 @@ Outputs:
     Cluster:
         Description: A reference to the ECS cluster
         Value: !Ref ECSCluster
-        
+
     ECSHostSecurityGroup:
         Description: A reference to the ECSHostSecurityGroup
         Value: !Ref ECSHostSecurityGroup
