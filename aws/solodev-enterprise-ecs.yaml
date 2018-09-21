@@ -109,6 +109,9 @@ Parameters:
         MinLength: 1
         MaxLength: 41
 
+Conditions:
+    UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+
 Resources:
 
     ALB:
@@ -127,6 +130,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
+                AMI: !If [UseDefaultAMI, !FindInMap ["ECS", !Ref "AWS::Region", AMI], !Ref AMI]
                 ClusterSize: 2
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
