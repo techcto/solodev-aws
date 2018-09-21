@@ -111,9 +111,6 @@ Parameters:
         Type: String
         Default: efs
 
-Conditions:
-    UseSSL: !Equals [ !Ref CertificateArn, "" ]
-
 Resources:
 
     ECSCluster:
