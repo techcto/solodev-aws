@@ -41,27 +41,6 @@ Parameters:
         Type: String
         Default: /
 
-    DatabaseHost:
-      Type: String
-      Description: The database host
-
-    DatabaseName:
-      Type: String
-      Description: The database name
-
-    DatabaseUsername:
-      Type: String
-      Description: The database user name
-
-    DatabasePassword:
-      Type: String
-      Description: The database user password
-        
-    DatabasePort:
-        Default: '3306'
-        Description: Database Port
-        Type: Number
-
 Resources:
 
     ECSTaskDefinition:
