@@ -41,6 +41,10 @@ Parameters:
         Description: Choose which subnets this cluster should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
     Path: 
         Description: The path to register with the Application Load Balancer
         Type: String
@@ -128,7 +132,7 @@ Resources:
                   FromPort: 0
                   ToPort: 65535
                   CidrIp: "0.0.0.0/0"
-                  #SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
+                  ##SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22
