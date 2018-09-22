@@ -115,6 +115,18 @@ Parameters:
         Type: String
         Default: efs
 
+    DockerUsername:
+        Description: Docker username
+        Type: String
+
+    DockerPassword:
+        Description: Docker password
+        Type: String
+
+    DockerEmail:
+        Description: Docker email address
+        Type: String
+
 Resources:
 
     ECSCluster:
