@@ -15,6 +15,14 @@ Parameters:
         Description: Please provide the ECS Cluster ID that this service should run on
         Type: String
 
+    LoadBalancer:
+        Description: The VPC that the ECS cluster is deployed to
+        Type: String
+
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
     DesiredCount: 
         Description: How many instances of this task should we run across our cluster?
         Type: Number
@@ -149,7 +157,7 @@ Resources:
             Volumes: 
                 - 
                     Host: 
-                        SourcePath: !Join ['', ['/efs/', !Ref AWS::StackName, '/solodev']]
+                        SourcePath: !Join ['', ['/efs/', !Ref 'AWS::StackName', '/solodev']]
                     Name: "solodev-client"
 
     CloudWatchLogsGroup:
@@ -193,44 +201,6 @@ Resources:
             Actions:
                 - TargetGroupArn: !Ref TargetGroup
                   Type: forward
-
-    # This IAM Role grants the service access to register/unregister with the 
-    # Application Load Balancer (ALB). It is based on the default documented here:
-    # http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_IAM_role.html
-    ServiceRole: 
-        Type: AWS::IAM::Role
-        Properties:
-            RoleName: !Sub ecs-service-${AWS::StackName}
-            Path: /
-            AssumeRolePolicyDocument: |
-                {
-                    "Statement": [{
-                        "Effect": "Allow",
-                        "Principal": { "Service": [ "ecs.amazonaws.com" ]},
-                        "Action": [ "sts:AssumeRole" ]
-                    }]
-                }
-            Policies:
-                - PolicyName: !Sub ecs-service-${AWS::StackName}
-                  PolicyDocument:
-                    {
-                        "Version": "2012-10-17",
-                        "Statement": [{
-                                "Effect": "Allow",
-                                "Action": [
-                                    "ec2:AuthorizeSecurityGroupIngress",
-                                    "ec2:Describe*",
-                                    "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                                    "elasticloadbalancing:Describe*",
-                                    "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                                    "elasticloadbalancing:DeregisterTargets",
-                                    "elasticloadbalancing:DescribeTargetGroups",
-                                    "elasticloadbalancing:DescribeTargetHealth",
-                                    "elasticloadbalancing:RegisterTargets"
-                                ],
-                                "Resource": "*"
-                        }]
-                    }
 
     ServiceScalableTarget:
         Type: "AWS::ApplicationAutoScaling::ScalableTarget"
@@ -336,10 +306,10 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-mongo.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPCID
+                VPC: !Ref VPC
                 Cluster: !Ref Cluster
                 LoadBalancer: !Ref LoadBalancer
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
-                ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
+                ServiceRole: !Ref ServiceRole 
                 ServiceDiscoveryNamespace: !Ref ServiceDiscoveryNamespace

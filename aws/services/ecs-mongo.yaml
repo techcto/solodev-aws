@@ -14,6 +14,10 @@ Parameters:
     LoadBalancer:
         Description: The VPC that the ECS cluster is deployed to
         Type: String
+
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
         
     Cluster:
         Description: Please provide the ECS Cluster ID that this service should run on
@@ -53,7 +57,6 @@ Resources:
 
     Service: 
         Type: AWS::ECS::Service
-        DependsOn: ListenerRule
         Properties: 
             Cluster: !Ref Cluster
             Role: !Ref ServiceRole
@@ -87,7 +90,7 @@ Resources:
             Volumes: 
                 - 
                     Host: 
-                        SourcePath: !Join ['', ['/efs/', !Ref AWS::StackName, '/mongo']]
+                        SourcePath: !Join ['', ['/efs/', !Ref 'AWS::StackName', '/mongo']]
                     Name: "solodev-mongo"
 
     CloudWatchLogsGroup:

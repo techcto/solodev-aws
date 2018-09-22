@@ -133,6 +133,7 @@ Parameters:
         Type: String
 
     DockerPassword:
+        NoEcho: true
         Description: Docker password
         Type: String
 
@@ -214,6 +215,7 @@ Resources:
                 VPC: !Ref VPCID
                 Cluster: !GetAtt ECS.Outputs.Cluster
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 DatabaseHost: "localhost"
