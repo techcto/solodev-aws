@@ -33,10 +33,6 @@ Parameters:
         Type: Number
         Default: 3
 
-    Listener:
-        Description: The Application Load Balancer listener to register with
-        Type: String
-
     Path: 
         Description: The path to register with the Application Load Balancer
         Type: String
@@ -53,10 +49,12 @@ Parameters:
     DatabaseName:
       Type: String
       Description: The database name
+      Default: "solodev-cms"
 
     DatabaseUsername:
       Type: String
       Description: The database user name
+      Default: "root"
 
     DatabasePassword:
       Type: String
@@ -70,6 +68,7 @@ Parameters:
     AdminUsername:
       Type: String
       Description: The admin user name
+      Default: "solodev"
 
     AdminPassword:
       Type: String
@@ -188,6 +187,16 @@ Resources:
                   Value: 'true'
                 - Key: stickiness.lb_cookie.duration_seconds
                   Value: '1860'
+
+    Listener:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Properties:
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: '80'
+            Protocol: HTTP
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule

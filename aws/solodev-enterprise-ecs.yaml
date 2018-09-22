@@ -33,7 +33,7 @@ Metadata:
         Label: 
           default: "Solodev Configuration"
         Parameters: 
-            - AdminUser
+            - AdminUsername
             - AdminPassword
             - DatabaseUsername
             - DatabasePassword
@@ -104,7 +104,7 @@ Parameters:
         Default: ''
         Type: String
 
-    AdminUser:
+    AdminUsername:
         Description: CMS Admin User
         Type: String
         Default: 'admin'
@@ -216,7 +216,7 @@ Resources:
                 Cluster: !GetAtt ECS.Outputs.Cluster
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                AdminUser: !Ref AdminUser
+                AdminUsername: !Ref AdminUsername
                 AdminPassword: !Ref AdminPassword
                 DatabaseHost: "localhost"
                 # DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
