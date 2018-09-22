@@ -24,10 +24,18 @@ Metadata:
           - KeyName
       - 
         Label: 
+          default: "Docker Credentials"
+        Parameters: 
+          - DockerUsername
+          - DockerPassword
+          - DockerEmail
+      - 
+        Label: 
           default: "Solodev Configuration"
         Parameters: 
             - AdminUser
             - AdminPassword
+            - DatabaseUsername
             - DatabasePassword
             - AMI
     ParameterLabels: 
@@ -115,6 +123,23 @@ Parameters:
         MinLength: 1
         MaxLength: 41
 
+    DatabaseUsername:
+        Description: Database root user
+        Type: String
+        Default: 'root'
+
+    DockerUsername:
+        Description: Docker username
+        Type: String
+
+    DockerPassword:
+        Description: Docker password
+        Type: String
+
+    DockerEmail:
+        Description: Docker email address
+        Type: String
+
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
 
@@ -149,6 +174,9 @@ Resources:
                 ClusterSize: 2
                 VPC: !Ref VPCID
                 EFS: !GetAtt EFS.Outputs.EFS
+                DockerUsername: !Ref DockerUsername
+                DockerPassword: !Ref DockerPassword
+                DockerEmail: !Ref DockerEmail
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
@@ -188,7 +216,8 @@ Resources:
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
-                DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
+                DatabaseHost: "localhost"
+                # DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 DesiredCount: 2
