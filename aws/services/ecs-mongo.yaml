@@ -1,0 +1,107 @@
+Description: >
+    ECS Task definition for MongoDB
+
+Parameters: 
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VPC:
+        Description: The VPC that the ECS cluster is deployed to
+        Type: AWS::EC2::VPC::Id
+
+    LoadBalancer:
+        Description: The VPC that the ECS cluster is deployed to
+        Type: String
+        
+    Cluster:
+        Description: Please provide the ECS Cluster ID that this service should run on
+        Type: String
+
+    DesiredCount: 
+        Description: How many instances of this task should we run across our cluster?
+        Type: Number
+        Default: 2
+
+    ServiceRole:
+        Description: The Application Load Balancer Service Role
+        Type: String
+
+    ServiceDiscoveryNamespace:
+        Description: The Service Discovery Namespace Private Dns
+        Type: String
+
+    Path: 
+        Description: The path to register with the Application Load Balancer
+        Type: String
+        Default: /
+
+    DatabaseName:
+      Type: String
+      Description: The database name
+
+    DatabaseUsername:
+      Type: String
+      Description: The database user name
+
+    DatabasePassword:
+      Type: String
+      Description: The database user password
+
+Resources:
+
+    Service: 
+        Type: AWS::ECS::Service
+        DependsOn: ListenerRule
+        Properties: 
+            Cluster: !Ref Cluster
+            Role: !Ref ServiceRole
+            DesiredCount: !Ref DesiredCount
+            TaskDefinition: !Ref TaskDefinition
+
+    TaskDefinition:
+        Type: AWS::ECS::TaskDefinition
+        Properties:
+            Family: solodev-cms
+            ContainerDefinitions:
+                - 
+                    Name: mongo
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-mongo"
+                            ContainerPath: "/mongo"
+                    Essential: true
+                    Image: mongo:4
+                    Environment:
+                        - Name: MONGO_INITDB_ROOT_USERNAME
+                          Value: !Ref DatabaseUsername
+                        - Name: MONGO_INITDB_ROOT_PASSWORD
+                          Value: !Ref DatabasePassword
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-mongo
+            Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref AWS::StackName, '/mongo']]
+                    Name: "solodev-mongo"
+
+    CloudWatchLogsGroup:
+        Type: AWS::Logs::LogGroup
+        Properties: 
+            LogGroupName: !Ref AWS::StackName
+            RetentionInDays: 14 
+
+    MongoServiceDiscovery:
+        Type: AWS::ServiceDiscovery::Service
+        Properties:
+            Name: mongo
+            DnsConfig:
+                DnsRecords: [{Type: A, TTL: "10"}]
+                NamespaceId: !Ref ServiceDiscoveryNamespace
+            HealthCheckCustomConfig:
+                FailureThreshold: 1

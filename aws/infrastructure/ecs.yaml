@@ -253,7 +253,10 @@ Resources:
                                     - /etc/cfn/hooks.d/cfn-auto-reloader.conf
                     commands:
                         add_instance_to_cluster:
-                            command: !Sub echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
+                            command: !Sub |
+                                echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
+                                echo ECS_ENGINE_AUTH_TYPE=docker >> /etc/ecs/ecs.config
+                                echo ECS_ENGINE_AUTH_DATA={"https://index.docker.io/v1/":{"username":"${DockerUsername}","password":"${DockerPassword}","email":"${DockerEmail}"}} >> /etc/ecs/ecs.config
                         change_cluster_storage_driver:
                             command: !Sub echo 'DOCKER_STORAGE_OPTIONS="--storage-driver overlay2"' > /etc/sysconfig/docker-storage
                         storage_opt_hack:

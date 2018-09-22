@@ -163,36 +163,37 @@ Resources:
     #             ECSHostSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
     #             Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
-    PROXY:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/nginx-proxy-ecs.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPCID
-                Cluster: !GetAtt ECS.Outputs.Cluster
-                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                DesiredCount: 2
-                ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
-                Path: /
-
-    # SOLODEV:
+    # PROXY:
     #     Type: AWS::CloudFormation::Stack
     #     Properties:
-    #         TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-ecs.yaml
+    #         TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/nginx-proxy-ecs.yaml
     #         Parameters:
     #             EnvironmentName: !Ref AWS::StackName
     #             VPC: !Ref VPCID
     #             Cluster: !GetAtt ECS.Outputs.Cluster
     #             LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-    #             AdminUser: !Ref AdminUser
-    #             AdminPassword: !Ref AdminPassword
-    #             DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
-    #             DatabasePassword: !Ref DatabasePassword
+    #             LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
     #             DesiredCount: 2
     #             ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
     #             Path: /
+
+    SOLODEV:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-solodev.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                Cluster: !GetAtt ECS.Outputs.Cluster
+                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+                AdminUser: !Ref AdminUser
+                AdminPassword: !Ref AdminPassword
+                DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
+                DatabaseUsername: !Ref DatabaseUsername
+                DatabasePassword: !Ref DatabasePassword
+                DesiredCount: 2
+                ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
+                Path: / 
 
 Outputs:
 
