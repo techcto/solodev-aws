@@ -98,6 +98,10 @@ Resources:
                     Subnets: !Ref Subnets
                     SecurityGroups:
                         - !GetAtt ServiceSecurityGroup.GroupId
+            LoadBalancers: 
+                    - ContainerName: "solodev-cms"
+                    ContainerPort: 8080
+                    TargetGroupArn: !Ref TargetGroup
 
     ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup
@@ -117,6 +121,10 @@ Resources:
             ContainerDefinitions:
                 -
                     Name: php-fpm
+                    PortMappings:
+                        - 
+                            ContainerPort: 9000
+                            Protocol: "tcp"
                     Essential: true
                     MountPoints: 
                         - 
@@ -148,6 +156,28 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-php-fpm
+                - 
+                    Name: apache2
+                    PortMappings:
+                        - 
+                            ContainerPort: 80
+                            Protocol: "tcp"
+                        - 
+                            ContainerPort: 443
+                            Protocol: "tcp"
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-client"
+                            ContainerPath: "/var/www/Solodev/clients/solodev"
+                    Essential: true
+                    Image: solodev/cms-apache:latest
+                    MemoryReservation: 256
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-apache2
             Volumes: 
                 - 
                     Host: 
