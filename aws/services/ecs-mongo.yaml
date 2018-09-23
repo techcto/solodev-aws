@@ -41,10 +41,6 @@ Parameters:
         Type: String
         Default: /
 
-    DatabaseName:
-      Type: String
-      Description: The database name
-
     DatabaseUsername:
       Type: String
       Description: The database user name

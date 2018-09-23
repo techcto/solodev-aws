@@ -322,5 +322,6 @@ Resources:
                 LoadBalancer: !Ref LoadBalancer
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
+                LoadBalancerSecurityGroup: !Ref LoadBalancerSecurityGroup
                 ServiceRole: !Ref ServiceRole 
                 ServiceDiscoveryNamespace: !Ref ServiceDiscoveryNamespace
