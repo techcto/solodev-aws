@@ -95,7 +95,6 @@ Resources:
                   ContainerPort: '80'
             NetworkConfiguration:
                 AwsvpcConfiguration:
-                    AssignPublicIp: ENABLED
                     Subnets: !Ref Subnets
                     SecurityGroups:
                         - !GetAtt ServiceSecurityGroup.GroupId
