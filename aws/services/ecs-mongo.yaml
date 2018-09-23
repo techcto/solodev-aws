@@ -99,6 +99,10 @@ Resources:
             ContainerDefinitions:
                 - 
                     Name: mongo
+                    PortMappings:
+                        - 
+                            ContainerPort: 27017
+                            Protocol: "tcp"
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-mongo"
