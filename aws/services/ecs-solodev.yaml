@@ -23,6 +23,10 @@ Parameters:
         Description: Select the Load Balancer Security Group to use for the cluster hosts
         Type: AWS::EC2::SecurityGroup::Id
 
+    Subnets:
+        Description: Choose which subnets this cluster should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
     DesiredCount: 
         Description: How many instances of this task should we run across our cluster?
         Type: Number
@@ -88,10 +92,10 @@ Resources:
             ServiceRegistries:
                 - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
             NetworkConfiguration:
-            AwsvpcConfiguration:
-                Subnets: !Ref Subnets
-                SecurityGroups:
-                    - !GetAtt ServiceSecurityGroup.GroupId
+                AwsvpcConfiguration:
+                    Subnets: !Ref Subnets
+                    SecurityGroups:
+                        - !GetAtt ServiceSecurityGroup.GroupId
 
     ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup

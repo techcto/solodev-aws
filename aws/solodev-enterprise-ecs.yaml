@@ -216,6 +216,7 @@ Resources:
                 Cluster: !GetAtt ECS.Outputs.Cluster
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 AdminUsername: !Ref AdminUsername
                 AdminPassword: !Ref AdminPassword
                 DatabaseHost: "localhost"
