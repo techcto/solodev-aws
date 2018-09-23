@@ -91,6 +91,8 @@ Resources:
             ServiceName: solodev-cms
             ServiceRegistries:
                 - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
+                  ContainerName: apache2
+                  ContainerPort: '80'
             NetworkConfiguration:
                 AwsvpcConfiguration:
                     Subnets: !Ref Subnets
@@ -319,7 +321,7 @@ Resources:
         Properties:
             Name: solodev-cms
             DnsConfig:
-                DnsRecords: [{Type: A, TTL: "10"}]
+                DnsRecords: [{Type: SRV, TTL: "10"}]
                 NamespaceId: !Ref ServiceDiscoveryNamespace
             HealthCheckCustomConfig:
                 FailureThreshold: 1

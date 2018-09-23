@@ -101,7 +101,7 @@ Resources:
         Properties:
             Name: mongo
             DnsConfig:
-                DnsRecords: [{Type: A, TTL: "10"}]
+                DnsRecords: [{Type: SRV, TTL: "10"}]
                 NamespaceId: !Ref ServiceDiscoveryNamespace
             HealthCheckCustomConfig:
                 FailureThreshold: 1
