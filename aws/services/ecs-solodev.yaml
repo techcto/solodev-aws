@@ -99,7 +99,7 @@ Resources:
                     SecurityGroups:
                         - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
-                - ContainerName: "solodev-cms"
+                - ContainerName: "apache2"
                   ContainerPort: 8080
                   TargetGroupArn: !Ref TargetGroup
 
@@ -111,7 +111,7 @@ Resources:
                 - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTP
                 - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTPS
             VpcId: !Ref VPC
-            
+
     TaskExecutionRole:
         Type: AWS::IAM::Role
         Properties:
