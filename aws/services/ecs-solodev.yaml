@@ -99,9 +99,9 @@ Resources:
                     SecurityGroups:
                         - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
-                    - ContainerName: "solodev-cms"
-                    ContainerPort: 8080
-                    TargetGroupArn: !Ref TargetGroup
+                - ContainerName: "solodev-cms"
+                  ContainerPort: 8080
+                  TargetGroupArn: !Ref TargetGroup
 
     ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup
@@ -111,6 +111,16 @@ Resources:
                 - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTP
                 - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTPS
             VpcId: !Ref VPC
+            
+    TaskExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
+            ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
@@ -317,16 +327,6 @@ Resources:
             ComparisonOperator: LessThanThreshold
             AlarmActions:
             - !Ref ServiceScaleInPolicy
-
-    TaskExecutionRole:
-        Type: AWS::IAM::Role
-        Properties:
-            AssumeRolePolicyDocument:
-                Version: 2012-10-17
-                Statement:
-                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
-            ManagedPolicyArns:
-                - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
     ServiceDiscoveryNamespace:
         Type: AWS::ServiceDiscovery::PrivateDnsNamespace
