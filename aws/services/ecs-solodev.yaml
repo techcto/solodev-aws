@@ -81,17 +81,26 @@ Resources:
         DependsOn: ListenerRule
         Properties: 
             Cluster: !Ref Cluster
-            Role: !Ref ServiceRole
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
-            DesiredCount: 4
+            DesiredCount: 3
             ServiceName: solodev-cms
             ServiceRegistries:
                 - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
-            LoadBalancers: 
-                - ContainerName: "solodev-cms"
-                  ContainerPort: 8080
-                  TargetGroupArn: !Ref TargetGroup
+            NetworkConfiguration:
+            AwsvpcConfiguration:
+                Subnets: !Ref Subnets
+                SecurityGroups:
+                    - !GetAtt MailServiceSecurityGroup.GroupId
+
+  MailServiceSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+        GroupDescription: mailhog ECS task
+        SecurityGroupIngress:
+            - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTP
+            - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTPS
+        VpcId: !Ref VPC
 
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
