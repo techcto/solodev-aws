@@ -359,3 +359,4 @@ Resources:
                 LoadBalancerSecurityGroup: !Ref LoadBalancerSecurityGroup
                 ServiceRole: !Ref ServiceRole 
                 ServiceDiscoveryNamespace: !Ref ServiceDiscoveryNamespace
+                Subnets: !Ref Subnets

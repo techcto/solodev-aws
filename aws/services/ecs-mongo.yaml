@@ -23,6 +23,10 @@ Parameters:
         Description: Please provide the ECS Cluster ID that this service should run on
         Type: String
 
+    Subnets:
+        Description: Choose which subnets this cluster should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
     DesiredCount: 
         Description: How many instances of this task should we run across our cluster?
         Type: Number
