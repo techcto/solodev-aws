@@ -76,6 +76,7 @@ Resources:
                             ContainerPath: "/mongo"
                     Essential: true
                     Image: mongo:4
+                    MemoryReservation: 256
                     Environment:
                         - Name: MONGO_INITDB_ROOT_USERNAME
                           Value: !Ref DatabaseUsername

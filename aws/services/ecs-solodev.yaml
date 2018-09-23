@@ -107,6 +107,7 @@ Resources:
                             ContainerPath: "/var/www/Solodev/clients/solodev"
                     Essential: true
                     Image: solodev/cms:latest
+                    MemoryReservation: 256
                     Environment:
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
