@@ -100,9 +100,10 @@ Resources:
     ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
+            GroupDescription: "Inbound web traffic"
             SecurityGroupIngress:
-                - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTP
-                - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTPS
+                - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTP
+                - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup} # HTTPS
             VpcId: !Ref VPC
 
     TaskDefinition:
