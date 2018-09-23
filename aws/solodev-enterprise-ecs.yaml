@@ -223,7 +223,7 @@ Resources:
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 DesiredCount: 2
-                ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
+                ServiceRole: !GetAtt ECS.Outputs.ECSRole 
                 Path: / 
 
 Outputs:

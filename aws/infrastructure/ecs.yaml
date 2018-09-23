@@ -329,3 +329,8 @@ Outputs:
     ECSHostSecurityGroup:
         Description: A reference to the ECSHostSecurityGroup
         Value: !Ref ECSHostSecurityGroup
+
+    ECSRole:
+        Description: A reference to the ECSRole
+        Value: !Ref ECSRole
+
