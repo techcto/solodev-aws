@@ -113,6 +113,7 @@ Resources:
         Properties:
             Family: solodev-cms
             NetworkMode: awsvpc
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
                 -
                     Name: php-fpm
@@ -147,30 +148,6 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-php-fpm
-                - 
-                    Name: apache2
-                    Links:
-                        - php-fpm
-                    PortMappings:
-                        - 
-                            ContainerPort: 80
-                            Protocol: "tcp"
-                        - 
-                            ContainerPort: 443
-                            Protocol: "tcp"
-                    MountPoints: 
-                        - 
-                            SourceVolume: "solodev-client"
-                            ContainerPath: "/var/www/Solodev/clients/solodev"
-                    Essential: true
-                    Image: solodev/cms-apache:latest
-                    MemoryReservation: 256
-                    LogConfiguration:
-                        LogDriver: awslogs
-                        Options:
-                            awslogs-group: !Ref AWS::StackName
-                            awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: solodev-apache2
             Volumes: 
                 - 
                     Host: 
@@ -310,6 +287,16 @@ Resources:
             ComparisonOperator: LessThanThreshold
             AlarmActions:
             - !Ref ServiceScaleInPolicy
+
+    TaskExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
+            ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
     ServiceDiscoveryNamespace:
         Type: AWS::ServiceDiscovery::PrivateDnsNamespace

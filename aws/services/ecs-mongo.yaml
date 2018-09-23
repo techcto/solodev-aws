@@ -64,6 +64,7 @@ Resources:
         Properties:
             Family: solodev-cms
             NetworkMode: awsvpc
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
                 - 
                     Name: mongo
