@@ -120,7 +120,7 @@ Resources:
                         - Name: DB_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
-                          Value: "mongo.ecs.solodev:27017"
+                          Value: !Join ['.', ['mongo', 'ecs', !Ref 'AWS::StackName', 'solodev:27017']]
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
@@ -298,7 +298,7 @@ Resources:
     ServiceDiscoveryNamespace:
         Type: AWS::ServiceDiscovery::PrivateDnsNamespace
         Properties:
-            Name: ecs.solodev
+            Name: !Join ['.', ['ecs', !Ref 'AWS::StackName', 'solodev']]
             Vpc: !Ref VPC
 
     SolodevServiceDiscovery:
