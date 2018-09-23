@@ -64,6 +64,8 @@ Resources:
             ServiceName: mongo
             ServiceRegistries:
                 - RegistryArn: !GetAtt MongoServiceDiscovery.Arn
+                  ContainerName: mongo
+                  ContainerPort: '27017'
             NetworkConfiguration:
                 AwsvpcConfiguration:
                     Subnets: !Ref Subnets

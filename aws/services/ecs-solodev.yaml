@@ -359,4 +359,5 @@ Resources:
                 LoadBalancerSecurityGroup: !Ref LoadBalancerSecurityGroup
                 ServiceRole: !Ref ServiceRole 
                 ServiceDiscoveryNamespace: !Ref ServiceDiscoveryNamespace
-                Subnets: !Ref Subnets
+                # Subnets: !Ref Subnets
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
