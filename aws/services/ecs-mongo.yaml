@@ -66,6 +66,7 @@ Resources:
             ContainerDefinitions:
                 - 
                     Name: mongo
+                    NetworkMode: awsvpc
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-mongo"

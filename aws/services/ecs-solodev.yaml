@@ -115,6 +115,7 @@ Resources:
             ContainerDefinitions:
                 -
                     Name: php-fpm
+                    NetworkMode: awsvpc
                     Essential: true
                     MountPoints: 
                         - 
@@ -148,6 +149,7 @@ Resources:
                             awslogs-stream-prefix: solodev-php-fpm
                 - 
                     Name: apache2
+                    NetworkMode: awsvpc
                     Links:
                         - php-fpm
                     PortMappings:
