@@ -100,7 +100,7 @@ Resources:
                         - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
                 - ContainerName: "apache2"
-                  ContainerPort: 8080
+                  ContainerPort: 80
                   TargetGroupArn: !Ref TargetGroup
 
     ServiceSecurityGroup:
@@ -213,6 +213,7 @@ Resources:
             HealthCheckProtocol: HTTP
             HealthCheckTimeoutSeconds: 5
             HealthyThresholdCount: 2
+            TargetType: ip
             TargetGroupAttributes:
                 - Key: deregistration_delay.timeout_seconds
                   Value: '700'
