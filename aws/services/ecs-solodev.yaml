@@ -91,16 +91,15 @@ Resources:
             AwsvpcConfiguration:
                 Subnets: !Ref Subnets
                 SecurityGroups:
-                    - !GetAtt MailServiceSecurityGroup.GroupId
+                    - !GetAtt ServiceSecurityGroup.GroupId
 
-  MailServiceSecurityGroup:
+    ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
-        GroupDescription: mailhog ECS task
-        SecurityGroupIngress:
-            - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTP
-            - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTPS
-        VpcId: !Ref VPC
+            SecurityGroupIngress:
+                - {ToPort: 80, FromPort: 80, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTP
+                - {ToPort: 443, FromPort: 443, IpProtocol: tcp, SourceSecurityGroupId: !Ref SourceSecurityGroup} # HTTPS
+            VpcId: !Ref VPC
 
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
