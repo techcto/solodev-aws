@@ -63,10 +63,10 @@ Resources:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: solodev-cms
+            NetworkMode: awsvpc
             ContainerDefinitions:
                 - 
                     Name: mongo
-                    NetworkMode: awsvpc
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-mongo"
