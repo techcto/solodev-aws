@@ -26,7 +26,7 @@ Parameters:
     DesiredCount: 
         Description: How many instances of this task should we run across our cluster?
         Type: Number
-        Default: 2
+        Default: 1
 
     ServiceRole:
         Description: The Application Load Balancer Service Role
@@ -55,9 +55,24 @@ Resources:
         Type: AWS::ECS::Service
         Properties: 
             Cluster: !Ref Cluster
-            # Role: !Ref ServiceRole
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
+            ServiceName: mongo
+            ServiceRegistries:
+                - RegistryArn: !GetAtt MongoServiceDiscovery.Arn
+            NetworkConfiguration:
+                AwsvpcConfiguration:
+                    Subnets: !Ref Subnets
+                    SecurityGroups:
+                        - !GetAtt ServiceSecurityGroup.GroupId
+
+    ServiceSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: "Inbound mongo traffic"
+            SecurityGroupIngress:
+                - {ToPort: 27017, FromPort: 27017, IpProtocol: tcp, SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup}
+            VpcId: !Ref VPC
 
     TaskExecutionRole:
         Type: AWS::IAM::Role
