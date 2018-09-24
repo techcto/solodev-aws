@@ -30,7 +30,7 @@ Parameters:
     DesiredCount: 
         Description: How many instances of this task should we run across our cluster?
         Type: Number
-        Default: 1
+        Default: 2
 
     ServiceRole:
         Description: The Application Load Balancer Service Role
@@ -39,7 +39,7 @@ Parameters:
     Path: 
         Description: The path to register with the Application Load Balancer
         Type: String
-        Default: /
+        Default: /mongo
 
     DatabaseUsername:
       Type: String
@@ -68,6 +68,10 @@ Resources:
                     Subnets: !Ref Subnets
                     SecurityGroups:
                         - !GetAtt ServiceSecurityGroup.GroupId
+            LoadBalancers: 
+                - ContainerName: "mongo"
+                  ContainerPort: 27017
+                  TargetGroupArn: !Ref TargetGroup
 
     ServiceSecurityGroup:
         Type: AWS::EC2::SecurityGroup
@@ -135,7 +139,7 @@ Resources:
         Properties:
             VpcId: !Ref VPC
             Port: 27017
-            Protocol: TCP
+            Protocol: HTTP
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
