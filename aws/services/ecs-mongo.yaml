@@ -36,10 +36,6 @@ Parameters:
         Description: The Application Load Balancer Service Role
         Type: String
 
-    ServiceDiscoveryNamespace:
-        Description: The Service Discovery Namespace Private Dns
-        Type: String
-
     Path: 
         Description: The path to register with the Application Load Balancer
         Type: String
@@ -60,12 +56,13 @@ Resources:
         Properties: 
             Cluster: !Ref Cluster
             DesiredCount: !Ref DesiredCount
+            LaunchType: EC2
             TaskDefinition: !Ref TaskDefinition
             ServiceName: mongo
-            ServiceRegistries:
-                - RegistryArn: !GetAtt MongoServiceDiscovery.Arn
-                  ContainerName: mongo
-                  ContainerPort: '27017'
+            # ServiceRegistries:
+            #     - RegistryArn: !GetAtt MongoServiceDiscovery.Arn
+            #       ContainerName: mongo
+            #       ContainerPort: '27017'
             NetworkConfiguration:
                 AwsvpcConfiguration:
                     Subnets: !Ref Subnets
@@ -133,12 +130,42 @@ Resources:
             LogGroupName: !Ref AWS::StackName
             RetentionInDays: 14 
 
-    MongoServiceDiscovery:
-        Type: AWS::ServiceDiscovery::Service
+    TargetGroup:
+        Type: AWS::ElasticLoadBalancingV2::TargetGroup
         Properties:
-            Name: mongo
-            DnsConfig:
-                DnsRecords: [{Type: SRV, TTL: "10"}]
-                NamespaceId: !Ref ServiceDiscoveryNamespace
-            HealthCheckCustomConfig:
-                FailureThreshold: 1
+            VpcId: !Ref VPC
+            Port: 27017
+            Protocol: TCP
+
+    Listener:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Properties:
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: '27017'
+            Protocol: HTTP
+    
+    ListenerRule:
+        Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Properties:
+            ListenerArn: !Ref Listener
+            Priority: 1
+            Conditions:
+                - Field: path-pattern
+                  Values: 
+                    - !Ref Path
+            Actions:
+                - TargetGroupArn: !Ref TargetGroup
+                  Type: forward
+
+    # MongoServiceDiscovery:
+    #     Type: AWS::ServiceDiscovery::Service
+    #     Properties:
+    #         Name: mongo
+    #         DnsConfig:
+    #             DnsRecords: [{Type: SRV, TTL: "10"}]
+    #             NamespaceId: !Ref ServiceDiscoveryNamespace
+    #         HealthCheckCustomConfig:
+    #             FailureThreshold: 1

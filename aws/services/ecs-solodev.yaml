@@ -87,12 +87,13 @@ Resources:
             Cluster: !Ref Cluster
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
-            DesiredCount: 3
+            DesiredCount: 2
+            # LaunchType: EC2
             ServiceName: solodev-cms
-            ServiceRegistries:
-                - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
-                  ContainerName: apache2
-                  ContainerPort: '80'
+            # ServiceRegistries:
+            #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
+            #       ContainerName: apache2
+            #       ContainerPort: '80'
             NetworkConfiguration:
                 AwsvpcConfiguration:
                     Subnets: !Ref Subnets
@@ -329,35 +330,18 @@ Resources:
             AlarmActions:
             - !Ref ServiceScaleInPolicy
 
-    ServiceDiscoveryNamespace:
-        Type: AWS::ServiceDiscovery::PrivateDnsNamespace
-        Properties:
-            Name: !Join ['.', ['ecs', !Ref 'AWS::StackName', 'solodev']]
-            Vpc: !Ref VPC
+    # ServiceDiscoveryNamespace:
+    #     Type: AWS::ServiceDiscovery::PrivateDnsNamespace
+    #     Properties:
+    #         Name: !Join ['.', ['ecs', !Ref 'AWS::StackName', 'solodev']]
+    #         Vpc: !Ref VPC
 
-    SolodevServiceDiscovery:
-        Type: AWS::ServiceDiscovery::Service
-        Properties:
-            Name: solodev-cms
-            DnsConfig:
-                DnsRecords: [{Type: SRV, TTL: "10"}]
-                NamespaceId: !Ref ServiceDiscoveryNamespace
-            HealthCheckCustomConfig:
-                FailureThreshold: 1
-
-    MONGO:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-mongo.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPC
-                Cluster: !Ref Cluster
-                LoadBalancer: !Ref LoadBalancer
-                DatabaseUsername: !Ref DatabaseUsername
-                DatabasePassword: !Ref DatabasePassword
-                LoadBalancerSecurityGroup: !Ref LoadBalancerSecurityGroup
-                ServiceRole: !Ref ServiceRole 
-                ServiceDiscoveryNamespace: !Ref ServiceDiscoveryNamespace
-                # Subnets: !Ref Subnets
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+    # SolodevServiceDiscovery:
+    #     Type: AWS::ServiceDiscovery::Service
+    #     Properties:
+    #         Name: solodev-cms
+    #         DnsConfig:
+    #             DnsRecords: [{Type: SRV, TTL: "10"}]
+    #             NamespaceId: !Ref ServiceDiscoveryNamespace
+    #         HealthCheckCustomConfig:
+    #             FailureThreshold: 1
