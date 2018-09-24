@@ -50,6 +50,10 @@ Parameters:
       Type: String
       Description: The database host
 
+    MongoHost:
+      Type: String
+      Description: The mongo host
+
     DatabaseName:
       Type: String
       Description: The database name
@@ -94,11 +98,11 @@ Resources:
             #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
             #       ContainerName: apache2
             #       ContainerPort: '80'
-            NetworkConfiguration:
-                AwsvpcConfiguration:
-                    Subnets: !Ref Subnets
-                    SecurityGroups:
-                        - !GetAtt ServiceSecurityGroup.GroupId
+            # NetworkConfiguration:
+            #     AwsvpcConfiguration:
+            #         Subnets: !Ref Subnets
+            #         SecurityGroups:
+            #             - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
                 - ContainerName: "apache2"
                   ContainerPort: 80
@@ -127,7 +131,7 @@ Resources:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: solodev-cms
-            NetworkMode: awsvpc
+            # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
                 -
@@ -156,7 +160,7 @@ Resources:
                         - Name: DB_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
-                          Value: !Join ['.', ['mongo', 'ecs', !Ref 'AWS::StackName', 'solodev:27017']]
+                          Value: !Ref MongoHost
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
@@ -214,7 +218,7 @@ Resources:
             HealthCheckProtocol: HTTP
             HealthCheckTimeoutSeconds: 5
             HealthyThresholdCount: 2
-            TargetType: ip
+            # TargetType: ip
             TargetGroupAttributes:
                 - Key: deregistration_delay.timeout_seconds
                   Value: '700'
@@ -224,6 +228,10 @@ Resources:
                   Value: 'true'
                 - Key: stickiness.lb_cookie.duration_seconds
                   Value: '1860'
+            Name: !Join 
+                - '-'
+                - - !Ref 'EnvironmentName'
+                  - solodev
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'

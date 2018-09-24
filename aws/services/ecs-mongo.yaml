@@ -63,11 +63,11 @@ Resources:
             #     - RegistryArn: !GetAtt MongoServiceDiscovery.Arn
             #       ContainerName: mongo
             #       ContainerPort: '27017'
-            NetworkConfiguration:
-                AwsvpcConfiguration:
-                    Subnets: !Ref Subnets
-                    SecurityGroups:
-                        - !GetAtt ServiceSecurityGroup.GroupId
+            # NetworkConfiguration:
+            #     AwsvpcConfiguration:
+            #         Subnets: !Ref Subnets
+            #         SecurityGroups:
+            #             - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
                 - ContainerName: "mongo"
                   ContainerPort: 27017
@@ -95,7 +95,7 @@ Resources:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: solodev-cms
-            NetworkMode: awsvpc
+            # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
                 - 
@@ -140,6 +140,11 @@ Resources:
             VpcId: !Ref VPC
             Port: 27017
             Protocol: HTTP
+            # TargetType: ip
+            Name: !Join 
+                - '-'
+                - - !Ref 'EnvironmentName'
+                  - mongo
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
