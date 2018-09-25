@@ -104,7 +104,7 @@ Resources:
             #         SecurityGroups:
             #             - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
-                - ContainerName: "apache2"
+                - ContainerName: "solodev-cms"
                   ContainerPort: 80
                   TargetGroupArn: !Ref TargetGroup
 
@@ -130,49 +130,49 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: solodev-cms
+            Family: solodev
             # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
-                -
-                    Name: php-fpm
-                    PortMappings:
-                        - 
-                            ContainerPort: 9000
-                            Protocol: "tcp"
-                    Essential: true
-                    MountPoints: 
-                        - 
-                            SourceVolume: "solodev-client"
-                            ContainerPath: "/var/www/Solodev/clients/solodev"
-                    Essential: true
-                    Image: solodev/cms:latest
-                    MemoryReservation: 256
-                    Environment:
-                        - Name: DB_HOST
-                          Value: !Ref DatabaseHost
-                        - Name: DB_PORT
-                          Value: !Ref DatabasePort
-                        - Name: DB_NAME
-                          Value: !Ref DatabaseName
-                        - Name: DB_USER
-                          Value: !Ref DatabaseUsername
-                        - Name: DB_PASSWORD
-                          Value: !Ref DatabasePassword
-                        - Name: MONGO_HOST
-                          Value: !Ref MongoHost
-                        - Name: SOLODEV_USER
-                          Value: !Ref AdminUsername
-                        - Name: SOLODEV_PASSWORD
-                          Value: !Ref AdminPassword
-                    LogConfiguration:
-                        LogDriver: awslogs
-                        Options:
-                            awslogs-group: !Ref AWS::StackName
-                            awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: solodev-php-fpm
+                # -
+                #     Name: php-fpm
+                #     PortMappings:
+                #         - 
+                #             ContainerPort: 9000
+                #             Protocol: "tcp"
+                #     Essential: true
+                #     MountPoints: 
+                #         - 
+                #             SourceVolume: "solodev-client"
+                #             ContainerPath: "/var/www/Solodev/clients/solodev"
+                #     Essential: true
+                #     Image: solodev/cms:latest
+                #     MemoryReservation: 256
+                #     Environment:
+                #         - Name: DB_HOST
+                #           Value: !Ref DatabaseHost
+                #         - Name: DB_PORT
+                #           Value: !Ref DatabasePort
+                #         - Name: DB_NAME
+                #           Value: !Ref DatabaseName
+                #         - Name: DB_USER
+                #           Value: !Ref DatabaseUsername
+                #         - Name: DB_PASSWORD
+                #           Value: !Ref DatabasePassword
+                #         - Name: MONGO_HOST
+                #           Value: !Ref MongoHost
+                #         - Name: SOLODEV_USER
+                #           Value: !Ref AdminUsername
+                #         - Name: SOLODEV_PASSWORD
+                #           Value: !Ref AdminPassword
+                #     LogConfiguration:
+                #         LogDriver: awslogs
+                #         Options:
+                #             awslogs-group: !Ref AWS::StackName
+                #             awslogs-region: !Ref AWS::Region
+                #             awslogs-stream-prefix: solodev-php-fpm
                 - 
-                    Name: apache2
+                    Name: solodev-cms
                     PortMappings:
                         - 
                             ContainerPort: 80
@@ -196,7 +196,7 @@ Resources:
             Volumes: 
                 - 
                     Host: 
-                        SourcePath: !Join ['', ['/efs/', !Ref 'AWS::StackName', '/solodev']]
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/solodev']]
                     Name: "solodev-client"
 
     CloudWatchLogsGroup:
@@ -211,26 +211,27 @@ Resources:
             VpcId: !Ref VPC
             Port: 80
             Protocol: HTTP
-            Matcher: 
-                HttpCode: 200-299
-            HealthCheckIntervalSeconds: 10
-            HealthCheckPath: /
-            HealthCheckProtocol: HTTP
-            HealthCheckTimeoutSeconds: 5
-            HealthyThresholdCount: 2
-            # TargetType: ip
-            TargetGroupAttributes:
-                - Key: deregistration_delay.timeout_seconds
-                  Value: '700'
-                - Key: stickiness.type
-                  Value: lb_cookie
-                - Key: stickiness.enabled
-                  Value: 'true'
-                - Key: stickiness.lb_cookie.duration_seconds
-                  Value: '1860'
+            # Matcher: 
+            #     HttpCode: 200-299
+            # HealthCheckIntervalSeconds: 10
+            # HealthCheckPath: /
+            # HealthCheckProtocol: HTTP
+            # HealthCheckTimeoutSeconds: 5
+            # HealthyThresholdCount: 2
+            # # TargetType: ip
+            # TargetGroupAttributes:
+            #     - Key: deregistration_delay.timeout_seconds
+            #       Value: '700'
+            #     - Key: stickiness.type
+            #       Value: lb_cookie
+            #     - Key: stickiness.enabled
+            #       Value: 'true'
+            #     - Key: stickiness.lb_cookie.duration_seconds
+            #       Value: '1860'
             Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
+                  - !Ref 'AWS::StackName'
                   - solodev
 
     Listener:
@@ -256,6 +257,38 @@ Resources:
                 - TargetGroupArn: !Ref TargetGroup
                   Type: forward
 
+    ScalingRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Principal:
+                        Service:
+                            - application-autoscaling.amazonaws.com
+                    Action:
+                      - "sts:AssumeRole"
+            Path: "/"
+            Policies:
+                -
+                    PolicyName: "root"
+                    PolicyDocument:
+                        Version: "2012-10-17"
+                        Statement:
+                        -
+                            Effect: "Allow"
+                            Action:
+                            - "dynamodb:DescribeTable"
+                            - "dynamodb:UpdateTable"
+                            - "cloudwatch:PutMetricAlarm"
+                            - "cloudwatch:DescribeAlarms"
+                            - "cloudwatch:GetMetricStatistics"
+                            - "cloudwatch:SetAlarmState"
+                            - "cloudwatch:DeleteAlarms"
+                            Resource: "*"
+
     ServiceScalableTarget:
         Type: "AWS::ApplicationAutoScaling::ScalableTarget"
         Properties:
@@ -266,7 +299,7 @@ Resources:
                 - - service
                   - !Ref Cluster
                   - !GetAtt Service.Name
-            RoleARN: !Ref ServiceRole
+            RoleARN: !GetAtt ScalingRole.Arn
             ScalableDimension: ecs:service:DesiredCount
             ServiceNamespace: ecs
 

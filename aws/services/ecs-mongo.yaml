@@ -94,7 +94,7 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: solodev-cms
+            Family: solodev
             # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
@@ -125,7 +125,7 @@ Resources:
             Volumes: 
                 - 
                     Host: 
-                        SourcePath: !Join ['', ['/efs/', !Ref 'AWS::StackName', '/mongo']]
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mongo']]
                     Name: "solodev-mongo"
 
     CloudWatchLogsGroup:
@@ -144,6 +144,7 @@ Resources:
             Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
+                  - !Ref 'AWS::StackName'
                   - mongo
 
     Listener:
