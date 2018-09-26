@@ -92,7 +92,6 @@ Resources:
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
             DesiredCount: 2
-            # LaunchType: EC2
             ServiceName: solodev-cms
             # ServiceRegistries:
             #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
@@ -131,48 +130,53 @@ Resources:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: solodev
-            # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
-                # -
-                #     Name: php-fpm
-                #     PortMappings:
-                #         - 
-                #             ContainerPort: 9000
-                #             Protocol: "tcp"
-                #     Essential: true
-                #     MountPoints: 
-                #         - 
-                #             SourceVolume: "solodev-client"
-                #             ContainerPath: "/var/www/Solodev/clients/solodev"
-                #     Essential: true
-                #     Image: solodev/cms:latest
-                #     MemoryReservation: 256
-                #     Environment:
-                #         - Name: DB_HOST
-                #           Value: !Ref DatabaseHost
-                #         - Name: DB_PORT
-                #           Value: !Ref DatabasePort
-                #         - Name: DB_NAME
-                #           Value: !Ref DatabaseName
-                #         - Name: DB_USER
-                #           Value: !Ref DatabaseUsername
-                #         - Name: DB_PASSWORD
-                #           Value: !Ref DatabasePassword
-                #         - Name: MONGO_HOST
-                #           Value: !Ref MongoHost
-                #         - Name: SOLODEV_USER
-                #           Value: !Ref AdminUsername
-                #         - Name: SOLODEV_PASSWORD
-                #           Value: !Ref AdminPassword
-                #     LogConfiguration:
-                #         LogDriver: awslogs
-                #         Options:
-                #             awslogs-group: !Ref AWS::StackName
-                #             awslogs-region: !Ref AWS::Region
-                #             awslogs-stream-prefix: solodev-php-fpm
+                -
+                    Name: solodev
+                    PortMappings:
+                        - 
+                            ContainerPort: 9000
+                            Protocol: "tcp"
+                    Essential: true
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-client"
+                            ContainerPath: "/var/www/Solodev/clients/solodev"
+                    Essential: true
+                    Image: solodev/cms:latest
+                    MemoryReservation: 256
+                    Environment:
+                        - Name: APP_DEBUG
+                          Value: false
+                        - Name: APP_ENV
+                          Value: 'prod'
+                        - Name: DB_HOST
+                          Value: !Ref DatabaseHost
+                        - Name: DB_PORT
+                          Value: !Ref DatabasePort
+                        - Name: DB_NAME
+                          Value: !Ref DatabaseName
+                        - Name: DB_USER
+                          Value: !Ref DatabaseUsername
+                        - Name: DB_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MONGO_HOST
+                          Value: !Ref MongoHost
+                        - Name: SOLODEV_USER
+                          Value: !Ref AdminUsername
+                        - Name: SOLODEV_PASSWORD
+                          Value: !Ref AdminPassword
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-php-fpm
                 - 
                     Name: solodev-cms
+                    Links:
+                        - solodev
                     PortMappings:
                         - 
                             ContainerPort: 80
