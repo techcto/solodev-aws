@@ -174,7 +174,7 @@ Resources:
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-php-fpm
                 - 
-                    Name: solodev-cms
+                    Name: apache2
                     Links:
                         - solodev
                     PortMappings:

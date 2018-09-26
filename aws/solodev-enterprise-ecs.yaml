@@ -182,15 +182,15 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
 
-    # RDS:
-    #     Type: AWS::CloudFormation::Stack
-    #     Properties:
-    #         TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
-    #         Parameters:
-    #             EnvironmentName: !Ref AWS::StackName
-    #             VPC: !Ref VPCID
-    #             ECSHostSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
-    #             Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+    RDS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                ECSHostSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     # PROXY:
     #     Type: AWS::CloudFormation::Stack
@@ -235,8 +235,8 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 AdminUsername: !Ref AdminUsername
                 AdminPassword: !Ref AdminPassword
-                DatabaseHost: "localhost"
-                # DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
+                # DatabaseHost: "localhost"
+                DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
                 MongoHost: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "mongo" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
