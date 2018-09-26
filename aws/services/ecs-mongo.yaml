@@ -144,7 +144,6 @@ Resources:
             Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
-                  - !Ref 'AWS::StackName'
                   - mongo
 
     Listener:
