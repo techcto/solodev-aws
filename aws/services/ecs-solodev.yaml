@@ -103,7 +103,7 @@ Resources:
             #         SecurityGroups:
             #             - !GetAtt ServiceSecurityGroup.GroupId
             LoadBalancers: 
-                - ContainerName: "solodev-cms"
+                - ContainerName: "apache2"
                   ContainerPort: 80
                   TargetGroupArn: !Ref TargetGroup
 
