@@ -189,8 +189,9 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                ECSHostSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                DatabasePassword: !Ref DatabasePassword
 
     # PROXY:
     #     Type: AWS::CloudFormation::Stack
