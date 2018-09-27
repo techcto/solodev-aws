@@ -225,6 +225,7 @@ Resources:
 
     SOLODEV:
         Type: AWS::CloudFormation::Stack
+        DependsOn: RDS
         Properties:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-solodev.yaml
             Parameters:
