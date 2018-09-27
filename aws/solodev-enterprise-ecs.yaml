@@ -238,7 +238,7 @@ Resources:
                 AdminUsername: !Ref AdminUsername
                 AdminPassword: !Ref AdminPassword
                 # DatabaseHost: "localhost"
-                DatabaseHost: !GetAtt RDS.Outputs.RDSEndpointAddress
+                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 MongoHost: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "mongo" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
