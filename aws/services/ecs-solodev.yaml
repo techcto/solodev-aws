@@ -123,9 +123,15 @@ Resources:
                 Statement:
                 - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
             Path: "/"
+            ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+    TaskRole:
+        Type: AWS::IAM::Role
+        Properties:
             Policies: 
                 - 
-                    PolicyName: "root"
+                    PolicyName: "AwsMarketplaceRegisterUsage"
                     PolicyDocument: 
                         Version: "2012-10-17"
                         Statement: 
@@ -133,14 +139,13 @@ Resources:
                                 Effect: "Allow"
                                 Action: [ "aws-marketplace:RegisterUsage" ]
                                 Resource: "*"
-            ManagedPolicyArns:
-                - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: solodev
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+            TaskRoleArn: !GetAtt TaskRole.Arn
             ContainerDefinitions:
                 -
                     Name: solodev
