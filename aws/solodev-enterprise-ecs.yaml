@@ -247,7 +247,7 @@ Resources:
                 # DatabaseHost: "localhost"
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
-                MongoHost: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "mongo" ]]
+                MongoHost: !Join [ "", [ !GetAtt ALB.Outputs.LoadBalancerUrl, ":27017" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 DesiredCount: 2
