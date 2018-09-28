@@ -35,6 +35,7 @@ Metadata:
         Parameters: 
             - AdminUsername
             - AdminPassword
+            - DatabaseName
             - DatabaseUsername
             - DatabasePassword
             - AMI
@@ -116,6 +117,11 @@ Parameters:
         MinLength: 1
         MaxLength: 41
 
+    DatabaseName:
+        Type: String
+        Description: The database name
+        Default: "solodev-cms"
+
     DatabasePassword:
         NoEcho: true
         Description: The database root account password
@@ -188,6 +194,7 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
+                DatabaseName: !Ref DatabaseName
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
@@ -239,6 +246,7 @@ Resources:
                 AdminPassword: !Ref AdminPassword
                 # DatabaseHost: "localhost"
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                DatabaseName: !Ref DatabaseName
                 MongoHost: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "mongo" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword

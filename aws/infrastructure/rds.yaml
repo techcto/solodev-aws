@@ -20,7 +20,6 @@ Parameters:
     Type: 'List<AWS::EC2::Subnet::Id>'
 
   DatabaseName:
-    Default: solodev
     Description: The database name
     Type: String
     MinLength: '1'
