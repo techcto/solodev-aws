@@ -120,7 +120,7 @@ Parameters:
     DatabaseName:
         Type: String
         Description: The database name
-        Default: "solodev-cms"
+        Default: "solodev"
 
     DatabasePassword:
         NoEcho: true
