@@ -92,7 +92,7 @@ Resources:
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
             DesiredCount: 2
-            ServiceName: solodev-cms
+            ServiceName: solodev
             # ServiceRegistries:
             #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
             #       ContainerName: apache2
