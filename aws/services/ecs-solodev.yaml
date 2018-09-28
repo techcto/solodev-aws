@@ -122,6 +122,17 @@ Resources:
                 Version: 2012-10-17
                 Statement:
                 - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
+            Path: "/"
+            Policies: 
+                - 
+                    PolicyName: "root"
+                    PolicyDocument: 
+                        Version: "2012-10-17"
+                        Statement: 
+                            - 
+                                Effect: "Allow"
+                                Action: [ "aws-marketplace:RegisterUsage" ]
+                                Resource: "*"
             ManagedPolicyArns:
                 - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
@@ -141,7 +152,7 @@ Resources:
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-client"
-                            ContainerPath: "/var/www/Solodev/clients/solodev"
+                            ContainerPath: "/var/www/solodev/clients/solodev"
                     Essential: true
                     Image: solodev/cms:latest
                     MemoryReservation: 256
@@ -186,7 +197,7 @@ Resources:
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-client"
-                            ContainerPath: "/var/www/Solodev/clients/solodev"
+                            ContainerPath: "/var/www/solodev/clients/solodev"
                     Essential: true
                     Image: solodev/cms-apache:latest
                     MemoryReservation: 256

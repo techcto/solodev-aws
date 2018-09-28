@@ -15,7 +15,6 @@ Parameters:
         Description: Choose which subnets the Application Load Balancer should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
-
 Resources:
 
   EFS:
