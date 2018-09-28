@@ -222,15 +222,15 @@ Resources:
             # HealthCheckTimeoutSeconds: 5
             # HealthyThresholdCount: 2
             # # TargetType: ip
-            # TargetGroupAttributes:
-            #     - Key: deregistration_delay.timeout_seconds
-            #       Value: '700'
-            #     - Key: stickiness.type
-            #       Value: lb_cookie
-            #     - Key: stickiness.enabled
-            #       Value: 'true'
-            #     - Key: stickiness.lb_cookie.duration_seconds
-            #       Value: '1860'
+            TargetGroupAttributes:
+                - Key: deregistration_delay.timeout_seconds
+                  Value: '120'
+                - Key: stickiness.type
+                  Value: lb_cookie
+                - Key: stickiness.enabled
+                  Value: 'true'
+                - Key: stickiness.lb_cookie.duration_seconds
+                  Value: '2000'
             Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
