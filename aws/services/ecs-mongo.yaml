@@ -94,7 +94,7 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: solodev
+            Family: mongodb
             # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:
