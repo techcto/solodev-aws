@@ -131,7 +131,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: 2012-10-17
                 Statement:
-                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs.amazonaws.com}}
+                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
             Path: "/"
             Policies: 
                 - 
