@@ -90,7 +90,7 @@ Resources:
             Cluster: !Ref Cluster
             DesiredCount: !Ref DesiredCount
             TaskDefinition: !Ref TaskDefinition
-            DesiredCount: 2
+            SchedulingStrategy: DAEMON
             ServiceName: solodev
             # ServiceRegistries:
             #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
@@ -160,7 +160,7 @@ Resources:
                             ContainerPath: "/var/www/solodev/clients/solodev"
                     Essential: true
                     Image: solodev/cms:latest
-                    MemoryReservation: 256
+                    Memory: '500'
                     Environment:
                         - Name: APP_DEBUG
                           Value: false
@@ -230,14 +230,15 @@ Resources:
             VpcId: !Ref VPC
             Port: 80
             Protocol: HTTP
-            # Matcher: 
-            #     HttpCode: 200-299
-            # HealthCheckIntervalSeconds: 10
-            # HealthCheckPath: /
-            # HealthCheckProtocol: HTTP
-            # HealthCheckTimeoutSeconds: 5
-            # HealthyThresholdCount: 2
-            # # TargetType: ip
+            Matcher: 
+                HttpCode: 200-299
+            HealthCheckIntervalSeconds: 30
+            HealthCheckPath: /
+            HealthCheckProtocol: HTTP
+            HealthCheckTimeoutSeconds: 20
+            HealthyThresholdCount: 2
+            UnhealthyThresholdCount: 3
+            # TargetType: ip
             TargetGroupAttributes:
                 - Key: deregistration_delay.timeout_seconds
                   Value: '120'
@@ -275,119 +276,119 @@ Resources:
                 - TargetGroupArn: !Ref TargetGroup
                   Type: forward
 
-    ScalingRole:
-        Type: AWS::IAM::Role
-        Properties:
-            AssumeRolePolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                  -
-                    Effect: "Allow"
-                    Principal:
-                        Service:
-                            - application-autoscaling.amazonaws.com
-                    Action:
-                      - "sts:AssumeRole"
-            Path: "/"
-            Policies:
-                -
-                    PolicyName: "root"
-                    PolicyDocument:
-                        Version: "2012-10-17"
-                        Statement:
-                        -
-                            Effect: "Allow"
-                            Action:
-                            - "dynamodb:DescribeTable"
-                            - "dynamodb:UpdateTable"
-                            - "cloudwatch:PutMetricAlarm"
-                            - "cloudwatch:DescribeAlarms"
-                            - "cloudwatch:GetMetricStatistics"
-                            - "cloudwatch:SetAlarmState"
-                            - "cloudwatch:DeleteAlarms"
-                            Resource: "*"
+    # ScalingRole:
+    #     Type: AWS::IAM::Role
+    #     Properties:
+    #         AssumeRolePolicyDocument:
+    #             Version: "2012-10-17"
+    #             Statement:
+    #               -
+    #                 Effect: "Allow"
+    #                 Principal:
+    #                     Service:
+    #                         - application-autoscaling.amazonaws.com
+    #                 Action:
+    #                   - "sts:AssumeRole"
+    #         Path: "/"
+    #         Policies:
+    #             -
+    #                 PolicyName: "root"
+    #                 PolicyDocument:
+    #                     Version: "2012-10-17"
+    #                     Statement:
+    #                     -
+    #                         Effect: "Allow"
+    #                         Action:
+    #                         - "dynamodb:DescribeTable"
+    #                         - "dynamodb:UpdateTable"
+    #                         - "cloudwatch:PutMetricAlarm"
+    #                         - "cloudwatch:DescribeAlarms"
+    #                         - "cloudwatch:GetMetricStatistics"
+    #                         - "cloudwatch:SetAlarmState"
+    #                         - "cloudwatch:DeleteAlarms"
+    #                         Resource: "*"
 
-    ServiceScalableTarget:
-        Type: "AWS::ApplicationAutoScaling::ScalableTarget"
-        Properties:
-            MaxCapacity: !Ref MaxCount
-            MinCapacity: !Ref DesiredCount
-            ResourceId: !Join
-                - /
-                - - service
-                  - !Ref Cluster
-                  - !GetAtt Service.Name
-            RoleARN: !GetAtt ScalingRole.Arn
-            ScalableDimension: ecs:service:DesiredCount
-            ServiceNamespace: ecs
+    # ServiceScalableTarget:
+    #     Type: "AWS::ApplicationAutoScaling::ScalableTarget"
+    #     Properties:
+    #         MaxCapacity: !Ref MaxCount
+    #         MinCapacity: !Ref DesiredCount
+    #         ResourceId: !Join
+    #             - /
+    #             - - service
+    #               - !Ref Cluster
+    #               - !GetAtt Service.Name
+    #         RoleARN: !GetAtt ScalingRole.Arn
+    #         ScalableDimension: ecs:service:DesiredCount
+    #         ServiceNamespace: ecs
 
-    ServiceScaleOutPolicy:
-        Type : "AWS::ApplicationAutoScaling::ScalingPolicy"
-        Properties:
-            PolicyName: ServiceScaleOutPolicy
-            PolicyType: StepScaling
-            ScalingTargetId: !Ref ServiceScalableTarget
-            StepScalingPolicyConfiguration:
-                AdjustmentType: ChangeInCapacity
-                Cooldown: 1800
-                MetricAggregationType: Average
-                StepAdjustments:
-                - MetricIntervalLowerBound: 0
-                  ScalingAdjustment: 1
+    # ServiceScaleOutPolicy:
+    #     Type : "AWS::ApplicationAutoScaling::ScalingPolicy"
+    #     Properties:
+    #         PolicyName: ServiceScaleOutPolicy
+    #         PolicyType: StepScaling
+    #         ScalingTargetId: !Ref ServiceScalableTarget
+    #         StepScalingPolicyConfiguration:
+    #             AdjustmentType: ChangeInCapacity
+    #             Cooldown: 1800
+    #             MetricAggregationType: Average
+    #             StepAdjustments:
+    #             - MetricIntervalLowerBound: 0
+    #               ScalingAdjustment: 1
 
-    ServiceScaleInPolicy:
-        Type : "AWS::ApplicationAutoScaling::ScalingPolicy"
-        Properties:
-            PolicyName: ServiceScaleInPolicy
-            PolicyType: StepScaling
-            ScalingTargetId: !Ref ServiceScalableTarget
-            StepScalingPolicyConfiguration:
-                AdjustmentType: ChangeInCapacity
-                Cooldown: 1800
-                MetricAggregationType: Average
-                StepAdjustments:
-                - MetricIntervalUpperBound: 0
-                  ScalingAdjustment: -1
+    # ServiceScaleInPolicy:
+    #     Type : "AWS::ApplicationAutoScaling::ScalingPolicy"
+    #     Properties:
+    #         PolicyName: ServiceScaleInPolicy
+    #         PolicyType: StepScaling
+    #         ScalingTargetId: !Ref ServiceScalableTarget
+    #         StepScalingPolicyConfiguration:
+    #             AdjustmentType: ChangeInCapacity
+    #             Cooldown: 1800
+    #             MetricAggregationType: Average
+    #             StepAdjustments:
+    #             - MetricIntervalUpperBound: 0
+    #               ScalingAdjustment: -1
 
-    CPUScaleOutAlarm:
-        Type: AWS::CloudWatch::Alarm
-        Properties:
-            AlarmName: CPU utilization greater than 90%
-            AlarmDescription: Alarm if cpu utilization greater than 90% of reserved cpu
-            Namespace: AWS/ECS
-            MetricName: CPUUtilization
-            Dimensions:
-            - Name: ClusterName
-              Value: !Ref Cluster
-            - Name: ServiceName
-              Value: !GetAtt Service.Name
-            Statistic: Maximum
-            Period: '60'
-            EvaluationPeriods: '3'
-            Threshold: '90'
-            ComparisonOperator: GreaterThanThreshold
-            AlarmActions:
-            - !Ref ServiceScaleOutPolicy
+    # CPUScaleOutAlarm:
+    #     Type: AWS::CloudWatch::Alarm
+    #     Properties:
+    #         AlarmName: CPU utilization greater than 90%
+    #         AlarmDescription: Alarm if cpu utilization greater than 90% of reserved cpu
+    #         Namespace: AWS/ECS
+    #         MetricName: CPUUtilization
+    #         Dimensions:
+    #         - Name: ClusterName
+    #           Value: !Ref Cluster
+    #         - Name: ServiceName
+    #           Value: !GetAtt Service.Name
+    #         Statistic: Maximum
+    #         Period: '60'
+    #         EvaluationPeriods: '3'
+    #         Threshold: '90'
+    #         ComparisonOperator: GreaterThanThreshold
+    #         AlarmActions:
+    #         - !Ref ServiceScaleOutPolicy
 
-    CPUScaleInAlarm:
-        Type: AWS::CloudWatch::Alarm
-        Properties:
-            AlarmName: CPU utilization less than 70%
-            AlarmDescription: Alarm if cpu utilization greater than 70% of reserved cpu
-            Namespace: AWS/ECS
-            MetricName: CPUUtilization
-            Dimensions:
-            - Name: ClusterName
-              Value: !Ref Cluster
-            - Name: ServiceName
-              Value: !GetAtt Service.Name
-            Statistic: Maximum
-            Period: '60'
-            EvaluationPeriods: '10'
-            Threshold: '70'
-            ComparisonOperator: LessThanThreshold
-            AlarmActions:
-            - !Ref ServiceScaleInPolicy
+    # CPUScaleInAlarm:
+    #     Type: AWS::CloudWatch::Alarm
+    #     Properties:
+    #         AlarmName: CPU utilization less than 70%
+    #         AlarmDescription: Alarm if cpu utilization greater than 70% of reserved cpu
+    #         Namespace: AWS/ECS
+    #         MetricName: CPUUtilization
+    #         Dimensions:
+    #         - Name: ClusterName
+    #           Value: !Ref Cluster
+    #         - Name: ServiceName
+    #           Value: !GetAtt Service.Name
+    #         Statistic: Maximum
+    #         Period: '60'
+    #         EvaluationPeriods: '10'
+    #         Threshold: '70'
+    #         ComparisonOperator: LessThanThreshold
+    #         AlarmActions:
+    #         - !Ref ServiceScaleInPolicy
 
     # ServiceDiscoveryNamespace:
     #     Type: AWS::ServiceDiscovery::PrivateDnsNamespace
