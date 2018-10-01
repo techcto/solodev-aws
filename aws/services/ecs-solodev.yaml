@@ -89,11 +89,6 @@ Parameters:
       Description: Apache container image
       Type: String
 
-    PORT:
-      Description: HTTP or HTTPS (HTTPS requires AWS cert)
-      Type: String
-      Default: 'HTTP'
-
     FQDN:
       Type: String
       Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
@@ -105,7 +100,7 @@ Parameters:
       Default: ''
 
 Conditions:
-    UseHTTPS: !Equals [ !Ref PORT, "HTTPS" ]
+    UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
 
 Resources:
 
@@ -213,6 +208,8 @@ Resources:
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
                           Value: !Ref AdminPassword
+                        - Name: FQDN
+                          Value: !Ref FQDN
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:

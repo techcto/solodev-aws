@@ -32,11 +32,11 @@ Metadata:
         Label: 
           default: "Solodev Configuration"
         Parameters: 
-            - AdminUsername
-            - AdminPassword
-            - DatabaseName
-            - DatabaseUsername
-            - DatabasePassword
+          - AdminUsername
+          - AdminPassword
+          - DatabaseName
+          - DatabaseUsername
+          - DatabasePassword
       - 
         Label: 
           default: "OPTIONAL: Docker Credentials (Required if not purchased through AWS)"
@@ -95,12 +95,6 @@ Parameters:
         Type: String
         Description: SSL cert for HTTPS listener that matches the FQDN
         Default: ''
-
-    PORT:
-        Description: HTTP or HTTPS (HTTPS requires AWS cert)
-        Type: String
-        Default: HTTP
-        AllowedValues: [HTTP, HTTPS]
 
     KeyName:
         Default: ''
@@ -278,7 +272,6 @@ Resources:
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
-                PORT: !Ref PORT
                 CertificateArn: !Ref CertificateArn
                 SolodevContainer: !Ref SolodevContainer
                 ApacheContainer: !Ref ApacheContainer
