@@ -89,6 +89,24 @@ Parameters:
       Description: Apache container image
       Type: String
 
+    PORT:
+      Description: HTTP or HTTPS (HTTPS requires AWS cert)
+      Type: String
+      Default: 'HTTP'
+
+    FQDN:
+      Type: String
+      Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
+      Default: ''
+
+    CertificateArn:
+      Type: String
+      Description: SSL cert for HTTPS listener that matches the FQDN
+      Default: ''
+
+Conditions:
+    UseHTTPS: !Equals [ !Ref PORT, "HTTPS" ]
+
 Resources:
 
     Service: 
@@ -269,12 +287,14 @@ Resources:
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
         Properties:
+            Certificates: 
+                - CertificateArn: !Ref CertificateArn
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
             LoadBalancerArn: !Ref LoadBalancer
-            Port: '80'
-            Protocol: HTTP
+            Port: !If [UseHTTPS, 443, 80]
+            Protocol: !If [UseHTTPS, 'HTTPS', 'HTTP']
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule

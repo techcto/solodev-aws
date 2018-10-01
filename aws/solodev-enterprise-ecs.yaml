@@ -24,7 +24,7 @@ Metadata:
           - KeyName
       - 
         Label: 
-          default: "AWS ECR"
+          default: "Container Location (Default DockerHub)"
         Parameters: 
           - SolodevContainer
           - ApacheContainer
@@ -88,11 +88,19 @@ Parameters:
 
     FQDN:
         Type: String
-        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+        Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
+        Default: ''
 
     CertificateArn:
         Type: String
-        Description: SSL cert for HTTPS listener that matches the FQDN above
+        Description: SSL cert for HTTPS listener that matches the FQDN
+        Default: ''
+
+    PORT:
+        Description: HTTP or HTTPS (HTTPS requires AWS cert)
+        Type: String
+        Default: HTTP
+        AllowedValues: [HTTP, HTTPS]
 
     KeyName:
         Default: ''
@@ -269,6 +277,9 @@ Resources:
                 MongoHost: !Join [ "", [ !GetAtt ALB.Outputs.LoadBalancerUrl, ":27017" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
+                FQDN: !Ref FQDN
+                PORT: !Ref PORT
+                CertificateArn: !Ref CertificateArn
                 SolodevContainer: !Ref SolodevContainer
                 ApacheContainer: !Ref ApacheContainer
                 DesiredCount: 2
