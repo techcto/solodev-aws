@@ -288,7 +288,7 @@ Resources:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
         Properties:
             Certificates: 
-                - CertificateArn: !Ref CertificateArn
+                - !If [UseHTTPS, { CertificateArn: !Ref CertificateArn }, !Ref "AWS::NoValue" ]
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
