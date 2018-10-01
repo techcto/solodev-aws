@@ -281,7 +281,7 @@ Resources:
                   Value: '2000'
             Name: !Join 
                 - '-'
-                - - !Ref 'EnvironmentName'
+                - - !Ref AWS::StackName
                   - solodev
 
     Listener:
