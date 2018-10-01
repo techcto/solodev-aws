@@ -24,11 +24,10 @@ Metadata:
           - KeyName
       - 
         Label: 
-          default: "Docker Credentials"
+          default: "AWS ECR"
         Parameters: 
-          - DockerUsername
-          - DockerPassword
-          - DockerEmail
+          - SolodevContainer
+          - ApacheContainer
       - 
         Label: 
           default: "Solodev Configuration"
@@ -39,6 +38,13 @@ Metadata:
             - DatabaseUsername
             - DatabasePassword
             - AMI
+      - 
+        Label: 
+          default: "OPTIONAL: Docker Credentials (Required if not purchased through AWS)"
+        Parameters: 
+          - DockerUsername
+          - DockerPassword
+          - DockerEmail
     ParameterLabels: 
         VPCID: 
             default: "Which VPC should this be deployed to?"
@@ -64,6 +70,11 @@ Mappings:
     ap-southeast-2:
       AMI: ""
     ap-northeast-1:
+      AMI: ""
+  REPO:
+    us-east-1:
+      AMI: "ami-0b9a214f40c38d5eb"
+    us-west-1:
       AMI: ""
 
 Parameters:
@@ -99,6 +110,16 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+
+    SolodevContainer:
+        Description: Solodev container image
+        Default: 'solodev/cms:latest'
+        Type: String
+
+    ApacheContainer:
+        Description: Apache container image
+        Default: 'solodev/cms-apache:latest'
+        Type: String
 
     AMI:
         Description: Build AMI - Please leave this blank unless told otherwise
@@ -149,6 +170,7 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    UseAwsECR: !Equals [ !Ref AwsECR, "" ]
 
 Resources:
 
@@ -244,12 +266,13 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 AdminUsername: !Ref AdminUsername
                 AdminPassword: !Ref AdminPassword
-                # DatabaseHost: "localhost"
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
                 MongoHost: !Join [ "", [ !GetAtt ALB.Outputs.LoadBalancerUrl, ":27017" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
+                SolodevContainer: !Ref SolodevContainer
+                ApacheContainer: !Ref ApacheContainer
                 DesiredCount: 2
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 

@@ -81,6 +81,14 @@ Parameters:
       Type: String
       Description: The admin user password
 
+    SolodevContainer:
+      Description: Solodev container image
+      Type: String
+
+    ApacheContainer:
+      Description: Apache container image
+      Type: String
+
 Resources:
 
     Service: 
@@ -164,7 +172,7 @@ Resources:
                             SourceVolume: "solodev-client"
                             ContainerPath: "/var/www/solodev/clients/solodev"
                     Essential: true
-                    Image: solodev/cms:latest
+                    Image: !Ref SolodevContainer
                     Memory: '500'
                     Environment:
                         - Name: APP_DEBUG
@@ -209,7 +217,7 @@ Resources:
                             SourceVolume: "solodev-client"
                             ContainerPath: "/var/www/solodev/clients/solodev"
                     Essential: true
-                    Image: solodev/cms-apache:latest
+                    Image: !Ref ApacheContainer
                     MemoryReservation: 256
                     LogConfiguration:
                         LogDriver: awslogs
