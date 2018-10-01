@@ -90,6 +90,7 @@ Resources:
             Cluster: !Ref Cluster
             TaskDefinition: !Ref TaskDefinition
             SchedulingStrategy: DAEMON
+            HealthCheckGracePeriodSeconds: 300
             ServiceName: solodev
             # ServiceRegistries:
             #     - RegistryArn: !GetAtt SolodevServiceDiscovery.Arn
@@ -236,10 +237,10 @@ Resources:
             Protocol: HTTP
             Matcher: 
                 HttpCode: 200-299
-            HealthCheckIntervalSeconds: 30
+            HealthCheckIntervalSeconds: 45
             HealthCheckPath: /
             HealthCheckProtocol: HTTP
-            HealthCheckTimeoutSeconds: 20
+            HealthCheckTimeoutSeconds: 30
             HealthyThresholdCount: 2
             UnhealthyThresholdCount: 3
             # TargetType: ip
