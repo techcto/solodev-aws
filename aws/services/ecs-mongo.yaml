@@ -94,7 +94,7 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: mongodb
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'mongodb']]
             # NetworkMode: awsvpc
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             ContainerDefinitions:

@@ -147,7 +147,7 @@ Resources:
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: solodev-cms
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-cms']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
             ContainerDefinitions:
