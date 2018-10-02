@@ -105,6 +105,17 @@ Conditions:
 
 Resources:
 
+    SolodevBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
+            AccessControl: 'BucketOwnerFullControl'
+            Tags:
+                -
+                  Key: 'Name'
+                  Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
+        DeletionPolicy: Delete
+
     Service: 
         Type: AWS::ECS::Service
         Properties: 
@@ -157,7 +168,7 @@ Resources:
             Path: "/"
             Policies: 
                 - 
-                    PolicyName: "AwsMarketplaceRegisterUsage"
+                    PolicyName: "solodev-inline"
                     PolicyDocument: 
                         Version: "2012-10-17"
                         Statement: 
@@ -165,6 +176,63 @@ Resources:
                                 Effect: "Allow"
                                 Action: [ "aws-marketplace:RegisterUsage" ]
                                 Resource: "*"
+                            -   
+                                Effect: Allow
+                                Action:
+                                  - 's3:*'
+                                Resource: !Join ['', ['arn:aws:s3:::', !Ref 'SolodevBucket', /*]]
+
+    TaskDefinition:
+        Type: AWS::ECS::TaskDefinition
+        Properties:
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-runner']]
+            # NetworkMode: awsvpc
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+            ContainerDefinitions:
+                - 
+                    Name: runner
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-client"
+                            ContainerPath: "/var/www/solodev/clients/solodev"
+                    Image: solodev-runner:4
+                    Memory: '500'
+                    Environment:
+                        - Name: APP_DEBUG
+                          Value: false
+                        - Name: APP_ENV
+                          Value: 'prod'
+                        - Name: DB_HOST
+                          Value: !Ref DatabaseHost
+                        - Name: DB_PORT
+                          Value: !Ref DatabasePort
+                        - Name: DB_NAME
+                          Value: !Ref DatabaseName
+                        - Name: DB_USER
+                          Value: !Ref DatabaseUsername
+                        - Name: DB_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MONGO_HOST
+                          Value: !Ref MongoHost
+                        - Name: SOLODEV_USER
+                          Value: !Ref AdminUsername
+                        - Name: SOLODEV_PASSWORD
+                          Value: !Ref AdminPassword
+                        - Name: FQDN
+                          Value: !Ref FQDN
+                        - Name: BACKUP_BUCKET
+                          Value: !Ref SolodevBucket
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-runner
+            Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/solodev']]
+                    Name: "solodev-client"
 
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
@@ -215,7 +283,7 @@ Resources:
                         Options:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: solodev-php-fpm
+                            awslogs-stream-prefix: solodev-cms
                 - 
                     Name: apache2
                     Links:
@@ -462,3 +530,9 @@ Resources:
     #             NamespaceId: !Ref ServiceDiscoveryNamespace
     #         HealthCheckCustomConfig:
     #             FailureThreshold: 1
+
+Outputs:
+
+    SolodevBucket:
+        Description: A reference to the S3 bucket for solodev
+        Value: !Ref SolodevBucket
