@@ -319,7 +319,7 @@ Resources:
 
     ListenerSSLRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        Condition: UseHTTPS
+        DependsOn: ListenerSSL
         Properties:
             ListenerArn: !Ref ListenerSSL
             Priority: 2
