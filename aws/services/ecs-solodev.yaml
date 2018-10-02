@@ -296,8 +296,7 @@ Resources:
         Condition: UseHTTPS
         Properties:
             Certificates: 
-                CertificateArn:
-                    - !Ref CertificateArn
+                - CertificateArn: !Ref CertificateArn
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
