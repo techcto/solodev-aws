@@ -101,6 +101,7 @@ Parameters:
 
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
+    UseHTTP: !Equals [ !Ref CertificateArn, "" ]
 
 Resources:
 
@@ -283,7 +284,7 @@ Resources:
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
-        Condition: !Not [ UseHTTPS ]
+        Condition: UseHTTP
         Properties:
             DefaultActions:
                 - Type: forward
