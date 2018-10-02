@@ -283,6 +283,7 @@ Resources:
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Condition: !Not [ UseHTTPS ]
         Properties:
             DefaultActions:
                 - Type: forward
@@ -306,6 +307,7 @@ Resources:
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        DependsOn: Listener
         Properties:
             ListenerArn: !Ref Listener
             Priority: 1
