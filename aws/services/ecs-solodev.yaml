@@ -293,7 +293,7 @@ Resources:
 
     ListenerSSL:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
-        Condition: "UseHTTPS",
+        Condition: UseHTTPS
         Properties:
             Certificates: 
                 - !Ref CertificateArn
@@ -319,6 +319,7 @@ Resources:
 
     ListenerSSLRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Condition: UseHTTPS
         Properties:
             ListenerArn: !Ref ListenerSSL
             Priority: 2
