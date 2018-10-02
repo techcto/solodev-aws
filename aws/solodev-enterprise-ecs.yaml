@@ -53,9 +53,9 @@ Metadata:
         VPCID: 
             default: "Which VPC should this be deployed to?"
         FQDN:
-            default: "Optional: FQDN"
+            default: "Optional: DNS name for CMS.  DNS permissions required."
         CertificateArn:
-            default: "Optional: CertificateArn"
+            default: "Optional: Certificate Arn from https://console.aws.amazon.com/acm/home"
 
 Mappings:
   ECS:
@@ -88,7 +88,7 @@ Parameters:
 
     FQDN:
         Type: String
-        Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
+        Description: URL for app. Stack name + FQDN = CMS Admin URL
         Default: ''
 
     CertificateArn:

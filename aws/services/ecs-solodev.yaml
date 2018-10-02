@@ -284,20 +284,44 @@ Resources:
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
         Properties:
-            Certificates: 
-                - !If [UseHTTPS, { CertificateArn: !Ref CertificateArn }, !Ref "AWS::NoValue" ]
             DefaultActions:
                 - Type: forward
                   TargetGroupArn: !Ref TargetGroup
             LoadBalancerArn: !Ref LoadBalancer
-            Port: !If [UseHTTPS, 443, 80]
-            Protocol: !If [UseHTTPS, 'HTTPS', 'HTTP']
+            Port: 80
+            Protocol: HTTP
+
+    ListenerSSL:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Condition: "UseHTTPS",
+        Properties:
+            Certificates: 
+                - !Ref CertificateArn
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: 443
+            Protocol: HTTPS
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
         Properties:
             ListenerArn: !Ref Listener
             Priority: 1
+            Conditions:
+                - Field: path-pattern
+                  Values: 
+                    - !Ref Path
+            Actions:
+                - TargetGroupArn: !Ref TargetGroup
+                  Type: forward
+
+    ListenerSSLRule:
+        Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Properties:
+            ListenerArn: !Ref ListenerSSL
+            Priority: 2
             Conditions:
                 - Field: path-pattern
                   Values: 
