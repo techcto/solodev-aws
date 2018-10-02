@@ -50,12 +50,10 @@ Metadata:
         Parameters: 
           - AMI
     ParameterLabels: 
-        VPCID: 
-            default: "Which VPC should this be deployed to?"
         FQDN:
-            default: "Optional: DNS name for CMS.  DNS permissions required."
+            default: "Optional: CMS CNAME"
         CertificateArn:
-            default: "Optional: Certificate Arn from https://console.aws.amazon.com/acm/home"
+            default: "Optional: CertificateArn"
 
 Mappings:
   ECS:

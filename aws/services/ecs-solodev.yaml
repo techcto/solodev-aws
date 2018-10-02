@@ -107,7 +107,6 @@ Resources:
 
     Service: 
         Type: AWS::ECS::Service
-        DependsOn: ListenerRule
         Properties: 
             Cluster: !Ref Cluster
             TaskDefinition: !Ref TaskDefinition
@@ -308,7 +307,7 @@ Resources:
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        DependsOn: Listener
+        Condition: UseHTTP
         Properties:
             ListenerArn: !Ref Listener
             Priority: 1
@@ -322,7 +321,7 @@ Resources:
 
     ListenerSSLRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        DependsOn: ListenerSSL
+        Condition: UseHTTPS
         Properties:
             ListenerArn: !Ref ListenerSSL
             Priority: 2
