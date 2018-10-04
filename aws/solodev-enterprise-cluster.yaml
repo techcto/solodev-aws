@@ -179,6 +179,7 @@ Resources:
                 LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
+                DatabaseName: 'solodev'
 
     EC2:
         Type: AWS::CloudFormation::Stack
