@@ -120,6 +120,11 @@ Parameters:
         Default: 'solodev/cms-apache:latest'
         Type: String
 
+    MongoContainer:
+        Description: Mongo container image
+        Default: 'solodev/cms-mongo:latest'
+        Type: String
+
     AMI:
         Description: Build AMI - Please leave this blank unless told otherwise
         Default: ''
@@ -248,6 +253,7 @@ Resources:
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole
+                MongoContainer: !Ref MongoContainer
                 Path: '/mongo'
 
     SOLODEV:

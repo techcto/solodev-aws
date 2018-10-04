@@ -49,6 +49,10 @@ Parameters:
       Type: String
       Description: The database user password
 
+    MongoContainer:
+      Description: Mongo container image
+      Type: String
+
 Resources:
 
     Service: 
@@ -109,7 +113,7 @@ Resources:
                             SourceVolume: "solodev-mongo"
                             ContainerPath: "/mongo"
                     Essential: true
-                    Image: mongo:4
+                    Image: !Ref MongoContainer
                     MemoryReservation: 256
                     Environment:
                         - Name: MONGO_INITDB_ROOT_USERNAME
