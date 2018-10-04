@@ -260,6 +260,7 @@ Resources:
         Type: 'AWS::OpsWorks::Stack'
         Properties:
             Name: !Ref 'EnvironmentName'
+            DefaultOs: 'Custom'
             ConfigurationManager:
                 Name: Chef
                 Version: '12'
