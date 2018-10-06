@@ -114,8 +114,6 @@ Resources:
                             ContainerPath: "/mongo"
                     Essential: true
                     Image: !Ref MongoContainer
-                    Command: 
-                        - "--bind_ip 0.0.0.0"
                     MemoryReservation: 256
                     Environment:
                         - Name: MONGO_INITDB_ROOT_USERNAME
