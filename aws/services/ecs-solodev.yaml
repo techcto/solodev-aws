@@ -329,7 +329,7 @@ Resources:
                     MemoryReservation: 256
                     Environment:
                         - Name: MONGO_INITDB_ROOT_USERNAME
-                          Value: '!Ref DatabaseUsername'
+                          Value: !Ref DatabaseUsername
                         - Name: MONGO_INITDB_ROOT_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_INITDB_DATABASE
