@@ -332,6 +332,8 @@ Resources:
                           Value: !Ref DatabaseUsername
                         - Name: MONGO_INITDB_ROOT_PASSWORD
                           Value: !Ref DatabasePassword
+                        - Name: MONGO_INITDB_DATABASE
+                          Value: 'solodev_views'
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
