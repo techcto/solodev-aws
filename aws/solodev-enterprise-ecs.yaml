@@ -279,6 +279,7 @@ Resources:
                 CertificateArn: !Ref CertificateArn
                 SolodevContainer: !Ref SolodevContainer
                 ApacheContainer: !Ref ApacheContainer
+                MongoContainer: !Ref MongoContainer
                 DesiredCount: 2
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 

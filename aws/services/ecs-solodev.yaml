@@ -89,6 +89,10 @@ Parameters:
       Description: Apache container image
       Type: String
 
+    MongoContainer:
+      Description: Mongo container image
+      Type: String
+
     FQDN:
       Type: String
       Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
