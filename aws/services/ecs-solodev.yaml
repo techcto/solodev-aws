@@ -50,9 +50,10 @@ Parameters:
       Type: String
       Description: The database host
 
-    # MongoHost:
-    #   Type: String
-    #   Description: The mongo host
+    MongoHost:
+      Type: String
+      Description: The mongo host
+      Default: "techcto/mongo:latest"
 
     DatabaseName:
       Type: String
