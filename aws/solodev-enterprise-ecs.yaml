@@ -239,22 +239,22 @@ Resources:
     #             ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
     #             Path: /
     
-    MONGO:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-mongo.yaml
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPCID
-                Cluster: !GetAtt ECS.Outputs.Cluster
-                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-                DatabaseUsername: !Ref DatabaseUsername
-                DatabasePassword: !Ref DatabasePassword
-                ServiceRole: !GetAtt ALB.Outputs.ServiceRole
-                MongoContainer: !Ref MongoContainer
-                Path: '/mongo'
+    # MONGO:
+    #     Type: AWS::CloudFormation::Stack
+    #     Properties:
+    #         TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-mongo.yaml
+    #         Parameters:
+    #             EnvironmentName: !Ref AWS::StackName
+    #             VPC: !Ref VPCID
+    #             Cluster: !GetAtt ECS.Outputs.Cluster
+    #             LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+    #             LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+    #             Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+    #             DatabaseUsername: !Ref DatabaseUsername
+    #             DatabasePassword: !Ref DatabasePassword
+    #             ServiceRole: !GetAtt ALB.Outputs.ServiceRole
+    #             MongoContainer: !Ref MongoContainer
+    #             Path: '/mongo'
 
     SOLODEV:
         Type: AWS::CloudFormation::Stack
@@ -272,7 +272,7 @@ Resources:
                 AdminPassword: !Ref AdminPassword
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
-                MongoHost: !Join [ "", [ !GetAtt ALB.Outputs.LoadBalancerUrl, ":27017" ]]
+                # MongoHost: !Join [ "", [ !GetAtt ALB.Outputs.LoadBalancerUrl, ":27017" ]]
                 DatabaseUsername: !Ref DatabaseUsername
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN

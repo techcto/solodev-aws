@@ -50,9 +50,9 @@ Parameters:
       Type: String
       Description: The database host
 
-    MongoHost:
-      Type: String
-      Description: The mongo host
+    # MongoHost:
+    #   Type: String
+    #   Description: The mongo host
 
     DatabaseName:
       Type: String
@@ -271,7 +271,7 @@ Resources:
                         - Name: DB_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
-                          Value: !Ref MongoHost
+                          Value: 'mongodb:27017'
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
@@ -308,11 +308,39 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-apache2
+                - 
+                    Name: mongodb
+                    PortMappings:
+                        - 
+                            ContainerPort: 27017
+                            Protocol: "tcp"
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-mongo"
+                            ContainerPath: "/mongo"
+                    Essential: true
+                    Image: !Ref MongoContainer
+                    MemoryReservation: 256
+                    Environment:
+                        - Name: MONGO_INITDB_ROOT_USERNAME
+                          Value: !Ref DatabaseUsername
+                        - Name: MONGO_INITDB_ROOT_PASSWORD
+                          Value: !Ref DatabasePassword
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-mongo
             Volumes: 
                 - 
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/solodev']]
                     Name: "solodev-client"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mongo']]
+                    Name: "solodev-mongo"
 
     CloudWatchLogsGroup:
         Type: AWS::Logs::LogGroup
