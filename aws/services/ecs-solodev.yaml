@@ -247,6 +247,8 @@ Resources:
             ContainerDefinitions:
                 -
                     Name: solodev
+                    Links:
+                        - mongodb
                     PortMappings:
                         - 
                             ContainerPort: 9000
