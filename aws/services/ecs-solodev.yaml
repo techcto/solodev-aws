@@ -323,13 +323,13 @@ Resources:
                     MountPoints: 
                         - 
                             SourceVolume: "solodev-mongo"
-                            ContainerPath: "/mongo"
+                            ContainerPath: "/data"
                     Essential: true
                     Image: !Ref MongoContainer
                     MemoryReservation: 256
                     Environment:
                         - Name: MONGO_INITDB_ROOT_USERNAME
-                          Value: !Ref DatabaseUsername
+                          Value: '!Ref DatabaseUsername'
                         - Name: MONGO_INITDB_ROOT_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_INITDB_DATABASE
