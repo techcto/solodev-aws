@@ -21,18 +21,18 @@ Resources:
     # This security group defines who/where is allowed to access the Application Load Balancer.
     # By default, we've opened this up to the public internet (0.0.0.0/0) but can you restrict
     # it further if you want.
-    # LoadBalancerSecurityGroup:
-    #     Type: AWS::EC2::SecurityGroup
-    #     Properties: 
-    #         VpcId: !Ref VPC
-    #         GroupDescription: Access to the load balancer
-    #         SecurityGroupIngress:
-    #             # Allow access from anywhere
-    #             - CidrIp: 0.0.0.0/0
-    #               IpProtocol: -1
-    #         Tags: 
-    #             - Key: Name
-    #               Value: !Sub ${EnvironmentName}-LoadBalancers
+    LoadBalancerSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties: 
+            VpcId: !Ref VPC
+            GroupDescription: Access to the load balancer
+            SecurityGroupIngress:
+                # Allow access from anywhere
+                - CidrIp: 0.0.0.0/0
+                  IpProtocol: -1
+            Tags: 
+                - Key: Name
+                  Value: !Sub ${EnvironmentName}-LoadBalancers
 
     LoadBalancer:
         Type: AWS::ElasticLoadBalancingV2::LoadBalancer
