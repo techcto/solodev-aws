@@ -35,15 +35,21 @@ Parameters:
     VPCID: 
         Type: AWS::EC2::VPC::Id
         Description: Choose which VPC the Application should be deployed to
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
 
     Subnets:
         Description: Choose at least two public subnets for this application
         Type: List<AWS::EC2::Subnet::Id>
+        AllowedPattern: .+
+        ConstraintDescription: Please choose Subnets
 
     KeyName:
         Default: ''
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
         Type: 'AWS::EC2::KeyPair::KeyName'
+        AllowedPattern: .+
+        ConstraintDescription: Please choose EC2 KeyPair
 
     InstanceType:
         Description: EC2 instance type
