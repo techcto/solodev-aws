@@ -45,7 +45,6 @@ Parameters:
         ConstraintDescription: Please choose Subnets
 
     KeyName:
-        Default: ''
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
         Type: 'AWS::EC2::KeyPair::KeyName'
         AllowedPattern: .+
@@ -95,7 +94,7 @@ Parameters:
 Mappings:
     AWSRegionToAMI:
       us-east-1:
-        AMI: "ami-0a6c18815383966e2"
+        AMI: "ami-0fcd3709511dab24a"
       us-west-1:
         AMI: ""
       us-west-2:
