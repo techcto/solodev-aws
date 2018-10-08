@@ -325,6 +325,7 @@ Resources:
                             SourceVolume: "solodev-backup"
                             ContainerPath: "/root/.duply"
                     Image: techcto/duplicity:latest
+                    Essential: false
                     Memory: '500'
                     Environment:
                         - Name: MOUNT
