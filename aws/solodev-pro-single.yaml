@@ -81,10 +81,14 @@ Parameters:
     VPCID: 
         Type: AWS::EC2::VPC::Id
         Description: Choose which VPC the Application should be deployed to
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
 
     Subnets:
         Description: Choose at least (2) Public subnets for this application in the same VPC selected above
         Type: List<AWS::EC2::Subnet::Id>
+        AllowedPattern: .+
+        ConstraintDescription: Please choose Subnets
 
     FQDN:
         Type: String
@@ -95,9 +99,10 @@ Parameters:
         Description: SSL cert for HTTPS listener that matches the FQDN above
 
     KeyName:
-        Default: ''
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
         Type: 'AWS::EC2::KeyPair::KeyName'
+        AllowedPattern: .+
+        ConstraintDescription: Please choose EC2 KeyPair
 
     InstanceType:
         Description: EC2 instance type
@@ -119,6 +124,8 @@ Parameters:
         Description: CMS Admin User
         Type: String
         Default: 'admin'
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin username
 
     AdminPassword:
         NoEcho: true
@@ -126,6 +133,8 @@ Parameters:
         Type: String
         MinLength: 1
         MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin account password
 
     DatabasePassword:
         NoEcho: true
@@ -133,6 +142,8 @@ Parameters:
         Type: String
         MinLength: 1
         MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set database account password
 
     DevOpsFlavor:
         Description: Which DevOps tools would you like to use to manage auto scaling
@@ -141,9 +152,12 @@ Parameters:
         AllowedValues: [Opsworks]
 
     RestoreBucketName:
-        Default: ''
         Description: Name of bucket containing files for restore
         Type: String
+        AllowedPattern: ^(([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])$
+        MinLength: 3
+        MaxLength: 63
+        ConstraintDescription: Please set BucketName according to - https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
