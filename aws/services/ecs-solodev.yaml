@@ -104,6 +104,11 @@ Parameters:
       Description: SSL cert for HTTPS listener that matches the FQDN
       Default: ''
 
+    CronSchedule:
+      Type: String
+      Default: "cron(00 11 ? * * *)"
+      Description: "Backup cron schedule"
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -401,11 +406,11 @@ Resources:
             AssumeRolePolicyDocument:
                 Statement:
                 - Effect: Allow
-                    Principal:
+                  Principal:
                     Service:
                         - events.amazonaws.com
-                    Action:
-                        - 'sts:AssumeRole'
+                  Action:
+                    - 'sts:AssumeRole'
             Path: /
             Policies:
                 - PolicyName: ecs-service
@@ -421,22 +426,18 @@ Resources:
         Type: 'AWS::Events::Rule'
         Properties:
             Description: Creating a Schedule with CloudFormation as an example
-            ScheduleExpression: !If 
-                - CronRate
-                    - !Ref CronSchedule
-                    - !Ref RateSchedule
+            ScheduleExpression: !Ref CronSchedule
             State: ENABLED
             Targets:
-                - Arn: !GetAtt 
-                    - ECSCluster
-                    - Arn
+              - 
+                Arn: !Ref Cluster
                 Id: Target1
                 RoleArn: !GetAtt 
                     - ECSEventRole
                     - Arn
                 EcsParameters:
-                    TaskCount: !Ref SchedulerTasksCount
-                    TaskDefinitionArn: !Ref taskdefinition
+                    TaskCount: 1
+                    TaskDefinitionArn: !Ref BackupTaskDefinition
 
     CloudWatchLogsGroup:
         Type: AWS::Logs::LogGroup
