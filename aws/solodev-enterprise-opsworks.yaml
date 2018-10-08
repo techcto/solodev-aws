@@ -29,7 +29,6 @@ Metadata:
             - AdminUser
             - AdminPassword
             - DatabasePassword
-            - DevOpsFlavor
             - RestoreBucketName
             - AMI
     ParameterLabels: 
@@ -44,23 +43,6 @@ Mappings:
   Opsworks:
     us-east-1:
       AMI: "ami-06c947d51eef5e358"
-    us-west-1:
-      AMI: ""
-    us-west-2:
-      AMI: ""
-    eu-west-1:
-      AMI: ""
-    sa-east-1:
-      AMI: ""
-    ap-southeast-1:
-      AMI: ""
-    ap-southeast-2:
-      AMI: ""
-    ap-northeast-1:
-      AMI: ""
-  AutoScalingGroup:
-    us-east-1:
-      AMI: "ami-07d08befc870d19f2"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -134,12 +116,6 @@ Parameters:
         MinLength: 1
         MaxLength: 41
 
-    DevOpsFlavor:
-        Description: Which DevOps tools would you like to use to manage auto scaling
-        Type: String
-        Default: Opsworks
-        AllowedValues: [Opsworks, AutoScalingGroup]
-
     RestoreBucketName:
         Default: ''
         Description: Name of bucket containing files for restore
@@ -147,14 +123,13 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
-    UseOpsworks: !Equals [ !Ref DevOpsFlavor, "Opsworks" ]
 
 Resources:
 
     LB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml"]
+            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml"
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
@@ -184,13 +159,13 @@ Resources:
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: !If [UseOpsworks, "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml", "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev.yaml"]
+            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml"
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
                 ClusterSize: 3
                 VPC: !Ref VPCID
-                AMI: !If [UseDefaultAMI, !FindInMap [!Ref DevOpsFlavor, !Ref "AWS::Region", AMI], !Ref AMI]
+                AMI: !If [UseDefaultAMI, !FindInMap ['Opsworks', !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
