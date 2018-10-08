@@ -213,12 +213,77 @@ Resources:
                                   - 's3:*'
                                 Resource: !Join ['', ['arn:aws:s3:::', !Ref 'SolodevBucket', /*]]
 
+    BackupTaskDefinition:
+        Type: AWS::ECS::TaskDefinition
+        Properties:
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-cms']]
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+            TaskRoleArn: !GetAtt TaskRole.Arn
+            ContainerDefinitions:
+                - 
+                    Name: backup
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-client"
+                            ContainerPath: "/var/www/solodev/clients/solodev"
+                        - 
+                            SourceVolume: "solodev-backup"
+                            ContainerPath: "/root/.duply"
+                    Image: techcto/duplicity:latest
+                    Essential: false
+                    Memory: '500'
+                    Environment:
+                        - Name: MOUNT
+                          Value: "/var/www/solodev/clients/solodev"
+                        - Name: PROCESS
+                          Value: 'backup'
+                        - Name: BUCKET
+                          Value: !Ref SolodevBucket
+                        - Name: RESTORE_BUCKET
+                          Value: !Ref SolodevBucket
+                        - Name: DB_HOST
+                          Value: !Ref DatabaseHost
+                        - Name: DB_NAME
+                          Value: !Ref DatabaseName
+                        - Name: DB_USER
+                          Value: !Ref DatabaseUsername
+                        - Name: DB_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MONGO_HOST
+                          Value: !Ref MongoHost
+                        - Name: '127.0.0.1:27017'
+                          Value: 'solodev_views'
+                        - Name: IAM_ACCESS_KEY
+                          Value: !Ref BackupUserKeys
+                        - Name: IAM_SECRET_KEY
+                          Value: !GetAtt 
+                            - BackupUserKeys
+                            - SecretAccessKey
+                        - Name: GPG_PW
+                          Value: 'iYJQC1nt/CL7W+vi+t12WmqXpcI='
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-backup
+            Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/solodev']]
+                    Name: "solodev-client"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
+                    Name: "solodev-backup"
+
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
             Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-cms']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
+            NetworkMode: "host"
             ContainerDefinitions:
                 -
                     Name: solodev
@@ -293,6 +358,7 @@ Resources:
                     Name: mongodb
                     PortMappings:
                         - 
+                            HostPort: 27017
                             ContainerPort: 27017
                             Protocol: "tcp"
                     MountPoints: 
@@ -315,53 +381,6 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-mongo
-                - 
-                    Name: backup
-                    MountPoints: 
-                        - 
-                            SourceVolume: "solodev-client"
-                            ContainerPath: "/var/www/solodev/clients/solodev"
-                        - 
-                            SourceVolume: "solodev-backup"
-                            ContainerPath: "/root/.duply"
-                    Image: techcto/duplicity:latest
-                    Essential: false
-                    Memory: '500'
-                    Environment:
-                        - Name: MOUNT
-                          Value: "/var/www/solodev/clients/solodev"
-                        - Name: PROCESS
-                          Value: 'backup'
-                        - Name: BUCKET
-                          Value: !Ref SolodevBucket
-                        - Name: RESTORE_BUCKET
-                          Value: !Ref SolodevBucket
-                        - Name: DB_HOST
-                          Value: !Ref DatabaseHost
-                        - Name: DB_NAME
-                          Value: !Ref DatabaseName
-                        - Name: DB_USER
-                          Value: !Ref DatabaseUsername
-                        - Name: DB_PASSWORD
-                          Value: !Ref DatabasePassword
-                        - Name: MONGO_HOST
-                          Value: !Ref MongoHost
-                        - Name: 'mongodb:27017'
-                          Value: 'solodev_views'
-                        - Name: IAM_ACCESS_KEY
-                          Value: !Ref BackupUserKeys
-                        - Name: IAM_SECRET_KEY
-                          Value: !GetAtt 
-                            - BackupUserKeys
-                            - SecretAccessKey
-                        - Name: GPG_PW
-                          Value: 'iYJQC1nt/CL7W+vi+t12WmqXpcI='
-                    LogConfiguration:
-                        LogDriver: awslogs
-                        Options:
-                            awslogs-group: !Ref AWS::StackName
-                            awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: solodev-backup
             Volumes: 
                 - 
                     Host: 
@@ -375,6 +394,49 @@ Resources:
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
                     Name: "solodev-backup"
+
+    ECSEventRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            AssumeRolePolicyDocument:
+                Statement:
+                - Effect: Allow
+                    Principal:
+                    Service:
+                        - events.amazonaws.com
+                    Action:
+                        - 'sts:AssumeRole'
+            Path: /
+            Policies:
+                - PolicyName: ecs-service
+                  PolicyDocument:
+                    Statement:
+                        - Effect: Allow
+                          Action:
+                            - 'ecs:RunTask'
+                          Resource: '*'
+
+    ECSScheduledTask:
+        DependsOn: ECSEventRole
+        Type: 'AWS::Events::Rule'
+        Properties:
+            Description: Creating a Schedule with CloudFormation as an example
+            ScheduleExpression: !If 
+                - CronRate
+                    - !Ref CronSchedule
+                    - !Ref RateSchedule
+            State: ENABLED
+            Targets:
+                - Arn: !GetAtt 
+                    - ECSCluster
+                    - Arn
+                Id: Target1
+                RoleArn: !GetAtt 
+                    - ECSEventRole
+                    - Arn
+                EcsParameters:
+                    TaskCount: !Ref SchedulerTasksCount
+                    TaskDefinitionArn: !Ref taskdefinition
 
     CloudWatchLogsGroup:
         Type: AWS::Logs::LogGroup
