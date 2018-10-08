@@ -244,6 +244,8 @@ Resources:
                           Value: 'backup'
                         - Name: BUCKET
                           Value: !Ref SolodevBucket
+                        - Name: RESTORE_BUCKET
+                          Value: !Ref SolodevBucket
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
                         - Name: DB_NAME
