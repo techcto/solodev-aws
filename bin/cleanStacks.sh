@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-for STACK in $(aws cloudformation describe-stacks --max-items 1000 | ./jq -r '.StackSummaries[].StackName')
+echo $(aws cloudformation describe-stacks)
+for STACK in $(aws cloudformation describe-stacks | ./jq -r '.StackSummaries[].StackName')
 do
     echo $STACK
 done
