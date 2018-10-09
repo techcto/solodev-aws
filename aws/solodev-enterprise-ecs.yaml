@@ -208,7 +208,7 @@ Resources:
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
-                DeploymentType: "dev"
+                # DeploymentType: "dev"
 
     RDS:
         Type: AWS::CloudFormation::Stack
