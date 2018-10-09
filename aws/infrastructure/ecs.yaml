@@ -326,6 +326,10 @@ Outputs:
         Description: A reference to the ECS cluster
         Value: !Ref ECSCluster
 
+    ClusterArn:
+        Description: A reference to the ECS cluster ARN
+        Value: !GetAtt ECSCluster.Arn
+
     ECSHostSecurityGroup:
         Description: A reference to the ECSHostSecurityGroup
         Value: !Ref ECSHostSecurityGroup
