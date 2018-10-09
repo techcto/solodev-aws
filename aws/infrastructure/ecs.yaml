@@ -218,11 +218,11 @@ Resources:
                             },{
                                 "Effect": "Allow",
                                 "Action": ["iam:DeleteInstanceProfile", "iam:RemoveRoleFromInstanceProfile"],
-                                "Resource": "arn:aws:iam${AWS:AccountId}:instance-profile/${EnvironmentName}-ECSInstanceProfile-*"
+                                "Resource": "arn:aws:iam${AWS::AccountId}:instance-profile/${EnvironmentName}-ECSInstanceProfile-*"
                             },{
                                 "Effect": "Allow",
                                 "Action": ["iam:DeleteRole", "iam:DeleteRolePolicy"],
-                                "Resource": "arn:aws:iam${AWS:AccountId}:role/${EnvironmentName}-ECSRole-*"
+                                "Resource": "arn:aws:iam${AWS::AccountId}:role/${EnvironmentName}-ECSRole-*"
                             }
                         ]
                     }
