@@ -20,7 +20,7 @@ phases:
       - echo $(aws s3 cp s3://build-secure/params/solodev.json - ) > params.json
       - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback 
         --parameters file:///${CODEBUILD_SRC_DIR}/params.json
-        --template-url s3://solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
+        --template-url https://s3.amazonaws.com/build-secure/params/solodev.json
   post_build:
     commands:
       - echo "S3 synced on `date`"
