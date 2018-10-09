@@ -15,7 +15,7 @@ phases:
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
-      - DATE=$(date +%d%m%H%M)
+      - DATE=$(date +%d%H%M)
       - echo "Delete Old Stacks"
       - chmod 700 bin/cleanStacks.sh
       - ./bin/cleanStacks.sh
@@ -32,7 +32,7 @@ phases:
       #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-single.yaml
       # - echo "Create Solodev Opsworks"
       # - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json
-      # - aws cloudformation create-stack --stack-name opsworks-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+      # - aws cloudformation create-stack --stack-name ops-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
       #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-opsworks.json
       #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-opsworks.yaml
       - echo "Create Solodev ECS"
