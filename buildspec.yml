@@ -18,7 +18,20 @@ phases:
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Create Stack"
       - echo $(aws s3 cp s3://build-secure/params/solodev.json - ) > params.json
-      - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback --capabilities CAPABILITY_IAM
+      echo "Create Solodev Lite"
+      - aws cloudformation create-stack --stack-name lite-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/params.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-lite-single.yaml
+      echo "Create Solodev Pro Single"
+      - aws cloudformation create-stack --stack-name pro-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/params.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-single.yaml
+      echo "Create Solodev Opsworks"
+      - aws cloudformation create-stack --stack-name opsworks-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/params.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-opsworks.yaml
+      echo "Create Solodev ECS"
+      - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
         --parameters file:///${CODEBUILD_SRC_DIR}/params.json
         --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
   post_build:
