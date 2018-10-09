@@ -17,7 +17,8 @@ phases:
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Delete Old Stacks"
-      - chmod 700 bin/cleanStacks.sh | ./bin/cleanStacks.sh
+      - chmod 700 bin/cleanStacks.sh
+      - ./bin/cleanStacks.sh
       - echo "Create Stacks:"
       # - echo "Create Solodev Lite"
       # - echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
