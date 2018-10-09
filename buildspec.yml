@@ -18,7 +18,9 @@ phases:
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Delete Old Stacks"
       - aws cloudformation describe-stacks | \
-        jq -rc '.Stacks[]' | while IFS='' read stack;do
+        jq -rc '.Stacks[]' | \
+        while IFS='' read stack
+        do
             name=$(echo "$stack" | jq .StackName)
             status=$(echo "$stack" | jq .StackStatus)
             echo "+ $name ($status)"
