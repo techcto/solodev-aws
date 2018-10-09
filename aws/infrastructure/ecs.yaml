@@ -195,6 +195,10 @@ Resources:
                                     "ecs:Submit*",
                                     "logs:CreateLogStream",
                                     "logs:PutLogEvents",
+                                    "iam:DeleteInstanceProfile",
+                                    "iam:RemoveRoleFromInstanceProfile",
+                                    "iam:DeleteRole",
+                                    "iam:DeleteRolePolicy",
                                     "ecr:BatchCheckLayerAvailability",
                                     "ecr:BatchGetImage",
                                     "ecr:GetDownloadUrlForLayer",
@@ -215,14 +219,6 @@ Resources:
                                 "Condition": 
                                     StringEquals:
                                         ec2:ResourceTag/aws:cloudformation:stack-id: !Ref AWSStackId
-                            },{
-                                "Effect": "Allow",
-                                "Action": ["iam:DeleteInstanceProfile", "iam:RemoveRoleFromInstanceProfile"],
-                                "Resource": "arn:aws:iam${AWS::AccountId}:instance-profile/${EnvironmentName}-ECSInstanceProfile-*"
-                            },{
-                                "Effect": "Allow",
-                                "Action": ["iam:DeleteRole", "iam:DeleteRolePolicy"],
-                                "Resource": "arn:aws:iam${AWS::AccountId}:role/${EnvironmentName}-ECSRole-*"
                             }
                         ]
                     }
