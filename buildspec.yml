@@ -15,7 +15,6 @@ phases:
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
-      - aws s3 sync params s3://build-secure/aws/params
       - DATE=$(date +%d%m"-"%H%M)
       - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback 
         --parameters VPCID=vpc-2f13cf54,Subnets=subnet-812c73ae,subnet-ef11f6a5,KeyName=${KeyName},DockerUsername=${DockerUsername},DockerPassword=${DockerPassword},DockerEmail=${DockerEmail},DatabasePassword=password,AdminPassword=password
