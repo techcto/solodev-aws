@@ -8,6 +8,11 @@ Parameters:
         Description: An environment name that will be prefixed to resource names
         Type: String
 
+    AWSStackId:
+        Description: Stack ID used for cleanup scripts
+        Type: String
+        Default: ''
+
     InstanceType:
         Description: EC2 instance type
         Type: String
@@ -127,6 +132,11 @@ Parameters:
         Description: Docker email address
         Type: String
 
+    StackTTL:
+        Description:  If in dev mode, the time until the stacl self-destructs
+        Default: '5'
+        Type: String
+
 Resources:
 
     ECSCluster:
@@ -172,28 +182,49 @@ Resources:
                 - PolicyName: ecs-service
                   PolicyDocument: |
                     {
-                        "Statement": [{
-                            "Effect": "Allow",
-                            "Action": [
-                                "ecs:CreateCluster",
-                                "ecs:DeregisterContainerInstance",
-                                "ecs:DiscoverPollEndpoint",
-                                "ecs:Poll",
-                                "ecs:RegisterContainerInstance",
-                                "ecs:StartTelemetrySession",
-                                "ecs:Submit*",
-                                "logs:CreateLogStream",
-                                "logs:PutLogEvents",
-                                "ecr:BatchCheckLayerAvailability",
-                                "ecr:BatchGetImage",
-                                "ecr:GetDownloadUrlForLayer",
-                                "ecr:GetAuthorizationToken",
-                                "ecs:Describe*",
-                                "ecs:List*",
-                                "ec2:Describe*"
-                            ],
-                            "Resource": "*"
-                        }]
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "ecs:CreateCluster",
+                                    "ecs:DeregisterContainerInstance",
+                                    "ecs:DiscoverPollEndpoint",
+                                    "ecs:Poll",
+                                    "ecs:RegisterContainerInstance",
+                                    "ecs:StartTelemetrySession",
+                                    "ecs:Submit*",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents",
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:BatchGetImage",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:GetAuthorizationToken",
+                                    "ecs:Describe*",
+                                    "ecs:List*",
+                                    "ec2:Describe*"
+                                ],
+                                "Resource": "*"
+                            },{
+                                "Effect": "Allow",
+                                "Action": ["cloudformation:DeleteStack"],
+                                "Resource": !Ref AWSStackId
+                            },{
+                                "Effect": "Allow",
+                                "Action": ["ec2:TerminateInstances", "ec2:DeleteSecurityGroup"],
+                                "Resource": *
+                                "Condition": 
+                                    StringEquals:
+                                        ec2:ResourceTag/aws:cloudformation:stack-id: !Ref AWSStackId
+                            },{
+                                "Effect": "Allow",
+                                "Action": ["iam:DeleteInstanceProfile", "iam:RemoveRoleFromInstanceProfile"],
+                                "Resource": "arn:aws:iam${AWS:AccountId}:instance-profile/${EnvironmentName}-ECSInstanceProfile-*"
+                            },{
+                                "Effect": "Allow",
+                                "Action": ["iam:DeleteRole", "iam:DeleteRolePolicy"],
+                                "Resource": "arn:aws:iam${AWS:AccountId}:role/${EnvironmentName}-ECSRole-*"
+                            }
+                        ]
                     }
 
     ECSInstanceProfile: 
@@ -238,6 +269,10 @@ Resources:
                     efs:
                     - "efs"  
                     - "standard"
+                    dev:
+                    - "efs"  
+                    - "standard"
+                    - "delete"
                 standard:
                     files:
                         "/etc/cfn/cfn-hup.conf":
@@ -288,6 +323,16 @@ Resources:
                             command: !Sub "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ${EFS}.efs.${AWS::Region}.amazonaws.com:/ ${MountPoint}"
                         04_permissions:
                             command: !Sub "chown ec2-user:ec2-user ${MountPoint}"
+                delete:
+                    files:
+                        "/root/deleteStack.sh":
+                            mode: 000400
+                            owner: root
+                            group: root
+                            content: "aws cloudformation delete-stack --region ${AWS::Region} --stack-name ${EnvironmentName}"
+                    commands:
+                        delete_stack:
+                            command: !Sub "at -f /root/deleteStack.sh ${StackTTL} minutes"
 
     ECSAutoScalingGroup:
         Type: AWS::AutoScaling::AutoScalingGroup

@@ -296,8 +296,6 @@ Resources:
             ContainerDefinitions:
                 -
                     Name: solodev
-                    Links:
-                        - mongodb
                     PortMappings:
                         - 
                             ContainerPort: 9000
@@ -326,7 +324,7 @@ Resources:
                         - Name: DB_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
-                          Value: 'mongodb:27017'
+                          Value: '127.0.0.1:27017'
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
@@ -341,8 +339,6 @@ Resources:
                             awslogs-stream-prefix: solodev-cms
                 - 
                     Name: apache2
-                    Links:
-                        - solodev
                     PortMappings:
                         - 
                             ContainerPort: 80
