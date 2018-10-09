@@ -17,7 +17,7 @@ phases:
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
       - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback 
-        --parameters $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs.yaml - )
+        --parameters $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs.json - )
         --template-url s3://solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
   post_build:
     commands:
