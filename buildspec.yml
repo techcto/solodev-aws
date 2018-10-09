@@ -16,6 +16,13 @@ phases:
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
+      - echo "Delete Old Stacks"
+      - aws cloudformation describe-stacks --query "Stacks[].[StackName]"
+      - for name in $(aws cloudformation describe-stacks --query "Stacks[].[StackName]" - )
+        do
+          echo "Who are you?"
+          echo "I am $name"
+        done
       - echo "Create Stacks:"
       # - echo "Create Solodev Lite"
       # - echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
