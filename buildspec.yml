@@ -22,7 +22,6 @@ phases:
             name=$(echo "$stack" | jq .StackName)
             status=$(echo "$stack" | jq .StackStatus)
             echo "+ $name ($status)"
-            # do your processing here
         done
       - echo "Create Stacks:"
       # - echo "Create Solodev Lite"
