@@ -196,7 +196,7 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/ecs.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                AWSStackId: !Ref AWS:StackId
+                AWSStackId: !Ref AWS::StackId
                 InstanceType: !Ref InstanceType
                 AMI: !If [UseDefaultAMI, !FindInMap ["ECS", !Ref "AWS::Region", AMI], !Ref AMI]
                 ClusterSize: 2

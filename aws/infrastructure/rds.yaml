@@ -114,6 +114,7 @@ Resources:
 
   RDS:
     Type: 'AWS::RDS::DBInstance'
+    DeletionPolicy: Snapshot
     Properties:
       DBName: !Ref DatabaseName
       MultiAZ: !Ref MultiAZDatabase
