@@ -17,8 +17,8 @@ phases:
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
       - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback 
-        --parameters VPCID=vpc-2f13cf54,Subnets=subnet-812c73ae,subnet-ef11f6a5,KeyName=${KeyName},DockerUsername=${DockerUsername},DockerPassword=${DockerPassword},DockerEmail=${DockerEmail},DatabasePassword=password,AdminPassword=password
-        --template-url s3://build-secure/aws/params/solodev-enterprise-ecs.yaml
+        --parameters s3://build-secure/params/solodev-enterprise-ecs.yaml
+        --template-url s3://solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
   post_build:
     commands:
       - echo "S3 synced on `date`"
