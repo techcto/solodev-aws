@@ -18,13 +18,11 @@ phases:
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Delete Old Stacks"
       - aws cloudformation describe-stacks | \
-        jq -rc '.Stacks[]' | \
-        while IFS='' read stack
-        do
-            name=$(echo "$stack" | jq .StackName)
-            status=$(echo "$stack" | jq .StackStatus)
-            echo "+ $name ($status)"
-        done
+        ./jq -rc '.Stacks[]' | while IFS='' read stack; do
+              name=$(echo "$stack" | ./jq .StackName)
+              status=$(echo "$stack" | ./jq .StackStatus)
+              echo "+ $name ($status)"
+          done
       - echo "Create Stacks:"
       # - echo "Create Solodev Lite"
       # - echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
