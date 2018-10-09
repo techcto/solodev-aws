@@ -16,6 +16,7 @@ phases:
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
+      - echo "Create Stack"
       - aws cloudformation create-stack --stack-name ecs-${DATE} --disable-rollback 
         --parameters $(aws s3 cp s3://build-secure/params/solodev.json -)
         --template-url s3://solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
