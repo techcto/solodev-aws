@@ -17,12 +17,12 @@ phases:
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Delete Old Stacks"
-      - aws cloudformation describe-stacks --query "Stacks[].[StackName]"
-      - NAMES=$(aws cloudformation describe-stacks --query "Stacks[].[StackName]")
-      - for name in ${NAMES[@]}
-        do
-          echo "Who are you?"
-          echo "I am $name"
+      - aws cloudformation describe-stacks | \
+        jq -rc '.Stacks[]' | while IFS='' read stack;do
+            name=$(echo "$stack" | jq .StackName)
+            status=$(echo "$stack" | jq .StackStatus)
+            echo "+ $name ($status)"
+            # do your processing here
         done
       - echo "Create Stacks:"
       # - echo "Create Solodev Lite"
