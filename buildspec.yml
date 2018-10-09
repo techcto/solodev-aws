@@ -18,7 +18,8 @@ phases:
       - DATE=$(date +%d%m"-"%H%M)
       - echo "Delete Old Stacks"
       - aws cloudformation describe-stacks --query "Stacks[].[StackName]"
-      - for name in $(aws cloudformation describe-stacks --query "Stacks[].[StackName]" - )
+      - NAMES=$(aws cloudformation describe-stacks --query "Stacks[].[StackName]" - )
+      - for name in $NAMES[0]
         do
           echo "Who are you?"
           echo "I am $name"
