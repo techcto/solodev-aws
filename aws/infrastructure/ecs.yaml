@@ -250,10 +250,6 @@ Resources:
                     efs:
                     - "efs"  
                     - "standard"
-                    dev:
-                    - "efs"  
-                    - "standard"
-                    - "delete"
                 standard:
                     files:
                         "/etc/cfn/cfn-hup.conf":
@@ -304,16 +300,6 @@ Resources:
                             command: !Sub "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ${EFS}.efs.${AWS::Region}.amazonaws.com:/ ${MountPoint}"
                         04_permissions:
                             command: !Sub "chown ec2-user:ec2-user ${MountPoint}"
-                delete:
-                    files:
-                        "/root/deleteStack.sh":
-                            mode: 000400
-                            owner: root
-                            group: root
-                            content: "aws cloudformation delete-stack --region ${AWS::Region} --stack-name ${EnvironmentName}"
-                    commands:
-                        delete_stack:
-                            command: !Sub "at -f /root/deleteStack.sh ${StackTTL} minutes"
 
     ECSAutoScalingGroup:
         Type: AWS::AutoScaling::AutoScalingGroup
