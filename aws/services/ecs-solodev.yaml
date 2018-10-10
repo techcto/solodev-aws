@@ -158,6 +158,16 @@ Resources:
                                     - 
                                         - "arn:aws:s3:::"
                                         - !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
+                            - 
+                                Action: 
+                                    - 's3:*'
+                                Effect: "Allow"
+                                Resource: 
+                                    Fn::Join: 
+                                    - ""
+                                    - 
+                                        - "arn:aws:s3:::"
+                                        - !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
                                         - "/*"
 
     BackupUserKeys:
