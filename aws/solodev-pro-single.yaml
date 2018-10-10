@@ -186,6 +186,7 @@ Resources:
         Type: AWS::CloudFormation::Stack
         Properties:
             TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-single-opsworks.yaml"
+            Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
                 VPC: !Ref VPCID
