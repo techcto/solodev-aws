@@ -235,7 +235,7 @@ Resources:
     BackupTaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-cms']]
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-backup']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
             ContainerDefinitions:
