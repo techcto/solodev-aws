@@ -57,7 +57,7 @@ Parameters:
     MongoHost:
       Type: String
       Description: The mongo host
-      Default: "techcto/mongo:latest"
+      Default: "127.0.0.1:27017"
 
     DatabaseName:
       Type: String
