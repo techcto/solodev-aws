@@ -353,6 +353,7 @@ Resources:
                 Type: s3
                 Url: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
             CustomJson:
+                private_dns: 'solodev'
                 install:
                     StackName: !Ref 'EnvironmentName'
                     HostedZoneName: !Ref FQDN
@@ -428,8 +429,6 @@ Resources:
             Name: !Ref DeploymentType
             Type: custom
             Shortname: solodev-web
-            Attributes:
-                private_dns_name: 'solodev'
             EnableAutoHealing: 'true'
             AutoAssignElasticIps: 'false'
             AutoAssignPublicIps: 'true'
