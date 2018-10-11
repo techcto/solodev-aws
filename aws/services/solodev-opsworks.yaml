@@ -428,6 +428,8 @@ Resources:
             Name: !Ref DeploymentType
             Type: custom
             Shortname: solodev-web
+            Attributes:
+                private_dns_name: 'solodev'
             EnableAutoHealing: 'true'
             AutoAssignElasticIps: 'false'
             AutoAssignPublicIps: 'true'
