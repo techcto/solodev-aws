@@ -110,7 +110,7 @@ Parameters:
 
     CronSchedule:
       Type: String
-      Default: "cron(0 1,13 * * ? *)"
+      Default: "cron(0,15,30,45 * * * ? *)"
       Description: "Backup cron schedule"
 
 Conditions:
