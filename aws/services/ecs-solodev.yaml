@@ -238,6 +238,7 @@ Resources:
             Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-backup']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
+            NetworkMode: "host"
             ContainerDefinitions:
                 - 
                     Name: backup
