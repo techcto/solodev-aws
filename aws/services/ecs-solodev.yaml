@@ -269,8 +269,8 @@ Resources:
                         - Name: DB_PASSWORD
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
-                          Value: !Ref MongoHost
-                        - Name: '127.0.0.1:27017'
+                          Value: '127.0.0.1:27017'
+                        - Name: MONGO_DB
                           Value: 'solodev_views'
                         - Name: IAM_ACCESS_KEY
                           Value: !Ref BackupUserKeys
