@@ -113,9 +113,15 @@ Parameters:
       Default: "cron(0,15,30,45 * * * ? *)"
       Description: "Backup cron schedule"
 
+    RestoreBucketName:
+        Default: ''
+        Description: Name of bucket containing files for restore
+        Type: String
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
+    UseRestoreBucket: !Equals [ !Ref RestoreBucketName, "" ]
 
 Resources:
 
@@ -260,7 +266,7 @@ Resources:
                         - Name: BUCKET
                           Value: !Ref SolodevBucket
                         - Name: RESTORE_BUCKET
-                          Value: !Ref SolodevBucket
+                          Value: !If [UseRestoreBucket, !Ref RestoreBucketName, !Ref SolodevBucket]
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
                         - Name: DB_NAME

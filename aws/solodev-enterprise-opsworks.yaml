@@ -180,7 +180,7 @@ Resources:
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
                 DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
                 DeploymentType: "SolodevProduction"
-                RestoreBucketName: ""
+                RestoreBucketName: !Ref RestoreBucketName
 
 Outputs:
 

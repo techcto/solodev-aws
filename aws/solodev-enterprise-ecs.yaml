@@ -37,6 +37,7 @@ Metadata:
           - DatabaseName
           - DatabaseUsername
           - DatabasePassword
+          - RestoreBucketName
       - 
         Label: 
           default: "OPTIONAL: Docker Credentials (Required if not purchased through AWS)"
@@ -167,6 +168,11 @@ Parameters:
         Description: Docker email address
         Type: String
 
+    RestoreBucketName:
+        Default: ''
+        Description: Name of bucket containing files for restore
+        Type: String
+
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
 
@@ -260,6 +266,7 @@ Resources:
                 SolodevContainer: !Ref SolodevContainer
                 ApacheContainer: !Ref ApacheContainer
                 MongoContainer: 'techcto/mongo:latest'
+                RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: 2
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
