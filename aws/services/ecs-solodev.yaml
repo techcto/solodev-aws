@@ -436,6 +436,9 @@ Resources:
                         - Effect: Allow
                           Action:
                             - 'ecs:RunTask'
+                            - 'iam:ListInstanceProfiles'
+                            - 'iam:ListRoles'
+                            - 'iam:PassRole'
                           Resource: '*'
 
     ECSScheduledTask:
