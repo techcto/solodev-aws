@@ -370,7 +370,7 @@ Resources:
                         - SecretAccessKey
 
                     ClientName: solodev
-                    SoftwareName: Solodev
+                    SoftwareName: solodev
                     DocumentRoot: /var/www
                     ApacheConfDir: /etc/httpd/conf.d
                     DeploymentType: !Ref DeploymentType
