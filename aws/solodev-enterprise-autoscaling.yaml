@@ -126,10 +126,6 @@ Parameters:
         Default: 'Delete'
         Type: String
         Description: 'Asset Deletion Policy'
-        AllowedValues:
-        - 'Delete'
-        - 'Retain'
-        - 'Snapshot'
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
