@@ -156,7 +156,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
-        DeletionPolicy: !Ref DeletionPolicy
+        DeletionPolicy: 'Delete'
 
     BackupUser:
         Type: 'AWS::IAM::User'

@@ -186,7 +186,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
-        DeletionPolicy: !Ref DeletionPolicy
+        DeletionPolicy: 'Delete'
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
