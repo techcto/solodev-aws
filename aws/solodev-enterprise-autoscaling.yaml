@@ -30,6 +30,7 @@ Metadata:
             - AdminPassword
             - DatabasePassword
             - RestoreBucketName
+            - DeletionPolicy
             - AMI
     ParameterLabels: 
         VPCID: 
@@ -121,6 +122,15 @@ Parameters:
         Description: Name of bucket containing files for restore
         Type: String
 
+    DeletionPolicy:
+        Default: 'Delete'
+        Type: String
+        Description: 'Asset Deletion Policy'
+        AllowedValues:
+        - 'Delete'
+        - 'Retain'
+        - 'Snapshot'
+
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
 
@@ -155,6 +165,7 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
+                DeletionPolicy: !Ref DeletionPolicy
 
     EC2:
         Type: AWS::CloudFormation::Stack
@@ -180,7 +191,8 @@ Resources:
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
                 DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
                 DeploymentType: "SolodevProduction"
-                RestoreBucketName: ""
+                RestoreBucketName: !Ref RestoreBucketName
+                DeletionPolicy: !Ref DeletionPolicy
 
 Outputs:
 

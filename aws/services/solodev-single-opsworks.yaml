@@ -131,6 +131,11 @@ Parameters:
         Description: CMS Admin Password
         Type: String
 
+    DeletionPolicy:
+        Default: 'Snapshot'
+        Type: String
+        Description: 'Asset Deletion Policy'
+
 Conditions:
     UseSSL: !Equals [ !Ref CertificateArn, "" ]
 
@@ -151,7 +156,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
-        DeletionPolicy: Delete
+        DeletionPolicy: !Ref DeletionPolicy
 
     BackupUser:
         Type: 'AWS::IAM::User'

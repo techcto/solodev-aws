@@ -81,6 +81,11 @@ Parameters:
     MaxValue: '1024'
     ConstraintDescription: must be between 5 and 1024Gb.
 
+  DeletionPolicy:
+    Default: 'Snapshot'
+    Type: String
+    Description: 'RDS Deletion Policy'
+
 Resources:
 
   DBSubnetGroup:
@@ -114,7 +119,7 @@ Resources:
 
   RDS:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: Snapshot
+    DeletionPolicy: !Ref DeletionPolicy
     Properties:
       DBName: !Ref DatabaseName
       MultiAZ: !Ref MultiAZDatabase

@@ -118,6 +118,11 @@ Parameters:
         Description: Name of bucket containing files for restore
         Type: String
 
+    DeletionPolicy:
+        Default: 'Snapshot'
+        Type: String
+        Description: 'Asset Deletion Policy'
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -134,7 +139,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
-        DeletionPolicy: Delete
+        DeletionPolicy: !Ref DeletionPolicy
 
     BackupUser:
         Type: 'AWS::IAM::User'

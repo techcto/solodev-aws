@@ -156,6 +156,11 @@ Parameters:
         Type: String
         Default: Production
 
+    DeletionPolicy:
+        Default: 'Snapshot'
+        Type: String
+        Description: 'Asset Deletion Policy'
+
 Conditions:
     UseSSL: !Equals [ !Ref CertificateArn, "" ]
 
@@ -170,7 +175,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
-        DeletionPolicy: Delete
+        DeletionPolicy: !Ref DeletionPolicy
 
     LambdaExecutionRole:
         Type: 'AWS::IAM::Role'
