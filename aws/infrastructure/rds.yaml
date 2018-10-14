@@ -119,7 +119,7 @@ Resources:
 
   RDS:
     Type: 'AWS::RDS::DBInstance'
-    DeletionPolicy: !Ref DeletionPolicy
+    DeletionPolicy: 'Delete'
     Properties:
       DBName: !Ref DatabaseName
       MultiAZ: !Ref MultiAZDatabase
