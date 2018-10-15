@@ -130,7 +130,7 @@ Resources:
                 -
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'AWS::StackName', 'S3']]
-        DeletionPolicy: !Ref DeletionPolicy
+        DeletionPolicy: Delete
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
