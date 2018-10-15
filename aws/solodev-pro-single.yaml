@@ -43,7 +43,7 @@ Metadata:
 Mappings:
   Opsworks:
     us-east-1:
-      AMI: "ami-0d6541ac900022be0"
+      AMI: "ami-020e56855461aa74d"
     us-west-1:
       AMI: ""
     us-west-2:
