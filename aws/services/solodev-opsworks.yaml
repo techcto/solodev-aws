@@ -374,6 +374,7 @@ Resources:
                     DocumentRoot: /var/www
                     ApacheConfDir: /etc/httpd/conf.d
                     DeploymentType: !Ref DeploymentType
+                    EnterpriseMode: False
                     
                     RestoreBucketName: !Ref RestoreBucketName
                     BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
