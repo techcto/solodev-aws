@@ -188,9 +188,6 @@ Resources:
         Type: AWS::CloudFormation::Stack
         Properties:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
-            LoadBalancerAttributes:
-                - Key: idle_timeout.timeout_seconds
-                  Value: '120'
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID

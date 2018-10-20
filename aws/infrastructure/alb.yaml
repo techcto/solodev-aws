@@ -38,6 +38,9 @@ Resources:
         Type: AWS::ElasticLoadBalancingV2::LoadBalancer
         Properties:
             Name: !Ref EnvironmentName
+            LoadBalancerAttributes:
+                - Key: idle_timeout.timeout_seconds
+                  Value: '120'
             Subnets: !Ref Subnets
             SecurityGroups: 
                 - !Ref LoadBalancerSecurityGroup
