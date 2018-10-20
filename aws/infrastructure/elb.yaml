@@ -51,6 +51,8 @@ Resources:
     Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
     Properties:
       CrossZone: 'true'
+      ConnectionSettings:
+        IdleTimeout: 120
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
       Subnets: !Ref Subnets

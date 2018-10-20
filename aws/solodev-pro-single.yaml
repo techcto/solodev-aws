@@ -106,7 +106,7 @@ Parameters:
     AdminUser:
         Description: CMS Admin User
         Type: String
-        Default: 'admin'
+        Default: 'solodev'
         AllowedPattern: .+
         ConstraintDescription: Please set admin username
 
