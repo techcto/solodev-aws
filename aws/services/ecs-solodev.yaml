@@ -98,6 +98,11 @@ Parameters:
       Description: Mongo container image
       Type: String
 
+    RedisContainer:
+      Description: Mongo container image
+      Type: String
+      Default: 'redis:alpine'
+
     FQDN:
       Type: String
       Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
@@ -347,6 +352,8 @@ Resources:
                           Value: !Ref DatabasePassword
                         - Name: MONGO_HOST
                           Value: '127.0.0.1:27017'
+                        - Name: REDIS_HOST
+                          Value: '127.0.0.1:6379'
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD
@@ -408,6 +415,26 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-mongo
+                - 
+                    Name: redis
+                    PortMappings:
+                        - 
+                            HostPort: 6379
+                            ContainerPort: 6379
+                            Protocol: "tcp"
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-redis"
+                            ContainerPath: "/data"
+                    Essential: true
+                    Image: !Ref RedisContainer
+                    MemoryReservation: 256
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: solodev-redis
             Volumes: 
                 - 
                     Host: 
@@ -417,6 +444,10 @@ Resources:
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mongo']]
                     Name: "solodev-mongo"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/redis']]
+                    Name: "solodev-redis"
                 - 
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
