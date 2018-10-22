@@ -51,6 +51,11 @@ Parameters:
         Description: Choose which subnets this cluster should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
+    Path: 
+        Description: The path to register with the Application Load Balancer
+        Type: String
+        Default: /
+
     FQDN:
         Type: String
         Description: Fully qualified URL for using app.  DNS of FQDN must be pointed to CNAME of ALB.
