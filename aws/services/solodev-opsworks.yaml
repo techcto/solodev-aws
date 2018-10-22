@@ -559,6 +559,82 @@ Resources:
             Runtime: python2.7
             Timeout: '25'
 
+    TargetGroup:
+        Type: AWS::ElasticLoadBalancingV2::TargetGroup
+        Properties:
+            VpcId: !Ref VPC
+            Port:
+                !If
+                    - UseSSL
+                    - 443
+                    - 80
+            Protocol:
+                !If
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
+            Matcher: 
+                HttpCode: 200-299
+            HealthCheckIntervalSeconds: 60
+            HealthCheckPath: /
+            HealthCheckProtocol: 
+                !If
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
+            HealthCheckPort:
+                !If
+                    - UseSSL
+                    - 443
+                    - 80
+            HealthCheckTimeoutSeconds: 30
+            TargetGroupAttributes:
+                - Key: stickiness.type
+                  Value: lb_cookie
+                - Key: stickiness.enabled
+                  Value: 'true'
+            Name: !Join 
+                - '-'
+                - - !Ref 'EnvironmentName'
+                  - SolodevTG
+
+    Listener:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Properties:
+            Certificates: 
+                - CertificateArn: 
+                    - !If
+                        - UseSSL
+                        - !Ref CertificateArn
+                        - !Ref AWS::NoValue
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: 
+                !If
+                    - UseSSL
+                    - 443
+                    - 80
+            Protocol:
+                !If
+                    - UseSSL
+                    - HTTPS
+                    - HTTP
+    
+    ListenerRule:
+        Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Properties:
+            ListenerArn: !Ref Listener
+            Priority: 1
+            Conditions:
+                - Field: path-pattern
+                  Values: 
+                    - !Ref Path
+            Actions:
+                - TargetGroupArn: !Ref TargetGroup
+                  Type: forward
+
     LambdaExecutionRole:
         Type: 'AWS::IAM::Role'
         Properties:
