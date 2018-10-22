@@ -72,10 +72,12 @@ Parameters:
     FQDN:
         Type: String
         Description: URL for app. FQDN must be pointed to CNAME of ALB.
+        Default: ''
 
     CertificateArn:
         Type: String
         Description: SSL cert for HTTPS listener that matches the FQDN above
+        Default: ''
 
     KeyName:
         Default: ''
