@@ -475,12 +475,6 @@ Resources:
                     Size: !Ref BlockVolumeSize
                     NumberOfDisks: 1
 
-    ELBAttachment:
-        Type: 'AWS::OpsWorks::ElasticLoadBalancerAttachment'
-        Properties:
-            ElasticLoadBalancerName: !Ref LoadBalancer
-            LayerId: !Ref WebServerLayer
-
     SolodevInstance1:
         Type: 'AWS::OpsWorks::Instance'
         Properties:
