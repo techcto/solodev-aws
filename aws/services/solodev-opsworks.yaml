@@ -59,10 +59,12 @@ Parameters:
     FQDN:
         Type: String
         Description: Fully qualified URL for using app.  DNS of FQDN must be pointed to CNAME of ALB.
+        Default: ''
 
     CertificateArn:
         Type: String
         Description: SSL cert for AWS ALB HTTPS listener
+        Default: ''
 
     LoadBalancer:
         Description: The load balancer for the cluster hosts
