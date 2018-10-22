@@ -316,7 +316,7 @@ Resources:
     RestoreTaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-backup']]
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-restore']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
             NetworkMode: "host"
