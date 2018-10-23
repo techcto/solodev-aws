@@ -561,85 +561,11 @@ Resources:
             Runtime: python2.7
             Timeout: '25'
 
-    TargetGroup:
-        Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    ELBAttachment:
+        Type: 'AWS::OpsWorks::ElasticLoadBalancerAttachment'
         Properties:
-            VpcId: !Ref VPC
-            Port: 80
-            Protocol: HTTP
-            Matcher: 
-                HttpCode: 200-299
-            HealthCheckIntervalSeconds: 45
-            HealthCheckPath: /
-            HealthCheckProtocol: HTTP
-            HealthCheckTimeoutSeconds: 30
-            HealthyThresholdCount: 2
-            UnhealthyThresholdCount: 3
-            TargetGroupAttributes:
-                - Key: deregistration_delay.timeout_seconds
-                  Value: '120'
-                - Key: stickiness.type
-                  Value: lb_cookie
-                - Key: stickiness.enabled
-                  Value: 'true'
-                - Key: stickiness.lb_cookie.duration_seconds
-                  Value: '2000'
-            Name: !Join 
-                - '-'
-                - - !Ref 'EnvironmentName'
-                  - solodev
-
-    Listener:
-        Type: 'AWS::ElasticLoadBalancingV2::Listener'
-        Condition: UseHTTP
-        Properties:
-            DefaultActions:
-                - Type: forward
-                  TargetGroupArn: !Ref TargetGroup
-            LoadBalancerArn: !Ref LoadBalancer
-            Port: 80
-            Protocol: HTTP
-
-    ListenerSSL:
-        Type: 'AWS::ElasticLoadBalancingV2::Listener'
-        Condition: UseHTTPS
-        Properties:
-            Certificates: 
-                - CertificateArn: !Ref CertificateArn
-            DefaultActions:
-                - Type: forward
-                  TargetGroupArn: !Ref TargetGroup
-            LoadBalancerArn: !Ref LoadBalancer
-            Port: 443
-            Protocol: HTTPS
-    
-    ListenerRule:
-        Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        Condition: UseHTTP
-        Properties:
-            ListenerArn: !Ref Listener
-            Priority: 1
-            Conditions:
-                - Field: path-pattern
-                  Values: 
-                    - !Ref Path
-            Actions:
-                - TargetGroupArn: !Ref TargetGroup
-                  Type: forward
-
-    ListenerSSLRule:
-        Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        Condition: UseHTTPS
-        Properties:
-            ListenerArn: !Ref ListenerSSL
-            Priority: 2
-            Conditions:
-                - Field: path-pattern
-                  Values: 
-                    - !Ref Path
-            Actions:
-                - TargetGroupArn: !Ref TargetGroup
-                  Type: forward
+            ElasticLoadBalancerName: !Ref LoadBalancer
+            LayerId: !Ref WebServerLayer
 
     LambdaExecutionRole:
         Type: 'AWS::IAM::Role'
