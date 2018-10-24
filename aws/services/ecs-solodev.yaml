@@ -336,6 +336,8 @@ Resources:
                           Value: 'restore'
                         - Name: TIME
                           Value: '1h'
+                        - Name: BUCKET
+                          Value: !Ref SolodevBucket
                         - Name: MOUNT
                           Value: "/var/www/solodev/clients/solodev"
                         - Name: IAM_ACCESS_KEY
