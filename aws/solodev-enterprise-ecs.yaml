@@ -130,7 +130,7 @@ Parameters:
     AdminUsername:
         Description: CMS Admin User
         Type: String
-        Default: 'admin'
+        Default: 'solodev'
 
     AdminPassword:
         NoEcho: true

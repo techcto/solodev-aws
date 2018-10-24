@@ -275,8 +275,6 @@ Resources:
                           Value: 'backup'
                         - Name: BUCKET
                           Value: !Ref SolodevBucket
-                        - Name: RESTORE_BUCKET
-                          Value: !If [UseRestoreBucket, !Ref RestoreBucketName, !Ref SolodevBucket]
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
                         - Name: DB_NAME
@@ -337,7 +335,17 @@ Resources:
                         - Name: PROCESS
                           Value: 'restore'
                         - Name: TIME
-                          Value: '1H'
+                          Value: '1h'
+                        - Name: MOUNT
+                          Value: "/var/www/solodev/clients/solodev"
+                        - Name: IAM_ACCESS_KEY
+                          Value: !Ref BackupUserKeys
+                        - Name: IAM_SECRET_KEY
+                          Value: !GetAtt 
+                            - BackupUserKeys
+                            - SecretAccessKey
+                        - Name: GPG_PW
+                          Value: 'iYJQC1nt/CL7W+vi+t12WmqXpcI='
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
