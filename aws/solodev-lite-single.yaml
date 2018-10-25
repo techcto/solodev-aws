@@ -2,34 +2,27 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
 
-    This template deploys a single Solodev server on AWS
+    Solodev CMS Lite on AWS
 
 Metadata: 
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
       - 
         Label: 
-          default: "Network Configuration"
+          default: "Network Setup"
         Parameters: 
           - VPCID
           - Subnets
-      - 
-        Label: 
-          default: "Server Configuration"
-        Parameters: 
           - InstanceType
           - KeyName
-          - HostVolumeSize
-          - SSHFrom
       - 
         Label: 
-          default: "Solodev Configuration"
+          default: "Optional: Advanced"
         Parameters: 
-            - DeletionPolicy
-            - AMI
-    ParameterLabels: 
-        VPCID: 
-            default: "Which VPC should this be deployed to?"
+          - AMI
+          - HostVolumeSize
+          - SSHFrom
+          - DeletionPolicy
 
 Parameters:
 
@@ -52,7 +45,6 @@ Parameters:
         ConstraintDescription: Please choose EC2 KeyPair
 
     InstanceType:
-        Description: EC2 instance type
         Type: String
         Default: m3.medium
         AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
@@ -63,9 +55,14 @@ Parameters:
         ConstraintDescription: Please choose a valid instance type.
 
     AMI:
-        Description: Build AMI - Please leave this blank unless told otherwise
+        Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
         Default: ''
         Type: String
+
+    DeletionPolicy:
+        Default: 'Delete'
+        Type: String
+        Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
 
     HostVolumeSize:
         Description: Size in GB of root volume
@@ -84,18 +81,13 @@ Parameters:
         - '4096'
 
     SSHFrom:
-        Description: Lockdown SSH access to the bastion host
+        Description: Lockdown SSH access to host
         Type: String
         MinLength: '9'
         MaxLength: '18'
         Default: 0.0.0.0/0
         AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
         ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
-
-    DeletionPolicy:
-        Default: 'Delete'
-        Type: String
-        Description: 'Asset Deletion Policy'
 
 Mappings:
     AWSRegionToAMI:

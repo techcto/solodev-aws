@@ -137,7 +137,8 @@ Parameters:
         Description: 'Asset Deletion Policy'
 
 Conditions:
-    UseSSL: !Equals [ !Ref CertificateArn, "" ]
+    UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
+    UseHTTP: !Equals [ !Ref CertificateArn, "" ]
 
 Resources:
 

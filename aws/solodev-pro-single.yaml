@@ -111,7 +111,7 @@ Parameters:
         ConstraintDescription: Please set database root password
 
     RestoreBucketName:
-        Description: Name of bucket containing files for restore
+        Description: Name of S3 bucket containing files for restore
         Type: String
         Default: ""
 
@@ -139,9 +139,6 @@ Resources:
                                           - !Select
                                             - 1
                                             - Fn::GetAZs: ''
-                VpcCIDR:            10.180.0.0/16
-                PublicSubnet1CIDR:  10.180.8.0/21
-                PublicSubnet2CIDR:  10.180.16.0/21
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'

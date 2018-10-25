@@ -10,6 +10,12 @@ Metadata:
     ParameterGroups: 
       - 
         Label: 
+          default: "VPC Configuration"
+        Parameters: 
+          - VPCID
+          - Subnets
+      - 
+        Label: 
           default: "Server Configuration"
         Parameters: 
           - InstanceType
@@ -27,12 +33,6 @@ Metadata:
         Parameters: 
           - FQDN
           - CertificateArn
-      - 
-        Label: 
-          default: "Optional: VPC Configuration (Skip if unsure)"
-        Parameters: 
-          - VPCID
-          - Subnets
       - 
         Label: 
           default: "Optional: Advanced"
@@ -63,20 +63,16 @@ Mappings:
 Parameters:
 
     VPCID: 
-        # Type: AWS::EC2::VPC::Id
-        Type: String
+        Type: AWS::EC2::VPC::Id
         Description: Optionally use an existing VPC ARN.
-        Default: ''
-        # AllowedPattern: .+
-        # ConstraintDescription: Please choose VPC
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
 
     Subnets:
         Description: Choose at least 2 comma seperated public subnets for this application in the same VPC selected above
-        # Type: List<AWS::EC2::Subnet::Id>
-        Type: String
-        Default: ''
-        # AllowedPattern: .+
-        # ConstraintDescription: Please choose Subnets
+        Type: List<AWS::EC2::Subnet::Id>
+        AllowedPattern: .+
+        ConstraintDescription: Please choose Subnets
 
     FQDN:
         Type: String
@@ -144,37 +140,14 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
-    CreateVPC: !Equals [ !Ref VPCID, "" ]
-    UseVPC: !Not [!Equals [ !Ref VPCID, "" ]]
 
 Resources:
-
-    VPC:
-        Type: AWS::CloudFormation::Stack
-        Condition: CreateVPC
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-ha-aws/aws/infrastructure/vpc.yaml
-            Parameters:
-                EnvironmentName:    !Ref AWS::StackName
-                AvailabilityZone:   !Join
-                                        - ','
-                                        - - !Select
-                                            - 0
-                                            - Fn::GetAZs: '' 
-                                          - !Select
-                                            - 1
-                                            - Fn::GetAZs: ''
-                VpcCIDR:            10.180.0.0/16
-                PublicSubnet1CIDR:  10.180.8.0/21
-                PublicSubnet2CIDR:  10.180.16.0/21
-                PrivateSubnet1CIDR: 10.180.24.0/21
-                PrivateSubnet2CIDR: 10.180.32.0/21
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
             GroupDescription: Allow inbound requests to the OpsWorks instance
-            VpcId: !If [UseVPC, !GetAtt VPC.Outputs.VPC, !Ref VPCID]
+            VpcId: !Ref VPCID
             SecurityGroupIngress:
                 - 
                     IpProtocol: tcp
@@ -197,8 +170,8 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                VPC: !If [CreateVPC, !GetAtt VPC.Outputs.VPC, !Ref VPCID]
-                Subnets: !If [CreateVPC, !GetAtt VPC.Outputs.PublicSubnets, !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]]
+                VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     RDS:
         Type: AWS::CloudFormation::Stack
@@ -206,8 +179,8 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                VPC: !If [CreateVPC, !GetAtt VPC.Outputs.VPC, !Ref VPCID]
-                Subnets: !If [CreateVPC, !GetAtt VPC.Outputs.PublicSubnets, !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]]
+                VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
@@ -220,8 +193,8 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                VPC: !If [CreateVPC, !GetAtt VPC.Outputs.VPC, !Ref VPCID]
-                Subnets: !If [CreateVPC, !GetAtt VPC.Outputs.PublicSubnets, !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]]
+                VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 WebServerSecurityGroup: !Ref WebServerSecurityGroup
                 AMI: !If [UseDefaultAMI, !FindInMap ["Opsworks", !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
