@@ -23,7 +23,6 @@ Metadata:
             - AdminUser
             - AdminPassword
             - DatabaseName
-            - DatabaseUsername
             - DatabasePassword
       - 
         Label: 
@@ -40,10 +39,8 @@ Metadata:
           - DeletionPolicy
       - 
         Label: 
-          default: "Optional: Private Access (Required if not purchased through AWS)"
+          default: "Optional: Developer Access"
         Parameters: 
-          - SolodevContainer
-          - ApacheContainer
           - DockerUsername
           - DockerPassword
           - DockerEmail
@@ -132,14 +129,13 @@ Parameters:
         ConstraintDescription: Please set admin password
 
     DatabaseName:
+        Description: The solodev database name
         Type: String
-        Description: The database name
-        Default: "solodev"
-
-    DatabaseUsername:
-        Description: Database root user
-        Type: String
-        Default: 'root'
+        MinLength: '1'
+        MaxLength: '64'
+        AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+        ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+        Default: 'solodev'
 
     DatabasePassword:
         NoEcho: true
@@ -155,31 +151,25 @@ Parameters:
         Type: String
         Default: ""
 
-    SolodevContainer:
-        Description: Solodev container image
-        Default: 'solodev/cms:latest'
-        Type: String
-
-    ApacheContainer:
-        Description: Apache container image
-        Default: 'solodev/cms-apache:latest'
-        Type: String
-
     DockerUsername:
         Description: Docker username
         Type: String
+        Default: ''
 
     DockerPassword:
         NoEcho: true
         Description: Docker password
         Type: String
+        Default: ''
 
     DockerEmail:
         Description: Docker email address
         Type: String
+        Default: ''
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    UseMarketplace: !Equals [ !Ref DockerUsername, "" ]
 
 Resources:
 
@@ -213,12 +203,12 @@ Resources:
                 ClusterSize: 2
                 VPC: !Ref VPCID
                 EFS: !GetAtt EFS.Outputs.EFS
-                DockerUsername: !Ref DockerUsername
-                DockerPassword: !Ref DockerPassword
-                DockerEmail: !Ref DockerEmail
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
+                DockerUsername: !Ref DockerUsername
+                DockerPassword: !Ref DockerPassword
+                DockerEmail: !Ref DockerEmail
                 # DeploymentType: "dev"
 
     RDS:
@@ -265,12 +255,12 @@ Resources:
                 AdminPassword: !Ref AdminPassword
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
-                DatabaseUsername: !Ref DatabaseUsername
+                DatabaseUsername: 'root'
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                SolodevContainer: !Ref SolodevContainer
-                ApacheContainer: !Ref ApacheContainer
+                SolodevContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/fc123456-abcd-40d8-9a08-a13c4ca94f95/cg-9000123/solodev-cms:1.0-latest', 'solodev/cms:latest']
+                ApacheContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/fc123456-abcd-40d8-9a08-a13c4ca94f95/cg-9000123/solodev-apache:1.0-latest', 'solodev/cms-apache:latest']
                 MongoContainer: 'techcto/mongo:latest'
                 RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: 2
