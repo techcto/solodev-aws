@@ -23,12 +23,12 @@ Metadata:
           - AdminUser
           - AdminPassword
           - DatabasePassword
-      - 
-        Label: 
-          default: "Optional: SSL Configuration"
-        Parameters: 
-          - FQDN
-          - CertificateArn
+    #   - 
+    #     Label: 
+    #       default: "Optional: SSL Configuration"
+    #     Parameters: 
+    #       - FQDN
+    #       - CertificateArn
       - 
         Label: 
           default: "Optional: Advanced"
@@ -96,13 +96,13 @@ Parameters:
         Type: String
         Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
 
-    FQDN:
-        Type: String
-        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+    # FQDN:
+    #     Type: String
+    #     Description: URL for app. FQDN must be pointed to CNAME of ALB.
 
-    CertificateArn:
-        Type: String
-        Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
+    # CertificateArn:
+    #     Type: String
+    #     Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
 
     AdminUser:
         Description: The solodev admin username
@@ -195,8 +195,8 @@ Resources:
                 AMI: !If [UseDefaultAMI, !FindInMap ["Opsworks", !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
-                FQDN: !Ref FQDN
-                CertificateArn: !Ref CertificateArn
+                # FQDN: !Ref FQDN
+                # CertificateArn: !Ref CertificateArn
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName
