@@ -3,59 +3,50 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    This template launches a Solodev Enterprise for Containers (ECS) on AWS with external / encrypted database and filesystem.
+    Solodev CMS Enterprise for Docker ECS on AWS
 
 Metadata: 
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
       - 
         Label: 
-          default: "Network Configuration"
+          default: "Network Setup"
         Parameters: 
           - VPCID
           - Subnets
-          - FQDN
-          - CertificateArn
-      - 
-        Label: 
-          default: "Server Configuration"
-        Parameters: 
           - InstanceType
           - KeyName
       - 
         Label: 
-          default: "Container Location (Default DockerHub)"
+          default: "CMS Settings"
         Parameters: 
-          - SolodevContainer
-          - ApacheContainer
+            - AdminUser
+            - AdminPassword
+            - DatabaseName
+            - DatabaseUsername
+            - DatabasePassword
       - 
         Label: 
-          default: "Solodev Configuration"
+          default: "Optional: SSL Configuration"
         Parameters: 
-          - AdminUsername
-          - AdminPassword
-          - DatabaseName
-          - DatabaseUsername
-          - DatabasePassword
+          - FQDN
+          - CertificateArn
+      - 
+        Label: 
+          default: "Optional: Advanced"
+        Parameters: 
           - RestoreBucketName
+          - AMI
           - DeletionPolicy
       - 
         Label: 
-          default: "OPTIONAL: Docker Credentials (Required if not purchased through AWS)"
+          default: "Optional: Private Access (Required if not purchased through AWS)"
         Parameters: 
+          - SolodevContainer
+          - ApacheContainer
           - DockerUsername
           - DockerPassword
           - DockerEmail
-      - 
-        Label: 
-          default: "OPTIONAL: Custom AMI (COMING SOON!)"
-        Parameters: 
-          - AMI
-    ParameterLabels: 
-        FQDN:
-            default: "Optional: CMS CNAME"
-        CertificateArn:
-            default: "Optional: CertificateArn"
 
 Mappings:
   ECS:
@@ -81,28 +72,22 @@ Parameters:
     VPCID: 
         Type: AWS::EC2::VPC::Id
         Description: Choose which VPC the Application should be deployed to
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
 
     Subnets:
-        Description: Choose at least (2) Public subnets for this application in the same VPC selected above
+        Description: Choose at least two public subnets for this application
         Type: List<AWS::EC2::Subnet::Id>
-
-    FQDN:
-        Type: String
-        Description: URL for app. Stack name + FQDN = CMS Admin URL
-        Default: ''
-
-    CertificateArn:
-        Type: String
-        Description: SSL cert for HTTPS listener that matches the FQDN
-        Default: ''
+        AllowedPattern: .+
+        ConstraintDescription: Please choose Subnets
 
     KeyName:
-        Default: ''
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
         Type: 'AWS::EC2::KeyPair::KeyName'
+        AllowedPattern: .+
+        ConstraintDescription: Please choose EC2 KeyPair
 
     InstanceType:
-        Description: EC2 instance type
         Type: String
         Default: m3.medium
         AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
@@ -111,6 +96,64 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+
+    AMI:
+        Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
+        Default: ''
+        Type: String
+
+    DeletionPolicy:
+        Default: 'Delete'
+        Type: String
+        Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
+
+    FQDN:
+        Type: String
+        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+
+    CertificateArn:
+        Type: String
+        Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
+
+    AdminUser:
+        Description: The solodev admin username
+        Type: String
+        Default: 'solodev'
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin username
+
+    AdminPassword:
+        NoEcho: true
+        Description: The solodev admin password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin password
+
+    DatabaseName:
+        Type: String
+        Description: The database name
+        Default: "solodev"
+
+    DatabaseUsername:
+        Description: Database root user
+        Type: String
+        Default: 'root'
+
+    DatabasePassword:
+        NoEcho: true
+        Description: The database root password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set database root password
+
+    RestoreBucketName:
+        Description: Name of S3 bucket containing files for restore
+        Type: String
+        Default: ""
 
     SolodevContainer:
         Description: Solodev container image
@@ -121,40 +164,6 @@ Parameters:
         Description: Apache container image
         Default: 'solodev/cms-apache:latest'
         Type: String
-
-    AMI:
-        Description: Build AMI - Please leave this blank unless told otherwise
-        Default: ''
-        Type: String
-
-    AdminUsername:
-        Description: CMS Admin User
-        Type: String
-        Default: 'solodev'
-
-    AdminPassword:
-        NoEcho: true
-        Description: The solodev admin account password
-        Type: String
-        MinLength: 1
-        MaxLength: 41
-
-    DatabaseName:
-        Type: String
-        Description: The database name
-        Default: "solodev"
-
-    DatabasePassword:
-        NoEcho: true
-        Description: The database root account password
-        Type: String
-        MinLength: 1
-        MaxLength: 41
-
-    DatabaseUsername:
-        Description: Database root user
-        Type: String
-        Default: 'root'
 
     DockerUsername:
         Description: Docker username
@@ -168,16 +177,6 @@ Parameters:
     DockerEmail:
         Description: Docker email address
         Type: String
-
-    RestoreBucketName:
-        Default: ''
-        Description: Name of bucket containing files for restore
-        Type: String
-
-    DeletionPolicy:
-        Default: 'Delete'
-        Type: String
-        Description: 'Asset Deletion Policy'
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
