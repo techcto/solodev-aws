@@ -56,6 +56,18 @@ Mappings:
 
 Parameters:
 
+    VPCID: 
+        Type: AWS::EC2::VPC::Id
+        Description: Optionally use an existing VPC ARN.
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
+
+    Subnets:
+        Description: Choose at least 2 comma seperated public subnets for this application in the same VPC selected above
+        Type: List<AWS::EC2::Subnet::Id>
+        AllowedPattern: .+
+        ConstraintDescription: Please choose Subnets
+
     FQDN:
         Type: String
         Description: URL for app. FQDN must be pointed to CNAME of ALB.
