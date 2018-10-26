@@ -20,9 +20,9 @@ Metadata:
         Label: 
           default: "CMS Settings"
         Parameters: 
-          - AdminUser
-          - AdminPassword
-          - DatabasePassword
+            - AdminUser
+            - AdminPassword
+            - DatabasePassword
       - 
         Label: 
           default: "Optional: SSL Configuration"
