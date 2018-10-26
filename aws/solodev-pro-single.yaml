@@ -139,26 +139,11 @@ Conditions:
 
 Resources:
 
-    VPC:
-        Type: AWS::CloudFormation::Stack
-        Properties:
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/vpc.yaml
-            Parameters:
-                EnvironmentName:    !Ref AWS::StackName
-                AvailabilityZone:   !Join
-                                        - ','
-                                        - - !Select
-                                            - 0
-                                            - Fn::GetAZs: '' 
-                                          - !Select
-                                            - 1
-                                            - Fn::GetAZs: ''
-
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
             GroupDescription: Allow inbound requests to the OpsWorks instance
-            VpcId: !GetAtt VPC.Outputs.VPC
+            VpcId: !Ref VPCID
             SecurityGroupIngress:
                 - 
                     IpProtocol: tcp
@@ -181,7 +166,7 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                VPC: !GetAtt VPC.Outputs.VPC
+                VPC: !Ref VPCID
                 Subnets: !GetAtt VPC.Outputs.PublicSubnets
 
     RDS:
@@ -190,7 +175,7 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                VPC: !GetAtt VPC.Outputs.VPC
+                VPC: !Ref VPCID
                 Subnets: !GetAtt VPC.Outputs.PublicSubnets
                 LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 DatabasePassword: !Ref DatabasePassword
@@ -204,7 +189,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                VPC: !GetAtt VPC.Outputs.VPC
+                VPC: !Ref VPCID
                 Subnets: !GetAtt VPC.Outputs.PublicSubnets
                 WebServerSecurityGroup: !Ref WebServerSecurityGroup
                 AMI: !If [UseDefaultAMI, !FindInMap ["Opsworks", !Ref "AWS::Region", AMI], !Ref AMI]
