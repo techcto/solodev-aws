@@ -279,8 +279,8 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                SolodevContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/fc123456-abcd-40d8-9a08-a13c4ca94f95/cg-9000123/solodev-cms:1.0-latest', 'solodev/cms:latest']
-                ApacheContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/fc123456-abcd-40d8-9a08-a13c4ca94f95/cg-9000123/solodev-apache:1.0-latest', 'solodev/cms-apache:latest']
+                SolodevContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/d7b60c33-2aec-471e-9648-df87c939d854/cg-1038429469/solodev-cms', 'solodev/cms:latest']
+                ApacheContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/d7b60c33-2aec-471e-9648-df87c939d854/cg-1038429469/solodev-apache', 'solodev/cms-apache:latest']
                 MongoContainer: 'techcto/mongo:latest'
                 UseMarketplace: !If [UseMarketplace, 'true', 'false']
                 RestoreBucketName: !Ref RestoreBucketName

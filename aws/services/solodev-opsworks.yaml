@@ -179,7 +179,7 @@ Conditions:
     NodeTwo: !Or [!Equals ["2", !Ref ClusterSize], !Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
     NodeThree: !Or [!Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
     NodeFour: !Or [!Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
-    NodeFive: !Or [!Equals ["5", !Ref ClusterSize]]
+    NodeFive: !Equals ["5", !Ref ClusterSize]
 
 Resources:
 
