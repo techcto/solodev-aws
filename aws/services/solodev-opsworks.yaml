@@ -176,10 +176,10 @@ Parameters:
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
-    NodeTwo: !Or [!Equals ["1", !Ref ClusterSize], !Equals ["2", !Ref ClusterSize]]
-    NodeThree: !Or [!Equals ["1", !Ref ClusterSize], !Equals ["2", !Ref ClusterSize], !Equals ["3", !Ref ClusterSize]]
-    NodeFour: !Or [!Equals ["1", !Ref ClusterSize], !Equals ["2", !Ref ClusterSize], !Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize]]
-    NodeFive: !Or [!Equals ["1", !Ref ClusterSize], !Equals ["2", !Ref ClusterSize], !Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
+    NodeTwo: !Or [!Equals ["2", !Ref ClusterSize], !Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
+    NodeThree: !Or [!Equals ["3", !Ref ClusterSize], !Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
+    NodeFour: !Or [!Equals ["4", !Ref ClusterSize], !Equals ["5", !Ref ClusterSize]]
+    NodeFive: !Or [!Equals ["5", !Ref ClusterSize]]
 
 Resources:
 
