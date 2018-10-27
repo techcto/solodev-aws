@@ -128,6 +128,10 @@ Parameters:
         Type: String
         Description: 'Asset Deletion Policy'
 
+    UseMarketplace:
+        Default: 'true'
+        Type: String
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -391,6 +395,8 @@ Resources:
                           Value: false
                         - Name: APP_ENV
                           Value: 'prod'
+                        - Name: UseMarketplace
+                          Value: !Ref UseMarketplace
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
                         - Name: DB_PORT
