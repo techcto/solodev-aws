@@ -73,6 +73,15 @@ Parameters:
       - 'false'
     ConstraintDescription: must be either true or false.
 
+  StorageEncrypted:
+    Default: 'false'
+    Description: Enable encryption for Database (RDS)
+    Type: String
+    AllowedValues:
+      - 'true'
+      - 'false'
+    ConstraintDescription: must be either true or false.
+
   DBAllocatedStorage:
     Default: '10'
     Description: The size of the database (Gb)

@@ -19,6 +19,7 @@ Metadata:
             - DatabaseName
             - DatabaseUsername
             - DatabasePassword
+            - StorageEncrypted
       - 
         Label: 
           default: "Optional: SSL Configuration"
@@ -166,6 +167,16 @@ Parameters:
         Description: Name of S3 bucket containing files for restore
         Type: String
         Default: ""
+
+#Pro + Enterprise
+    StorageEncrypted:
+        Default: 'true'
+        Description: Enable encryption for both Database (RDS) and Filesystem (EFS)
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.
 
 #Docker Edition
     SolodevContainer:

@@ -23,6 +23,7 @@ Metadata:
           - AdminUser
           - AdminPassword
           - DatabasePassword
+          - StorageEncrypted
     #   - 
     #     Label: 
     #       default: "Optional: SSL Configuration"
@@ -96,6 +97,15 @@ Parameters:
         Type: String
         Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
 
+    StorageEncrypted:
+        Default: 'true'
+        Description: Enable encryption for both Database (RDS) and Filesystem (EFS)
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.
+
     # FQDN:
     #     Type: String
     #     Description: URL for app. FQDN must be pointed to CNAME of ALB.
@@ -167,6 +177,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
+                StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     RDS:
@@ -181,6 +192,7 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
                 DeletionPolicy: !Ref DeletionPolicy
+                StorageEncrypted: !Ref StorageEncrypted
 
     EC2:
         Type: AWS::CloudFormation::Stack
@@ -210,5 +222,5 @@ Resources:
 Outputs:
 
     AdminUrl: 
-        Description: Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead.
+        Description: Dedicated IP for web server.  Point your DNS to this IP.
         Value: !Join ["", [ "http://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]

@@ -15,11 +15,21 @@ Parameters:
         Description: Choose which subnets the Application Load Balancer should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
+    StorageEncrypted:
+        Default: 'false'
+        Description: Enable encryption for Filesystem (EFS)
+        Type: String
+        AllowedValues:
+          - 'true'
+          - 'false'
+        ConstraintDescription: must be either true or false.
+
 Resources:
 
   EFS:
     Type: 'AWS::EFS::FileSystem'
     Properties:
+      Encrypted: !Ref StorageEncrypted
       FileSystemTags:
         - Key: Name
           Value: !Join 
