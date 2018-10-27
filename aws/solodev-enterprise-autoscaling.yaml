@@ -93,6 +93,12 @@ Parameters:
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
 
+    InstanceCount:
+        Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
+        Default: 2
+        AllowedValues: [2, 3, 4, 5]
+        Type: Number
+
     AMI:
         Description: Build AMI - Please leave this blank unless told otherwise
         Default: ''
@@ -170,7 +176,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                ClusterSize: 3
+                ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
                 AMI: !If [UseDefaultAMI, !FindInMap ["AutoScalingGroup", !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS

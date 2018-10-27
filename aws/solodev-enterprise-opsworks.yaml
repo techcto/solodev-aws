@@ -15,6 +15,7 @@ Metadata:
           - VPCID
           - Subnets
           - InstanceType
+          - InstanceCount
           - KeyName
       - 
         Label: 
@@ -85,6 +86,12 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+
+    InstanceCount:
+        Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
+        Default: 2
+        AllowedValues: [1, 2, 3, 4, 5]
+        Type: Number
 
     AMI:
         Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
@@ -177,7 +184,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                ClusterSize: 3
+                ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
                 AMI: !If [UseDefaultAMI, !FindInMap ['Opsworks', !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS

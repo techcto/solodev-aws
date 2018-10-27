@@ -15,6 +15,7 @@ Metadata:
           - VPCID
           - Subnets
           - InstanceType
+          - InstanceCount
           - KeyName
       - 
         Label: 
@@ -93,6 +94,12 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+
+    InstanceCount:
+        Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
+        Default: 2
+        AllowedValues: [1, 2, 3, 4, 5]
+        Type: Number
 
     AMI:
         Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
@@ -200,7 +207,7 @@ Resources:
                 AWSStackId: !Ref AWS::StackId
                 InstanceType: !Ref InstanceType
                 AMI: !If [UseDefaultAMI, !FindInMap ["ECS", !Ref "AWS::Region", AMI], !Ref AMI]
-                ClusterSize: 2
+                ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
                 EFS: !GetAtt EFS.Outputs.EFS
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
@@ -263,7 +270,7 @@ Resources:
                 ApacheContainer: !If [UseMarketplace, '217273820646.dkr.ecr.us-east-1.amazonaws.com/fc123456-abcd-40d8-9a08-a13c4ca94f95/cg-9000123/solodev-apache:1.0-latest', 'solodev/cms-apache:latest']
                 MongoContainer: 'techcto/mongo:latest'
                 RestoreBucketName: !Ref RestoreBucketName
-                DesiredCount: 2
+                DesiredCount: !Ref InstanceCount
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
                 DeletionPolicy: !Ref DeletionPolicy
