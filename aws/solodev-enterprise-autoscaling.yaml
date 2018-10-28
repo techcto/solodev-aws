@@ -156,6 +156,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
+                CertificateArn: !Ref CertificateArn
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     EFS:

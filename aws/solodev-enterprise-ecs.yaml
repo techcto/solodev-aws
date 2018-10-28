@@ -197,6 +197,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
+                CertificateArn: !Ref CertificateArn
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
     EFS:
@@ -290,6 +291,9 @@ Resources:
                 DeletionPolicy: !Ref DeletionPolicy
 
 Outputs:
+    AdminUrl: 
+        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl
 
     URL: 
         Description: The URL endpoint for the website service

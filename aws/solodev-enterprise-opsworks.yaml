@@ -220,5 +220,5 @@ Resources:
 Outputs:
 
     AdminUrl: 
-        Description: The URL endpoint for load balancer. You should create a CNAME or alias to this name.
-        Value: !Join ["", [ "http://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]
+        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
+        Value: !GetAtt LB.Outputs.LoadBalancerUrl

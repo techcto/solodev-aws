@@ -109,15 +109,20 @@ Resources:
 Outputs:
 
     LoadBalancer:
-        Description: A reference to the Application Load Balancer
+        Description: A reference to the Load Balancer
         Value: !Ref LoadBalancer
 
-    LoadBalancerUrl:
-        Description: The URL of the ELB
-        Value: !GetAtt LoadBalancer.DNSName
+    LoadBalancerUrl: 
+        Description: CNAME of Load Balancer.  Point your DNS to this CNAME.
+        Value: !Join 
+                - ''
+                - - !If
+                    - UseSSL
+                    - "https://"
+                    - "http://"
+                  - !GetAtt LoadBalancer.DNSName
+                  - "/"
 
     LoadBalancerSecurityGroup:
         Description: A reference to LoadBalancerSecurityGroup
         Value: !Ref LoadBalancerSecurityGroup 
-
-    

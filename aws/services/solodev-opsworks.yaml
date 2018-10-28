@@ -1,5 +1,5 @@
 Description: >
-    This template deploys Solodev to the provided VPC and subnets using Opsworks Chef recipes.  
+    This template deploys Solodev using Opsworks Chef recipes.  
 
 Parameters:
 
