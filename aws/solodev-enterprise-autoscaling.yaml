@@ -149,7 +149,7 @@ Conditions:
 
 Resources:
 
-    LB:
+    ALB:
         Type: AWS::CloudFormation::Stack
         Properties:
             TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml"
@@ -176,7 +176,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
@@ -199,8 +199,8 @@ Resources:
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-                LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName
@@ -213,6 +213,6 @@ Resources:
 
 Outputs:
 
-    AdminUrl: 
-        Description: The URL endpoint for load balancer. You should create a CNAME or alias to this name.
-        Value: !Join ["", [ "http://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]
+    SolodevURL: 
+        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl

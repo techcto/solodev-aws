@@ -208,7 +208,7 @@ Resources:
 
 Outputs:
 
-    WebsiteIP:
+    SolodevIP:
         Value: 
             !Join 
             - ''

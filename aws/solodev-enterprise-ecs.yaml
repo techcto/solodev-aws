@@ -291,10 +291,6 @@ Resources:
                 DeletionPolicy: !Ref DeletionPolicy
 
 Outputs:
-    AdminUrl: 
+    SolodevURL: 
         Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
         Value: !GetAtt ALB.Outputs.LoadBalancerUrl
-
-    URL: 
-        Description: The URL endpoint for the website service
-        Value: !Join ["", [ "http://", !GetAtt ALB.Outputs.LoadBalancerUrl, "/" ]]

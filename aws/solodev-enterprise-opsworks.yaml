@@ -219,6 +219,6 @@ Resources:
 
 Outputs:
 
-    AdminUrl: 
+    SolodevURL: 
         Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
         Value: !GetAtt LB.Outputs.LoadBalancerUrl
