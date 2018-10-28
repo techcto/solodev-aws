@@ -7,11 +7,6 @@ Parameters:
         Description: An environment name that will be prefixed to resource names
         Type: String
 
-    AWSStackId:
-        Description: Stack ID used for cleanup scripts
-        Type: String
-        Default: ''
-
     InstanceType:
         Description: EC2 instance type
         Type: String
@@ -134,11 +129,6 @@ Parameters:
         Type: String
         Default: ''
 
-    StackTTL:
-        Description:  If in dev mode, the time until the stacl self-destructs
-        Default: '5'
-        Type: String
-
 Resources:
 
     ECSCluster:
@@ -155,8 +145,15 @@ Resources:
                 - IpProtocol: tcp
                   FromPort: 0
                   ToPort: 65535
+                  SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
+                - IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
                   CidrIp: "0.0.0.0/0"
-                  ##SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
+                - IpProtocol: tcp
+                  FromPort: 443
+                  ToPort: 443
+                  CidrIp: "0.0.0.0/0"
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22
