@@ -36,11 +36,29 @@ Metadata:
           default: "Optional: Advanced"
         Parameters: 
           - RestoreBucketName
+          - Subscription
           - AMI
           - DeletionPolicy
 
 Mappings:
   Opsworks:
+    us-east-1:
+      AMI: "ami-0c4f14d33b954e52b"
+    us-west-1:
+      AMI: ""
+    us-west-2:
+      AMI: ""
+    eu-west-1:
+      AMI: ""
+    sa-east-1:
+      AMI: ""
+    ap-southeast-1:
+      AMI: ""
+    ap-southeast-2:
+      AMI: ""
+    ap-northeast-1:
+      AMI: ""
+  BYOL:
     us-east-1:
       AMI: "ami-0c4f14d33b954e52b"
     us-west-1:
@@ -151,6 +169,15 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
+    Subscription:
+        Default: 'Marketplace'
+        Description: Select source of Solodev subscription
+        Type: String
+        AllowedValues:
+        - 'Marketplace'
+        - 'BYOL'
+        ConstraintDescription: must be either Marketplace or BYOL.
+
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
 
@@ -199,7 +226,7 @@ Resources:
                 InstanceType: !Ref InstanceType
                 ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
-                AMI: !If [UseDefaultAMI, !FindInMap ['Opsworks', !Ref "AWS::Region", AMI], !Ref AMI]
+                AMI: !If [UseDefaultAMI, !FindInMap [!Ref Subscription, !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN

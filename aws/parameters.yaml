@@ -32,6 +32,7 @@ Metadata:
         Parameters: 
           - RestoreBucketName
           - AMI
+          - Subscription
           - HostVolumeSize
           - SSHFrom
           - DeletionPolicy
@@ -177,6 +178,15 @@ Parameters:
         - 'true'
         - 'false'
         ConstraintDescription: must be either true or false.
+
+    Subscription:
+        Default: 'Marketplace'
+        Description: Select source of Solodev subscription
+        Type: String
+        AllowedValues:
+        - 'Marketplace'
+        - 'BYOL'
+        ConstraintDescription: must be either Marketplace or BYOL.
 
 #Docker Edition
     SolodevContainer:
