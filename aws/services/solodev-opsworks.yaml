@@ -173,6 +173,10 @@ Parameters:
         Type: String
         Description: 'Asset Deletion Policy'
 
+    BYOL:
+        Default: 'False'
+        Type: String
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -386,7 +390,7 @@ Resources:
                     DocumentRoot: /var/www
                     ApacheConfDir: /etc/httpd/conf.d
                     DeploymentType: !Ref DeploymentType
-                    EnterpriseMode: False
+                    EnterpriseMode: !Ref BYOL
                     
                     RestoreBucketName: !Ref RestoreBucketName
                     BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]

@@ -45,7 +45,7 @@ Metadata:
 Mappings:
   AutoScalingGroup:
     us-east-1:
-      AMI: "ami-0e0515ee9bee53e42"
+      AMI: "ami-028e39c623c17e836"
     us-west-1:
       AMI: ""
     us-west-2:

@@ -43,7 +43,7 @@ Metadata:
 Mappings:
   Opsworks:
     us-east-1:
-      AMI: "ami-0c4f14d33b954e52b"
+      AMI: "ami-02b37fc7ef687b73a"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -60,7 +60,7 @@ Mappings:
       AMI: ""
   BYOL:
     us-east-1:
-      AMI: "ami-0c4f14d33b954e52b"
+      AMI: "ami-0ed91bf0c1c29aad5"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -180,6 +180,7 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    UseBYOL: !Equals [ !Ref Subscription, "BYOL" ]
 
 Resources:
 
@@ -234,6 +235,7 @@ Resources:
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                BYOL: !If [UseBYOL, "True", "False"]
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName
