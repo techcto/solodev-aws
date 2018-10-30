@@ -36,7 +36,7 @@ Metadata:
           default: "Optional: Advanced"
         Parameters: 
           - RestoreBucketName
-          - Subscription
+          - SolodevSubscription
           - AMI
           - DeletionPolicy
 
@@ -169,7 +169,7 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
-    Subscription:
+    SolodevSubscription:
         Default: 'Marketplace'
         Description: Select source of Solodev subscription
         Type: String
@@ -180,7 +180,7 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
-    UseBYOL: !Equals [ !Ref Subscription, "BYOL" ]
+    UseBYOL: !Equals [ !Ref SolodevSubscription, "BYOL" ]
 
 Resources:
 
@@ -227,7 +227,7 @@ Resources:
                 InstanceType: !Ref InstanceType
                 ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
-                AMI: !If [UseDefaultAMI, !FindInMap [!Ref Subscription, !Ref "AWS::Region", AMI], !Ref AMI]
+                AMI: !If [UseDefaultAMI, !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN

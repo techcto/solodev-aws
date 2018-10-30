@@ -35,7 +35,7 @@ Metadata:
           default: "Optional: Advanced"
         Parameters: 
           - RestoreBucketName
-          - Subscription
+          - SolodevSubscription
           - AMI
           - DeletionPolicy
 
@@ -162,7 +162,7 @@ Parameters:
         Type: String
         Default: ""
 
-    Subscription:
+    SolodevSubscription:
         Default: 'Marketplace'
         Description: Select source of Solodev subscription
         Type: String
@@ -173,7 +173,7 @@ Parameters:
 
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
-    UseBYOL: !Equals [ !Ref Subscription, "BYOL" ]
+    UseBYOL: !Equals [ !Ref SolodevSubscription, "BYOL" ]
 
 Resources:
 
@@ -232,7 +232,7 @@ Resources:
                 VPC: !Ref VPCID
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 WebServerSecurityGroup: !Ref WebServerSecurityGroup
-                AMI: !If [UseDefaultAMI, !FindInMap [!Ref Subscription, !Ref "AWS::Region", AMI], !Ref AMI]
+                AMI: !If [UseDefaultAMI, !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI], !Ref AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 # FQDN: !Ref FQDN
