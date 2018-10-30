@@ -40,7 +40,7 @@ Metadata:
           - DeletionPolicy
 
 Mappings:
-  Opsworks:
+  Marketplace:
     us-east-1:
       AMI: "ami-02b37fc7ef687b73a"
     us-west-1:
