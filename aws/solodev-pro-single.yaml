@@ -42,7 +42,7 @@ Metadata:
 Mappings:
   Marketplace:
     us-east-1:
-      AMI: "ami-00e7373cfa30bf6f3"
+      AMI: "ami-0ad55be140da18833"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -59,7 +59,7 @@ Mappings:
       AMI: ""
   BYOL:
     us-east-1:
-      AMI: "ami-0c5272eb8516f3ceb"
+      AMI: "ami-0692ac428f35cf192"
     us-west-1:
       AMI: ""
     us-west-2:
