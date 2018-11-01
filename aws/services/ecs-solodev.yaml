@@ -1,5 +1,5 @@
 Description: >
-    ECS Task definition for Solodev CMS
+    This template deploys Solodev CMS for Docker ECS
 
 Parameters: 
 
