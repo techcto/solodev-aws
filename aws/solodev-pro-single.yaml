@@ -36,7 +36,6 @@ Metadata:
         Parameters: 
           - RestoreBucketName
           - SolodevSubscription
-          - AMI
           - DeletionPolicy
 
 Mappings:
@@ -105,10 +104,10 @@ Parameters:
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
 
-    AMI:
-        Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
-        Default: ''
-        Type: String
+    # AMI:
+    #     Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
+    #     Default: ''
+    #     Type: String
 
     DeletionPolicy:
         Default: 'Delete'
@@ -172,7 +171,7 @@ Parameters:
         ConstraintDescription: must be either Marketplace or BYOL.
 
 Conditions:
-    UseDefaultAMI: !Equals [ !Ref AMI, "" ]
+    # UseDefaultAMI: !Equals [ !Ref AMI, "" ]
     UseBYOL: !Equals [ !Ref SolodevSubscription, "BYOL" ]
 
 Resources:
@@ -232,7 +231,8 @@ Resources:
                 VPC: !Ref VPCID
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 WebServerSecurityGroup: !Ref WebServerSecurityGroup
-                AMI: !If [UseDefaultAMI, !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI], !Ref AMI]
+                # AMI: !If [UseDefaultAMI, !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI], !Ref AMI]
+                AMI: !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 # FQDN: !Ref FQDN
