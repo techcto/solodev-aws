@@ -244,6 +244,7 @@ Resources:
                 # FQDN: !Ref FQDN
                 # CertificateArn: !Ref CertificateArn
                 BYOL: !If [UseBYOL, "True", "False"]
+                CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 DatabaseName: !GetAtt RDS.Outputs.DatabaseName

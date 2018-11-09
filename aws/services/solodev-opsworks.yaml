@@ -176,6 +176,11 @@ Parameters:
         Default: 'False'
         Type: String
 
+    CookbookURL:
+        Type: String
+        Default: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
+        Description: The location of your Solodev Chef Recipes.  Download the default URL and host on your own S3 bucket or use the Solodev public cookbooks.
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -202,52 +207,6 @@ Resources:
                   Key: 'Name'
                   Value: !Join ['-', [!Ref 'EnvironmentName', 'S3']]
         DeletionPolicy: 'Delete'
-
-    UploadCookbooks:
-        Type: 'AWS::Lambda::Function'
-        Properties:
-            Environment:
-                Variables:
-                    Bucket:  !Ref SolodevBucket
-                    Runner: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
-                    Zip: 'cookbooks.tar.gz'
-            Code:
-                ZipFile: !Join 
-                - ''
-                - - |
-                    import cfnresponse
-                    import boto3,os
-                    import botocore.vendored.requests.packages.urllib3 as urllib3
-                    from botocore.client import Config
-
-                    def handler(event, context):
-                        url = os.environ['Runner']
-                        bucket = os.environ['Bucket']
-                        key = os.environ['Zip']
-                        responseData = {}
-
-                        #Upload Lambda
-                        s3 = boto3.client('s3', config=Config(signature_version='s3v4'))
-                        http = urllib3.PoolManager()
-                        s3.upload_fileobj(http.request('GET', url, preload_content=False), bucket, key)
-
-                        responseData['status'] = "success"
-                        try:
-                            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData)
-                        except BaseException as e:
-                            print(str(e))
-            Handler: index.handler
-            Role: !GetAtt 
-                - LambdaExecutionRole
-                - Arn
-            Runtime: python3.6
-            Timeout: 30
-
-    ExecuteUploadCookbooks:
-        Type: 'Custom::ExecuteUploadCookbooks'
-        Properties:
-            ServiceToken: !GetAtt UploadCookbooks.Arn
-            Region: !Ref 'AWS::Region'
 
     WebServerSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
@@ -417,8 +376,7 @@ Resources:
             CustomCookbooksSource:
                 Revision: master
                 Type: s3
-                # Url: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
-                Url: !Join ['', ['https://s3.amazonaws.com/', !Join ['-', [!Ref 'EnvironmentName', 'solodev']], '/cookbooks.tar.gz']]
+                Url: !Ref CookbookURL
             CustomJson:
                 private_dns: 'solodev'
                 install:

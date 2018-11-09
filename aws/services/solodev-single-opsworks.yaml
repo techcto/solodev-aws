@@ -141,6 +141,11 @@ Parameters:
         Default: 'False'
         Type: String
 
+    CookbookURL:
+        Type: String
+        Default: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
+        Description: The location of your Solodev Chef Recipes.  Download the default URL and host on your own S3 bucket or use the Solodev public cookbooks.
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -299,7 +304,7 @@ Resources:
             CustomCookbooksSource:
                 Revision: master
                 Type: s3
-                Url: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
+                Url: !Ref CookbookURL
             CustomJson:
                 private_dns: 'solodev'
                 install:
