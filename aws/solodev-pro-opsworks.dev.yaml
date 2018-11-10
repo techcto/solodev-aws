@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    Solodev CMS Enterprise for Opsworks on AWS
+    Solodev CMS Pro for Opsworks on AWS
 
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -15,22 +15,21 @@ Metadata:
           - VPCID
           - Subnets
           - InstanceType
-          - InstanceCount
           - KeyName
       - 
         Label: 
           default: "CMS Settings"
         Parameters: 
-            - AdminUser
-            - AdminPassword
-            - DatabasePassword
-            - StorageEncrypted
-      - 
-        Label: 
-          default: "Optional: SSL Configuration"
-        Parameters: 
-          - FQDN
-          - CertificateArn
+          - AdminUser
+          - AdminPassword
+          - DatabasePassword
+          - StorageEncrypted
+    #   - 
+    #     Label: 
+    #       default: "Optional: SSL Configuration"
+    #     Parameters: 
+    #       - FQDN
+    #       - CertificateArn
       - 
         Label: 
           default: "Optional: Advanced"
@@ -106,24 +105,32 @@ Parameters:
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
 
-    InstanceCount:
-        Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
-        Default: 2
-        AllowedValues: [1, 2, 3, 4, 5]
-        Type: Number
+    # AMI:
+    #     Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
+    #     Default: ''
+    #     Type: String
 
     DeletionPolicy:
         Default: 'Delete'
         Type: String
         Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
 
-    FQDN:
+    StorageEncrypted:
+        Default: 'true'
+        Description: Enable encryption for both Database (RDS) and Filesystem (EFS)
         Type: String
-        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.
 
-    CertificateArn:
-        Type: String
-        Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
+    # FQDN:
+    #     Type: String
+    #     Description: URL for app. FQDN must be pointed to CNAME of ALB.
+
+    # CertificateArn:
+    #     Type: String
+    #     Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
 
     CookbookURL:
         Type: String
@@ -160,15 +167,6 @@ Parameters:
         Type: String
         Default: ""
 
-    StorageEncrypted:
-        Default: 'true'
-        Description: Enable encryption for both Database (RDS) and Filesystem (EFS)
-        Type: String
-        AllowedValues:
-        - 'true'
-        - 'false'
-        ConstraintDescription: must be either true or false.
-
     SolodevSubscription:
         Default: 'Marketplace'
         Description: Select source of Solodev subscription
@@ -179,18 +177,31 @@ Parameters:
         ConstraintDescription: must be either Marketplace or BYOL.
 
 Conditions:
+    # UseDefaultAMI: !Equals [ !Ref AMI, "" ]
     UseBYOL: !Equals [ !Ref SolodevSubscription, "BYOL" ]
 
 Resources:
 
-    LB:
-        Type: AWS::CloudFormation::Stack
+    WebServerSecurityGroup:
+        Type: 'AWS::EC2::SecurityGroup'
         Properties:
-            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml"
-            Parameters:
-                EnvironmentName: !Ref AWS::StackName
-                VPC: !Ref VPCID
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+            GroupDescription: Allow inbound requests to the OpsWorks instance
+            VpcId: !Ref VPCID
+            SecurityGroupIngress:
+                - 
+                    IpProtocol: tcp
+                    FromPort: '80'
+                    ToPort: '80'
+                    CidrIp: '0.0.0.0/0'
+                - 
+                    IpProtocol: tcp
+                    FromPort: '443'
+                    ToPort: '443'
+                    CidrIp: '0.0.0.0/0'
+            Tags:
+                - 
+                    Key: Name
+                    Value: !Join ['-', [!Ref 'AWS::StackName', 'WebServerSecurityGroup']]
 
     EFS:
         Type: AWS::CloudFormation::Stack
@@ -209,31 +220,29 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
                 DeletionPolicy: !Ref DeletionPolicy
                 StorageEncrypted: !Ref StorageEncrypted
-                MultiAZDatabase: 'true'
 
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml"
+            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-single-opsworks.yaml"
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
-                ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                WebServerSecurityGroup: !Ref WebServerSecurityGroup
+                # AMI: !If [UseDefaultAMI, !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI], !Ref AMI]
                 AMI: !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
-                FQDN: !Ref FQDN
-                CertificateArn: !Ref CertificateArn
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-                LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                # FQDN: !Ref FQDN
+                # CertificateArn: !Ref CertificateArn
                 BYOL: !If [UseBYOL, "True", "False"]
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser
@@ -248,6 +257,6 @@ Resources:
 
 Outputs:
 
-    SolodevURL: 
-        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
-        Value: !GetAtt LB.Outputs.LoadBalancerUrl
+    SolodevIP: 
+        Description: Dedicated IP for web server.  Point your DNS to this IP.
+        Value: !Join ["", [ "http://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]

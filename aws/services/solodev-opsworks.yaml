@@ -84,14 +84,6 @@ Parameters:
         Type: Number
         Default: 5
 
-    # SSHFrom:
-    #     Description: Lockdown SSH access to the bastion host (default can be accessed from anywhere)
-    #     Type: String
-    #     MinLength: '9'
-    #     MaxLength: '18'
-    #     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
-    #     ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
-
     HostVolumeSize:
         Description: Size in GB of additional non-root volume
         Type: String
