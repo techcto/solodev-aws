@@ -21,7 +21,6 @@ Metadata:
         Parameters: 
           - AMI
           - HostVolumeSize
-          - SSHFrom
           - DeletionPolicy
 
 Parameters:
@@ -69,9 +68,6 @@ Parameters:
         Type: String
         Default: '128'
         AllowedValues:
-        - '8'
-        - '16'
-        - '32'
         - '64'
         - '128'
         - '256'
@@ -79,15 +75,6 @@ Parameters:
         - '1024'
         - '2048'
         - '4096'
-
-    SSHFrom:
-        Description: Lockdown SSH access to host
-        Type: String
-        MinLength: '9'
-        MaxLength: '18'
-        Default: 0.0.0.0/0
-        AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
-        ConstraintDescription: must be a valid CIDR range of the form x.x.x.x/x.
 
 Mappings:
     AWSRegionToAMI:
@@ -138,10 +125,6 @@ Resources:
               FromPort: 443
               ToPort: 443
               CidrIp: 0.0.0.0/0
-            - IpProtocol: tcp
-              FromPort: '22'
-              ToPort: '22'
-              CidrIp: !Ref SSHFrom
 
     PowerUserRole:
         Type: 'AWS::IAM::Role'
