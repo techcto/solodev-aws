@@ -14,6 +14,6 @@ for STACK in $(aws cloudformation describe-stacks --region us-west-1 | ./jq -r '
 do
     if [[ $STACK == *"-tmp-"* ]]; then
         echo "I found one. Time to delete stack: ${STACK}.  Bye-Bye!"
-        aws cloudformation delete-stack --stack-name $STACK
+        aws cloudformation delete-stack --region us-west-1 --stack-name $STACK
     fi
 done
