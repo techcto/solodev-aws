@@ -206,7 +206,7 @@ Resources:
                 KeyName: !Ref KeyName
                 # FQDN: !Ref FQDN
                 # CertificateArn: !Ref CertificateArn
-                BYOL: !If [UseBYOL, "True", "False"]
+                BYOL: True
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
