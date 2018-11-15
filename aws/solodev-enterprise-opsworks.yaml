@@ -36,28 +36,10 @@ Metadata:
           default: "Optional: Advanced"
         Parameters: 
           - RestoreBucketName
-          - SolodevSubscription
           - CookbookURL
           - DeletionPolicy
 
 Mappings:
-  BYOL:
-    us-east-1:
-      AMI: "ami-01baa7c3a8b3afd6e"
-    us-west-1:
-      AMI: ""
-    us-west-2:
-      AMI: ""
-    eu-west-1:
-      AMI: ""
-    sa-east-1:
-      AMI: ""
-    ap-southeast-1:
-      AMI: ""
-    ap-southeast-2:
-      AMI: ""
-    ap-northeast-1:
-      AMI: ""
   Marketplace:
     us-east-1:
       AMI: "ami-0dcef029f4d275cb5"
@@ -169,18 +151,6 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
-    SolodevSubscription:
-        Default: 'Marketplace'
-        Description: Select source of Solodev subscription
-        Type: String
-        AllowedValues:
-        - 'Marketplace'
-        - 'BYOL'
-        ConstraintDescription: must be either Marketplace or BYOL.
-
-Conditions:
-    UseBYOL: !Equals [ !Ref SolodevSubscription, "BYOL" ]
-
 Resources:
 
     LB:
@@ -226,7 +196,7 @@ Resources:
                 InstanceType: !Ref InstanceType
                 ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
-                AMI: !FindInMap [!Ref SolodevSubscription, !Ref "AWS::Region", AMI]
+                AMI: !FindInMap ["Marketplace", !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN

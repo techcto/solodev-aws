@@ -40,9 +40,9 @@ Metadata:
           - DeletionPolicy
 
 Mappings:
-  Marketplace:
+  BYOL:
     us-east-1:
-      AMI: "ami-0dcef029f4d275cb5"
+      AMI: "ami-01baa7c3a8b3afd6e"
     us-west-1:
       AMI: ""
     us-west-2:
@@ -94,11 +94,6 @@ Parameters:
         AllowedValues: [1, 2, 3, 4, 5]
         Type: Number
 
-    # AMI:
-    #     Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
-    #     Default: ''
-    #     Type: String
-
     DeletionPolicy:
         Default: 'Delete'
         Type: String
@@ -115,7 +110,7 @@ Parameters:
     CookbookURL:
         Type: String
         Default: ''
-        Description: Download https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz and host on your own S3 bucket or use this URL.
+        Description: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz | Download and host on your own S3 bucket or copy this URL.'
 
     AdminUser:
         Description: The solodev admin username
@@ -201,7 +196,7 @@ Resources:
                 InstanceType: !Ref InstanceType
                 ClusterSize: !Ref InstanceCount
                 VPC: !Ref VPCID
-                AMI: !FindInMap ["Marketplace", !Ref "AWS::Region", AMI]
+                AMI: !FindInMap ["BYOL", !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
