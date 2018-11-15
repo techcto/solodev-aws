@@ -31,7 +31,7 @@ phases:
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single.json
         --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks.yaml
       - echo "Create Solodev Pro Single in California"
-      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single.json
+      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-opsworks-us-west-1.json - ) > solodev-pro-single.json
       - aws cloudformation create-stack --region us-west-1 --disable-rollback --stack-name pro-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single.json
         --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks.yaml
