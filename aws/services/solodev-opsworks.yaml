@@ -592,7 +592,7 @@ Resources:
                 - LambdaExecutionRole
                 - Arn
             Code:
-                S3Bucket: solodev-install
+                S3Bucket: solodev-aws-ha
                 S3Key: opsworks_getip.zip
             Runtime: python2.7
             Timeout: '25'
