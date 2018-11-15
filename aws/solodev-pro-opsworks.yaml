@@ -43,9 +43,9 @@ Mappings:
     us-east-1:
       AMI: "ami-0dcef029f4d275cb5"
     us-west-1:
-      AMI: ""
+      AMI: "ami-09276f994abde3c48"
     us-west-2:
-      AMI: ""
+      AMI: "ami-0cb6b574b6497d677"
     eu-west-1:
       AMI: ""
     sa-east-1:
