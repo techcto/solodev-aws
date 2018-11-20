@@ -41,11 +41,11 @@ Metadata:
 Mappings:
   Marketplace:
     us-east-1:
-      AMI: "ami-0445b37f06506e100"
+      AMI: "ami-0362bc0efb50a8e25"
     us-west-1:
-      AMI: "ami-09276f994abde3c48"
+      AMI: ""
     us-west-2:
-      AMI: "ami-0cb6b574b6497d677"
+      AMI: ""
     eu-west-1:
       AMI: ""
     sa-east-1:
