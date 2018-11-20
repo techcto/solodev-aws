@@ -508,9 +508,9 @@ Resources:
                     - HTTPS
                     - HTTP
             Matcher: 
-                HttpCode: 200-299
+                HttpCode: 301
             HealthCheckIntervalSeconds: 60
-            HealthCheckPath: /test.php
+            HealthCheckPath: /
             HealthCheckProtocol: 
                 !If
                     - UseSSL

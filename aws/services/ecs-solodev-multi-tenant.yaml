@@ -461,7 +461,7 @@ Resources:
             Port: 80
             Protocol: HTTP
             Matcher: 
-                HttpCode: 200-299
+                HttpCode: 301
             HealthCheckIntervalSeconds: 45
             HealthCheckPath: /
             HealthCheckProtocol: HTTP
