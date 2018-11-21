@@ -228,9 +228,9 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                SolodevContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3481810083/solodev-cms:8.9-latest'
-                ApacheContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3481810083/solodev-apache:8.9-latest'
-                MongoContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3481810083/mongo:8.9-latest'
+                SolodevContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-1964206825/solodev-cms:8.9-latest'
+                ApacheContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-1964206825/solodev-apache:8.9-latest'
+                MongoContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-1964206825/mongo:8.9-latest'
                 UseMarketplace: 'true'
                 RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: !Ref InstanceCount
