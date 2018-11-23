@@ -80,7 +80,7 @@ Resources:
           - ''
           - - 'HTTP:'
             - 80
-            - /
+            - /healthcheck
         HealthyThreshold: '2'
         UnhealthyThreshold: '2'
         Interval: '30'
