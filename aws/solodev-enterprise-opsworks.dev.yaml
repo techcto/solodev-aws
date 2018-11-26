@@ -17,6 +17,7 @@ Metadata:
           - InstanceType
           - InstanceCount
           - KeyName
+          - CookbookURL
       - 
         Label: 
           default: "CMS Settings"
@@ -36,7 +37,6 @@ Metadata:
           default: "Optional: Advanced"
         Parameters: 
           - RestoreBucketName
-          - CookbookURL
           - DeletionPolicy
 
 Mappings:
