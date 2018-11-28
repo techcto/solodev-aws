@@ -44,19 +44,19 @@ Mappings:
     us-east-1:
       AMI: "ami-0b9a214f40c38d5eb"
     us-west-1:
-      AMI: ""
+      AMI: "ami-0285183bbef6224bd"
     us-west-2:
-      AMI: ""
+      AMI: "ami-01b70aea4161476b7"
     eu-west-1:
-      AMI: ""
+      AMI: "ami-0627e141ce928067c"
     sa-east-1:
-      AMI: ""
+      AMI: "ami-084b1eee100c102ee"
     ap-southeast-1:
-      AMI: ""
+      AMI: "ami-050865a806e0dae53"
     ap-southeast-2:
-      AMI: ""
+      AMI: "ami-02c73ee1100ce3e7a"
     ap-northeast-1:
-      AMI: ""
+      AMI: "ami-05b296a384694dfa4"
 
 Parameters:
 
