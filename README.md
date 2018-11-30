@@ -6,7 +6,7 @@ To deploy via the AWS Cloud, please visit [Solodev's AWS Marketplace Github Repo
 ---
 © 2018 Solodev. All rights reserved. 
 
-Errors or corrections? Email us at help@solodev.com................
+Errors or corrections? Email us at help@solodev.com..................
 
 ---
 Visit [solodev.com](https://www.solodev.com/) to learn more.
