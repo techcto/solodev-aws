@@ -111,7 +111,7 @@ Parameters:
 
     CookbookURL:
         Type: String
-        Default: ''
+        Default: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
         Description: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz | Download and host on your own S3 bucket or copy this URL.'
 
     AdminUser:
