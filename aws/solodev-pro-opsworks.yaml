@@ -25,12 +25,6 @@ Metadata:
           - AdminPassword
           - DatabasePassword
           - StorageEncrypted
-    #   - 
-    #     Label: 
-    #       default: "Optional: SSL Configuration"
-    #     Parameters: 
-    #       - FQDN
-    #       - CertificateArn
       - 
         Label: 
           default: "Optional: Advanced"
@@ -101,14 +95,6 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
-    # FQDN:
-    #     Type: String
-    #     Description: URL for app. FQDN must be pointed to CNAME of ALB.
-
-    # CertificateArn:
-    #     Type: String
-    #     Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
-
     CookbookURL:
         Type: String
         Default: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz'
@@ -174,6 +160,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
@@ -204,8 +191,6 @@ Resources:
                 AMI: !FindInMap ["Marketplace", !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
                 KeyName: !Ref KeyName
-                # FQDN: !Ref FQDN
-                # CertificateArn: !Ref CertificateArn
                 BYOL: False
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser

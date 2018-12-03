@@ -169,6 +169,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 

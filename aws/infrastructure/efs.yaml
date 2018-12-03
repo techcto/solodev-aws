@@ -15,6 +15,10 @@ Parameters:
         Description: Choose which subnets the Application Load Balancer should be deployed to
         Type: List<AWS::EC2::Subnet::Id>
 
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
     StorageEncrypted:
         Default: 'false'
         Description: Enable encryption for Filesystem (EFS)
@@ -46,7 +50,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: '2049'
           ToPort: '2049'
-          CidrIp: 0.0.0.0/0
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
 
   MountTarget1:
     Type: 'AWS::EFS::MountTarget'
