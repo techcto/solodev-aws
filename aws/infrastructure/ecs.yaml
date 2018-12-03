@@ -221,6 +221,7 @@ Resources:
             InstanceType: !Ref InstanceType
             SecurityGroups: 
                 - !Ref ECSHostSecurityGroup
+                - !Ref LoadBalancerSecurityGroup
             IamInstanceProfile: !Ref ECSInstanceProfile
             KeyName: !Ref KeyName
             AssociatePublicIpAddress: true
