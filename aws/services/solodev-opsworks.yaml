@@ -446,7 +446,7 @@ Resources:
             Type: custom
             Shortname: solodev-web
             EnableAutoHealing: 'true'
-            AutoAssignElasticIps: 'false'
+            AutoAssignElasticIps: 'true'
             AutoAssignPublicIps: 'true'
             LoadBasedAutoScaling:
                 DownScaling:
