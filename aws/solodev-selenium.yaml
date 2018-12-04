@@ -1,0 +1,46 @@
+LambdaInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref LifecycleExecuteSolodev
+      Action: 'lambda:InvokeFunction'
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref NotificationTopic
+
+  LifecycleExecuteSolodev:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Environment:
+        Variables:
+          cluster: !Ref AutoScalingGroup
+          instance_user: !Ref InstanceUser
+          bucket:  !Ref SolodevBucket
+          FQDN: !Ref FQDN
+          database_name: !Ref DatabaseName
+          database_host: !Ref DatabaseHost
+          database_user: !Ref DatabaseUsername
+          database_password: !Ref DatabasePassword
+          mongo_host: !Ref MongoHost
+      Handler: solodev.run
+      Role: !Ref LambdaExecutionRole
+      Code: 
+        S3Bucket: !Ref SolodevBucket
+        S3Key: 'solodev-runner.zip'
+      Runtime: python3.6
+      Timeout: 300
+
+  ExecuteLifecycleExecuteSolodev:
+    Type: 'Custom::ExecuteLifecycleExecuteSolodev'
+    Properties:
+      ServiceToken: !GetAtt LifecycleExecuteSolodev.Arn
+      Region: !Ref 'AWS::Region'
+
+  NotificationTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - 
+          Endpoint: !GetAtt 
+            - LifecycleExecuteSolodev
+            - Arn
+          Protocol: lambda
+    DependsOn: ExecuteLifecycleExecuteSolodev
