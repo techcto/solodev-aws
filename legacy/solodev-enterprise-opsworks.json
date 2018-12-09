@@ -304,24 +304,6 @@
       }
     },
     
-    "MountTarget3": {
-      "Type": "AWS::EFS::MountTarget",
-      "Properties": {
-        "FileSystemId": { "Ref": "FileSystem" },
-        "SubnetId": { "Fn::Select": [ "2", { "Ref":"Subnets" } ] },
-        "SecurityGroups": [ { "Ref": "MountTargetSecurityGroup" } ]        
-      }
-    },
-    
-    "MountTarget4": {
-      "Type": "AWS::EFS::MountTarget",
-      "Properties": {
-        "FileSystemId": { "Ref": "FileSystem" },
-        "SubnetId": { "Fn::Select": [ "3", { "Ref":"Subnets" } ] },
-        "SecurityGroups": [ { "Ref": "MountTargetSecurityGroup" } ]        
-      }
-    },
-    
     "SolodevStack": {
       "Type": "AWS::OpsWorks::Stack",
       "Properties": {
@@ -487,40 +469,6 @@
         "StackId": { "Ref": "SolodevStack" },
         "LayerIds": [ { "Ref": "WebServerLayer" } ],
         "SubnetId": { "Fn::Select": [ "1", { "Ref":"Subnets" } ] },
-        "InstanceType":{
-          "Ref":"InstanceType"
-        },
-        "RootDeviceType" : "ebs",
-        "SshKeyName" : {
-          "Ref":"KeyName"
-        }
-      }
-    },
-
-     "SolodevInstance3": {
-      "Type": "AWS::OpsWorks::Instance",
-      "Properties": {
-        "AmiId":{
-          "Fn::FindInMap":[
-            "AWSRegionWebBaseAMI",
-            {
-              "Ref":"AWS::Region"
-            },
-            {
-              "Fn::FindInMap":[
-                "AWSInstanceType2Arch",
-                {
-                  "Ref":"InstanceType"
-                },
-                "Arch"
-              ]
-            }
-          ]
-        },
-        "Os": "Custom",
-        "StackId": { "Ref": "SolodevStack" },
-        "LayerIds": [ { "Ref": "WebServerLayer" } ],
-        "SubnetId": { "Fn::Select": [ "2", { "Ref":"Subnets" } ] },
         "InstanceType":{
           "Ref":"InstanceType"
         },
