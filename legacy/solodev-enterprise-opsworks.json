@@ -312,6 +312,7 @@
         	"Name": "Chef",
         	"Version": "12"
         },
+        "DefaultOs": "Custom",
         "ServiceRoleArn": { "Fn::GetAtt": [ "OpsWorksServiceRole", "Arn" ] },
         "DefaultInstanceProfileArn": { "Fn::GetAtt": [ "SolodevInstanceProfile", "Arn" ] },
         "VpcId": { "Ref": "VpcId" },
