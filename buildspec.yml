@@ -15,13 +15,30 @@ phases:
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
       - aws s3 sync aws s3://solodev-aws-ha/aws --delete
+      - aws s3 sync legacy s3://solodev-aws-ha/legacy --delete
       - DATE=$(date +%d%H%M)
       
       - echo "Delete Old Stacks"
       - chmod 700 bin/cleanStacks.sh
       - ./bin/cleanStacks.sh
 
-      - echo "Create Stacks:"
+      - echo "Create Legacy Stacks:" 
+
+      - echo "Create Solodev Pro for Opsworks Legacy"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-classic.json - ) > solodev-pro-classic.json
+      - aws cloudformation create-stack --disable-rollback --stack-name pro-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-classic.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-pro-opsworks.json
+        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+
+      - echo "Create Solodev Enterprise for Opsworks Legacy"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-classic.json - ) > solodev-enterprise-classic.json
+      - aws cloudformation create-stack --disable-rollback --stack-name enterprise-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-classic.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-enterprise-opsworks.json
+        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+
+      - echo "Create Classic Stacks:"
 
       # - echo "Create Solodev Lite"
       # - echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
