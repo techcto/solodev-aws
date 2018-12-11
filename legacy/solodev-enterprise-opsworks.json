@@ -116,7 +116,7 @@
       "ConstraintDescription":"must contain only alphanumeric characters."
     },
     "DBClass":{
-      "Default":"db.t2.small",
+      "Default":"db.m1.small",
       "Description":"Database instance class",
       "Type":"String",
       "AllowedValues":[
