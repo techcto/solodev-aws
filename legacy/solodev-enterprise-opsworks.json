@@ -120,11 +120,10 @@
       "Description":"Database instance class",
       "Type":"String",
       "AllowedValues":[
-        "db.t2.small",
         "db.m1.small",
+        "db.m1.medium",
         "db.m1.large",
         "db.m1.xlarge",
-        "db.m2.xlarge",
         "db.m2.2xlarge",
         "db.m2.4xlarge"
       ],
@@ -859,8 +858,8 @@
           },
           "HealthyThreshold":"2",
           "UnhealthyThreshold":"2",
-          "Interval":"30",
-          "Timeout":"25"
+          "Interval":"60",
+          "Timeout":"55"
         },
         "LBCookieStickinessPolicy": [ { "PolicyName" : {"Fn::Join": ["-", [{"Ref": "AWS::StackName"}, "StickyLoadBalancer"]]}} ],
         "Tags":[
