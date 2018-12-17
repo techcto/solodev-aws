@@ -334,6 +334,7 @@
 		    		"document_root": "/var/www",
 		    		"control_root": "/var/www/Solodev/clients/solodev",
 		    		"mongo_nodes": {"Ref":"DeploymentType"},
+            "MongoHost": "127.0.0.1",
 		    		"software_name": "Solodev",
 		    		"client_name": "solodev",
 		    		"apache_conf_dir": "/etc/httpd/conf.d",
