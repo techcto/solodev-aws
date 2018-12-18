@@ -978,7 +978,7 @@
       "Description" : "URL for newly created application",
       "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "ELB", "DNSName" ]}]] }
     },
-    "AdminUser": {
+    "AdminUsername": {
       "Description": "CMS Admin User",
       "Value": { "Ref": "AdminUser" }
     },
@@ -990,7 +990,7 @@
       "Value" : { "Fn::GetAtt" : [ "IPAddress", "PublicIp" ]},
       "Description" : "Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead."
     },
-    "CNAME": {
+    "AdminUrl": {
       "Description" : "URL for admin login.  URL to use as CNAME for DNS. Please point all CNAME dns entries to this URL.",
       "Value" : { "Fn::GetAtt" : [ "ELB", "DNSName" ]}
     },

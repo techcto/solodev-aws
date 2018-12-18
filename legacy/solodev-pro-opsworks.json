@@ -888,7 +888,7 @@
       "Description": "CMS Admin User Email",
       "Value": { "Ref": "AdminUser" }
     },
-    "AdminUser": {
+    "AdminUsername": {
       "Description": "CMS Admin User",
       "Value": { "Ref": "AdminUser" }
     },
@@ -900,7 +900,7 @@
       "Description" : "URL for admin login.  URL to use as CNAME for DNS. Please point all CNAME dns entries to this URL.",
       "Value" : { "Fn::GetAtt" : [ "ELB", "DNSName" ]}
     },
-    "CNAMEURL": {
+    "AdminUrl": {
       "Description" : "URL for admin login.  URL to use as CNAME for DNS. Please point all CNAME dns entries to this URL.",
       "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "ELB", "DNSName" ]}]] }
     },

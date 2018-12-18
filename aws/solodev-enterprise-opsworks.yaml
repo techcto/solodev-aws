@@ -151,6 +151,9 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
+Conditions:
+    UseSSL: !Equals [ !Ref CertificateArn, "" ]
+
 Resources:
 
     LB:
@@ -220,6 +223,12 @@ Resources:
 
 Outputs:
 
-    SolodevURL: 
+    AdminUrl: 
         Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
-        Value: !GetAtt LB.Outputs.LoadBalancerUrl
+        Value: !Join ["", [ !If [UseSSL, 'https', 'http'], "://", !GetAtt LB.Outputs.LoadBalancerUrl, "/" ]]
+    AdminUsername: 
+        Description: Solodev admin username.
+        Value: !Ref AdminUser
+    AdminPassword: 
+        Description: Solodev admin password.
+        Value: !Ref AdminPassword
