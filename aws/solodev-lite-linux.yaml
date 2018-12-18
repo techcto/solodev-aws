@@ -190,4 +190,4 @@ Outputs:
         Value: "solodev"
     AdminPassword: 
         Description: Solodev admin password.
-        Value: !GetAtt WebServerInstance.Arn
+        Value: !Ref WebServerInstance
