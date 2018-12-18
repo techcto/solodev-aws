@@ -61,12 +61,12 @@ phases:
       # #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks.yaml
       # #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
-      # - echo "Create Solodev Pro for Opsworks BYOL"
-      # - echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single-byol.json
-      # - aws cloudformation create-stack --disable-rollback --stack-name pro-byol-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single-byol.json
-      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks-byol.yaml
-      #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+      - echo "Create Solodev Pro for Opsworks BYOL"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single-byol.json
+      - aws cloudformation create-stack --disable-rollback --stack-name pro-byol-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single-byol.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks-byol.yaml
+        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
       # # - echo "Create Solodev Pro for Opsworks BYOL - California"
       # # - echo $(aws s3 cp s3://build-secure/params/solodev-pro-opsworks-us-west-1.json - ) > solodev-pro-single-byol.json
@@ -75,12 +75,12 @@ phases:
       # #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks-byol.yaml
       # #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
-      # - echo "Create Solodev Enterprise for Opsworks"
-      # - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json
-      # - aws cloudformation create-stack --disable-rollback --stack-name ops-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-opsworks.json
-      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-opsworks.yaml
-      #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+      - echo "Create Solodev Enterprise for Opsworks"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json
+      - aws cloudformation create-stack --disable-rollback --stack-name ops-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-opsworks.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-opsworks.yaml
+        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
       # # - echo "Create Solodev Enterprise for Opsworks BYOL"
       # # - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json

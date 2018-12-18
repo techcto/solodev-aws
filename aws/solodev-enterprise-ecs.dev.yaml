@@ -189,7 +189,6 @@ Parameters:
 Conditions:
     UseDefaultAMI: !Equals [ !Ref AMI, "" ]
     UseMarketplace: !Equals [ !Ref DockerUsername, "" ]
-    UseSSL: !Equals [ !Ref CertificateArn, "" ]
 
 Resources:
 
@@ -297,7 +296,7 @@ Outputs:
 
     AdminUrl: 
         Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
-        Value: !Join ["", [ !If [UseSSL, 'https', 'http'], "://", !GetAtt ALB.Outputs.LoadBalancerUrl, "/" ]]
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl
     AdminUsername: 
         Description: Solodev admin username.
         Value: !Ref AdminUser
