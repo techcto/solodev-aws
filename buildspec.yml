@@ -22,23 +22,23 @@ phases:
       - chmod 700 bin/cleanStacks.sh
       - ./bin/cleanStacks.sh
 
-      - echo "Create Legacy Stacks:" 
+      # - echo "Create Legacy Stacks:" 
 
-      - echo "Create Solodev Pro for Opsworks Legacy"
-      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-classic.json - ) > solodev-pro-classic.json
-      - aws cloudformation create-stack --disable-rollback --stack-name pro-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-classic.json
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-pro-opsworks.json
-        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+      # - echo "Create Solodev Pro for Opsworks Legacy"
+      # - echo $(aws s3 cp s3://build-secure/params/solodev-pro-classic.json - ) > solodev-pro-classic.json
+      # - aws cloudformation create-stack --disable-rollback --stack-name pro-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-classic.json
+      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-pro-opsworks.json
+      #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
-      - echo "Create Solodev Enterprise for Opsworks Legacy"
-      - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-classic.json - ) > solodev-enterprise-classic.json
-      - aws cloudformation create-stack --disable-rollback --stack-name enterprise-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-classic.json
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-enterprise-opsworks.json
-        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+      # - echo "Create Solodev Enterprise for Opsworks Legacy"
+      # - echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-classic.json - ) > solodev-enterprise-classic.json
+      # - aws cloudformation create-stack --disable-rollback --stack-name enterprise-legacy-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-classic.json
+      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-enterprise-opsworks.json
+      #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
-      - echo "Create Classic Stacks:"
+      - echo "Create Stacks:"
 
       - echo "Create Solodev Lite"
       - echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
@@ -47,12 +47,12 @@ phases:
         --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-lite-linux.yaml
         --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
         
-      # - echo "Create Solodev Pro for Opsworks"
-      # - echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single.json
-      # - aws cloudformation create-stack --disable-rollback --stack-name pro-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single.json
-      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks.yaml
-      #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
+      - echo "Create Solodev Pro for Opsworks"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single.json
+      - aws cloudformation create-stack --disable-rollback --stack-name pro-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks.yaml
+        --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
       # # - echo "Create Solodev Pro for Opsworks - California"
       # # - echo $(aws s3 cp s3://build-secure/params/solodev-pro-opsworks-us-west-1.json - ) > solodev-pro-single.json
