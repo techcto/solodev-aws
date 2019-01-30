@@ -317,7 +317,7 @@
         "CustomCookbooksSource": {
 				  "Revision": "master",
 				  "Type" : "s3",
-				  "Url" : "https://s3.amazonaws.com/solodev-aws/cookbooks.tar.gz"
+				  "Url" : "https://s3.amazonaws.com/solodev-aws/cookbooks-fpm.tar.gz"
 		    },
 		    "CustomJson": {
 		    	"newrelic": {
