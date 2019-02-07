@@ -4,9 +4,9 @@ User-friendly for non-technical administrators and advanced enough for developer
 To deploy via the AWS Cloud, please visit [Solodev's AWS Marketplace Github Repository](https://github.com/solodev/aws-marketplace).
 
 ---
-© 2018 Solodev. All rights reserved. 
+© 2019 Solodev. All rights reserved. 
 
-Errors or corrections? Email us at help@solodev.com........................................................
+Errors or corrections? Email us at help@solodev.com.
 
 ---
 Visit [solodev.com](https://www.solodev.com/) to learn more.
