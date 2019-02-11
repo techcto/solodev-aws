@@ -244,6 +244,122 @@ Resources:
                                   - 's3:*'
                                 Resource: !Join ['', ['arn:aws:s3:::', !Ref 'SolodevBucket', /*]]
 
+    BackupTaskDefinition:
+        Type: AWS::ECS::TaskDefinition
+        Properties:
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'portal-backup']]
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+            TaskRoleArn: !GetAtt TaskRole.Arn
+            NetworkMode: "host"
+            ContainerDefinitions:
+                - 
+                    Name: backup
+                    MountPoints: 
+                        - 
+                            SourceVolume: "portal-client"
+                            ContainerPath: "/var/www/portal/client"
+                        - 
+                            SourceVolume: "portal-backup"
+                            ContainerPath: "/root/.duply"
+                    Image: techcto/duplicity:latest
+                    Essential: true
+                    Memory: '500'
+                    Environment:
+                        - Name: MOUNT
+                          Value: "/var/www/portal/client"
+                        - Name: PROCESS
+                          Value: 'backup'
+                        - Name: BUCKET
+                          Value: !Ref SolodevBucket
+                        - Name: DB_HOST
+                          Value: !Ref DatabaseHost
+                        - Name: DB_NAME
+                          Value: !Ref DatabaseName
+                        - Name: DB_USER
+                          Value: !Ref DatabaseUsername
+                        - Name: DB_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MONGO_HOST
+                          Value: '127.0.0.1:27017'
+                        - Name: MONGO_DB
+                          Value: 'portal'
+                        - Name: IAM_ACCESS_KEY
+                          Value: !Ref BackupUserKeys
+                        - Name: IAM_SECRET_KEY
+                          Value: !GetAtt 
+                            - BackupUserKeys
+                            - SecretAccessKey
+                        - Name: GPG_PW
+                          Value: 'iYJQC1nt/CL7W+vi+t12WmqXpcI='
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-backup
+            Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/client']]
+                    Name: "portal-client"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
+                    Name: "portal-backup"
+
+    RestoreTaskDefinition:
+        Type: AWS::ECS::TaskDefinition
+        Properties:
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-restore']]
+            ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+            TaskRoleArn: !GetAtt TaskRole.Arn
+            NetworkMode: "host"
+            ContainerDefinitions:
+                - 
+                    Name: restore
+                    MountPoints: 
+                        - 
+                            SourceVolume: "portal-client"
+                            ContainerPath: "/var/www/portal/client"
+                        - 
+                            SourceVolume: "portal-backup"
+                            ContainerPath: "/root/.duply"
+                    Image: techcto/duplicity:latest
+                    Essential: true
+                    Memory: '500'
+                    Environment:
+                        - Name: PROCESS
+                          Value: 'restore'
+                        - Name: TIME
+                          Value: '1h'
+                        - Name: BUCKET
+                          Value: !Ref PortalBucket
+                        - Name: MOUNT
+                          Value: "/var/www/portal/client"
+                        - Name: IAM_ACCESS_KEY
+                          Value: !Ref BackupUserKeys
+                        - Name: IAM_SECRET_KEY
+                          Value: !GetAtt 
+                            - BackupUserKeys
+                            - SecretAccessKey
+                        - Name: GPG_PW
+                          Value: 'iYJQC1nt/CL7W+vi+t12WmqXpcI='
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-restore
+            Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/client']]
+                    Name: "portal-client"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
+                    Name: "portal-backup"
+
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
@@ -258,6 +374,10 @@ Resources:
                         - 
                             ContainerPort: 9000
                             Protocol: "tcp"
+                    MountPoints: 
+                        - 
+                            SourceVolume: "portal-client"
+                            ContainerPath: "/var/www/portal/client"
                     Essential: true
                     Essential: true
                     Image: !Ref PortalContainer
@@ -355,6 +475,10 @@ Resources:
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: solodev-redis
             Volumes: 
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/client']]
+                    Name: "portal-client"
                 - 
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mongo']]
