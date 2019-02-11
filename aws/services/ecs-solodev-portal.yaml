@@ -314,7 +314,7 @@ Resources:
     RestoreTaskDefinition:
         Type: AWS::ECS::TaskDefinition
         Properties:
-            Family: !Join ['-', [!Ref 'EnvironmentName', 'solodev-restore']]
+            Family: !Join ['-', [!Ref 'EnvironmentName', 'portal-restore']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
             NetworkMode: "host"
@@ -394,7 +394,7 @@ Resources:
                         - Name: DATABASE_URL
                           Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "127.0.0.1", ":3306/", !Ref DatabaseName]]
                         - Name: MONGO_HOST
-                          Value: '127.0.0.1:27017'
+                          Value: '127.0.0.1:27018'
                         - Name: REDIS_HOST
                           Value: '127.0.0.1:6379'
                         - Name: SOLODEV_USER
@@ -449,8 +449,8 @@ Resources:
                     Name: mongodb
                     PortMappings:
                         - 
-                            HostPort: 27017
-                            ContainerPort: 27017
+                            HostPort: 27018
+                            ContainerPort: 27018
                             Protocol: "tcp"
                     MountPoints: 
                         - 
@@ -502,7 +502,7 @@ Resources:
                         - 
                             SourceVolume: "portal-mysql"
                             ContainerPath: "/var/lib/mysql"
-                    Command: ['--sql_mode=""']
+                    Command: ["--sql_mode="]
                     Environment:
                         - Name: MYSQL_DATABASE
                           Value: !Ref DatabaseName
