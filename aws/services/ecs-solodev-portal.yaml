@@ -242,7 +242,7 @@ Resources:
                                 Effect: Allow
                                 Action:
                                   - 's3:*'
-                                Resource: !Join ['', ['arn:aws:s3:::', !Ref 'SolodevBucket', /*]]
+                                Resource: !Join ['', ['arn:aws:s3:::', !Ref 'PortalBucket', /*]]
 
     BackupTaskDefinition:
         Type: AWS::ECS::TaskDefinition
@@ -270,7 +270,7 @@ Resources:
                         - Name: PROCESS
                           Value: 'backup'
                         - Name: BUCKET
-                          Value: !Ref SolodevBucket
+                          Value: !Ref PortalBucket
                         - Name: DB_HOST
                           Value: !Ref DatabaseHost
                         - Name: DB_NAME
