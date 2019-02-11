@@ -38,6 +38,14 @@ Metadata:
         Parameters: 
           - RestoreBucketName
           - DeletionPolicy
+      - 
+        Label: 
+          default: "Optional: Developer Access"
+        Parameters: 
+          - DockerUsername
+          - DockerPassword
+          - DockerEmail
+
 
 Mappings:
   ECS:
@@ -157,6 +165,22 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
+    DockerUsername:
+        Description: Docker username
+        Type: String
+        Default: ''
+
+    DockerPassword:
+        NoEcho: true
+        Description: Docker password
+        Type: String
+        Default: ''
+
+    DockerEmail:
+        Description: Docker email address
+        Type: String
+        Default: ''
+
 Resources:
 
     ALB:
@@ -194,6 +218,9 @@ Resources:
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 KeyName: !Ref KeyName
+                DockerUsername: !Ref DockerUsername
+                DockerPassword: !Ref DockerPassword
+                DockerEmail: !Ref DockerEmail
 
     RDS:
         Type: AWS::CloudFormation::Stack
