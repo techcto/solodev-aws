@@ -392,7 +392,7 @@ Resources:
                         - Name: APP_ENV
                           Value: 'prod'
                         - Name: DATABASE_URL
-                          Value: !Join ["", ["mysql://", "root", ":", !Ref DatabasePassword, "@", !Ref DatabaseHost, ":3306/", !Ref DatabaseName]]
+                          Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "127.0.0.1", ":3306/", !Ref DatabaseName]]
                         - Name: MONGO_HOST
                           Value: '127.0.0.1:27017'
                         - Name: REDIS_HOST
@@ -487,12 +487,42 @@ Resources:
                         Options:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: solodev-redis
+                            awslogs-stream-prefix: portal-redis
+                - 
+                    Name: mysql
+                    PortMappings:
+                        - 
+                            HostPort: 3306
+                            ContainerPort: 3306
+                            Protocol: "tcp"
+                    Essential: true
+                    Image: 'mysql:5.7.20'
+                    MemoryReservation: 256
+                    MountPoints: 
+                        - 
+                            SourceVolume: "portal-mysql"
+                            ContainerPath: "/var/lib/mysql"
+                    Command: --sql_mode=""
+                    Environment:
+                        MYSQL_DATABASE: !Ref DatabaseName
+                        MYSQL_PASSWORD: !Ref DatabasePassword
+                        MYSQL_ROOT_PASSWORD: !Ref DatabasePassword
+                        MYSQL_USER: !Ref DatabaseUsername
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-mysql
             Volumes: 
                 - 
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/client']]
                     Name: "portal-client"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mysql']]
+                    Name: "portal-mysql"
                 - 
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/mongo']]
