@@ -21,7 +21,6 @@ phases:
       - echo "Delete Old Stacks"
       - chmod 700 bin/cleanStacks.sh
       # - ./bin/cleanStacks.sh
-
       # - echo "Create Legacy Stacks:" 
 
       # - echo "Create Solodev Pro for Opsworks Legacy"
