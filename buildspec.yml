@@ -113,7 +113,7 @@ phases:
       - echo $(aws s3 cp s3://build-secure/params/solodev-portal-task-dev.json - ) > solodev-portal-task-dev.json
       - aws cloudformation create-stack --disable-rollback --stack-name portal-dev-task-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-portal-task-dev.json
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-portal-task.dev.yaml
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/services/ecs-solodev-portal.yaml
 
       - echo "Cleanup" | rm -f *json
   post_build:
