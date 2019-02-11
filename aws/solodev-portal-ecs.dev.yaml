@@ -42,6 +42,7 @@ Metadata:
         Label: 
           default: "Optional: Developer Access"
         Parameters: 
+          - AMI
           - DockerUsername
           - DockerPassword
           - DockerEmail
@@ -164,6 +165,11 @@ Parameters:
         - 'true'
         - 'false'
         ConstraintDescription: must be either true or false.
+
+    AMI:
+        Description: 'Experimental: Build AMI (Please leave this blank unless told otherwise)'
+        Default: ''
+        Type: String
 
     DockerUsername:
         Description: Docker username
