@@ -265,6 +265,7 @@ Resources:
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
                 PortalContainer: 'solodev/portal:latest'
+                UIContainer: 'solodev/portal-react:latest'
                 NginxContainer: 'solodev/portal-nginx:latest'
                 MongoContainer: 'techcto/mongo:latest'
                 RestoreBucketName: !Ref RestoreBucketName

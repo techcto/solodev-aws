@@ -90,6 +90,10 @@ Parameters:
       Description: Solodev portal container image
       Type: String
 
+    UIContainer:
+      Description: UI container image
+      Type: String
+
     NginxContainer:
       Description: Nginx container image
       Type: String
@@ -387,16 +391,8 @@ Resources:
                           Value: false
                         - Name: APP_ENV
                           Value: 'prod'
-                        - Name: DB_HOST
-                          Value: !Ref DatabaseHost
-                        - Name: DB_PORT
-                          Value: !Ref DatabasePort
-                        - Name: DB_NAME
-                          Value: !Ref DatabaseName
-                        - Name: DB_USER
-                          Value: !Ref DatabaseUsername
-                        - Name: DB_PASSWORD
-                          Value: !Ref DatabasePassword
+                        - Name: DATABASE_URL
+                          Value: !Join ["", ["mysql://", "root", ":", !Ref DatabasePassword, "@", !Ref DatabaseHost, ":3306/", !Ref DatabaseName]]
                         - Name: MONGO_HOST
                           Value: '127.0.0.1:27017'
                         - Name: REDIS_HOST
@@ -431,6 +427,24 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: portal-nginx
+                - 
+                    Name: ui
+                    PortMappings:
+                        - 
+                            ContainerPort: 3000
+                            Protocol: "tcp"
+                    Essential: true
+                    Image: !Ref UIContainer
+                    MemoryReservation: 256
+                    Environment:
+                        - Name: NODE_ENV
+                          Value: 'prod'
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-ui
                 - 
                     Name: mongodb
                     PortMappings:

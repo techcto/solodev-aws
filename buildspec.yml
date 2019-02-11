@@ -20,7 +20,7 @@ phases:
       
       - echo "Delete Old Stacks"
       - chmod 700 bin/cleanStacks.sh
-      - ./bin/cleanStacks.sh
+      # - ./bin/cleanStacks.sh
 
       # - echo "Create Legacy Stacks:" 
 
@@ -103,11 +103,17 @@ phases:
       #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.dev.yaml
       #   --notification-arns "arn:aws:sns:us-east-1:893612263489:solodevSelenium"
 
-      - echo "Create Solodev Portal for Docker (DockerHub)"
-      - echo $(aws s3 cp s3://build-secure/params/solodev-portal-ecs-dev.json - ) > solodev-portal-ecs-dev.json
-      - aws cloudformation create-stack --disable-rollback --stack-name portal-dev-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-portal-ecs-dev.json
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-portal-ecs.dev.yaml
+      # - echo "Create Solodev Portal for Docker (DockerHub)"
+      # - echo $(aws s3 cp s3://build-secure/params/solodev-portal-ecs-dev.json - ) > solodev-portal-ecs-dev.json
+      # - aws cloudformation create-stack --disable-rollback --stack-name portal-dev-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+      #   --parameters file:///${CODEBUILD_SRC_DIR}/solodev-portal-ecs-dev.json
+      #   --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-portal-ecs.dev.yaml
+
+      - echo "Create Solodev Portal Task for Existing ECS Cluster(DockerHub)"
+      - echo $(aws s3 cp s3://build-secure/params/solodev-portal-task-dev.json - ) > solodev-portal-task-dev.json
+      - aws cloudformation create-stack --disable-rollback --stack-name portal-dev-task-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-portal-task-dev.json
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-portal-task.dev.yaml
 
       - echo "Cleanup" | rm -f *json
   post_build:
