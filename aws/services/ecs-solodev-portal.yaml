@@ -502,7 +502,7 @@ Resources:
                         - 
                             SourceVolume: "portal-mysql"
                             ContainerPath: "/var/lib/mysql"
-                    Command: --sql_mode=""
+                    Command: "--sql_mode=''"
                     Environment:
                         MYSQL_DATABASE: !Ref DatabaseName
                         MYSQL_PASSWORD: !Ref DatabasePassword
