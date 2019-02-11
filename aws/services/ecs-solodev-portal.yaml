@@ -504,10 +504,14 @@ Resources:
                             ContainerPath: "/var/lib/mysql"
                     Command: ["--sql_mode=''"]
                     Environment:
-                        MYSQL_DATABASE: !Ref DatabaseName
-                        MYSQL_PASSWORD: !Ref DatabasePassword
-                        MYSQL_ROOT_PASSWORD: !Ref DatabasePassword
-                        MYSQL_USER: !Ref DatabaseUsername
+                        - Name: MYSQL_DATABASE
+                          Value: !Ref DatabaseName
+                        - Name: MYSQL_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MYSQL_ROOT_PASSWORD
+                          Value: !Ref DatabasePassword
+                        - Name: MYSQL_USER
+                          Value: !Ref DatabaseUsername
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
