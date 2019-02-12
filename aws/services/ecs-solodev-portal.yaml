@@ -428,7 +428,7 @@ Resources:
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: portal-nginx
                 - 
-                    Name: ui
+                    Name: react
                     PortMappings:
                         - 
                             ContainerPort: 3000
@@ -444,7 +444,7 @@ Resources:
                         Options:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: portal-ui
+                            awslogs-stream-prefix: portal-react
                 - 
                     Name: mongodb
                     PortMappings:
