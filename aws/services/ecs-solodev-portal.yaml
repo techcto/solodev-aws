@@ -373,7 +373,7 @@ Resources:
             NetworkMode: "host"
             ContainerDefinitions:
                 -
-                    Name: portal
+                    Name: php-fpm
                     PortMappings:
                         - 
                             ContainerPort: 9000
@@ -410,24 +410,6 @@ Resources:
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: portal
                 - 
-                    Name: nginx
-                    PortMappings:
-                        - 
-                            ContainerPort: 80
-                            Protocol: "tcp"
-                        - 
-                            ContainerPort: 443
-                            Protocol: "tcp"
-                    Essential: true
-                    Image: !Ref NginxContainer
-                    MemoryReservation: 256
-                    LogConfiguration:
-                        LogDriver: awslogs
-                        Options:
-                            awslogs-group: !Ref AWS::StackName
-                            awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: portal-nginx
-                - 
                     Name: react
                     PortMappings:
                         - 
@@ -445,6 +427,25 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: portal-react
+                - 
+                    Name: nginx
+                    PortMappings:
+                        - 
+                            ContainerPort: 80
+                            Protocol: "tcp"
+                        - 
+                            ContainerPort: 443
+                            Protocol: "tcp"
+                    Essential: true
+                    Image: !Ref NginxContainer
+                    MemoryReservation: 256
+                    Links: ["name:react","name:php-fpm"]
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-nginx
                 - 
                     Name: mongodb
                     PortMappings:
