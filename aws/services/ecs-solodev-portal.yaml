@@ -66,7 +66,7 @@ Parameters:
     DatabaseUsername:
       Type: String
       Description: The database user name
-      Default: "root"
+      Default: "solodev"
 
     DatabasePassword:
       Type: String
@@ -370,7 +370,7 @@ Resources:
             Family: !Join ['-', [!Ref 'EnvironmentName', 'portal']]
             ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
             TaskRoleArn: !GetAtt TaskRole.Arn
-            NetworkMode: "host"
+            NetworkMode: "bridge"
             ContainerDefinitions:
                 -
                     Name: php-fpm
@@ -386,17 +386,21 @@ Resources:
                     Essential: true
                     Image: !Ref PortalContainer
                     Memory: '500'
+                    Links:
+                        - mysql
+                        - mongodb
+                        - redis
                     Environment:
                         - Name: APP_DEBUG
                           Value: false
                         - Name: APP_ENV
                           Value: 'prod'
                         - Name: DATABASE_URL
-                          Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "127.0.0.1", ":3306/", !Ref DatabaseName]]
+                          Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "mysql", ":3306/", !Ref DatabaseName]]
                         - Name: MONGO_HOST
-                          Value: '127.0.0.1:27018'
+                          Value: 'mongodb:27018'
                         - Name: REDIS_HOST
-                          Value: '127.0.0.1:6379'
+                          Value: 'redis:6379'
                         - Name: SOLODEV_USER
                           Value: !Ref AdminUsername
                         - Name: SOLODEV_PASSWORD

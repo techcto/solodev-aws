@@ -261,7 +261,6 @@ Resources:
                 # DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseHost: 'mysql'
                 DatabaseName: !Ref DatabaseName
-                DatabaseUsername: 'root'
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
