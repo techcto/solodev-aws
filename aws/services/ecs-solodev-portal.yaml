@@ -439,7 +439,9 @@ Resources:
                     Essential: true
                     Image: !Ref NginxContainer
                     MemoryReservation: 256
-                    Links: ["name:react","name:php-fpm"]
+                    Links:
+                        - react
+                        - php-fpm
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
