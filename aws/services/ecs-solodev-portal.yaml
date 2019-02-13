@@ -406,8 +406,6 @@ Resources:
                         - 
                             SourceVolume: "portal-client"
                             ContainerPath: "/var/www/portal/client"
-                    Essential: true
-                    Essential: true
                     Image: !Ref PortalContainer
                     Memory: '500'
                     Links:
@@ -445,7 +443,6 @@ Resources:
                         - 
                             ContainerPort: 3000
                             Protocol: "tcp"
-                    Essential: true
                     Image: !Ref UIContainer
                     MemoryReservation: 256
                     Environment:
@@ -468,7 +465,6 @@ Resources:
                         - 
                             SourceVolume: "portal-mongo"
                             ContainerPath: "/data"
-                    Essential: true
                     Image: !Ref MongoContainer
                     MemoryReservation: 256
                     Environment:
