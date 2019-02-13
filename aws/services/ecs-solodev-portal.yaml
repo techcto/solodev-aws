@@ -384,7 +384,6 @@ Resources:
                         - 
                             ContainerPort: 8080
                             Protocol: "tcp"
-                    Essential: true
                     Image: !Ref NginxContainer
                     MemoryReservation: 256
                     Links:
@@ -487,7 +486,6 @@ Resources:
                             HostPort: 6379
                             ContainerPort: 6379
                             Protocol: "tcp"
-                    Essential: true
                     Image: !Ref RedisContainer
                     MemoryReservation: 256
                     LogConfiguration:
@@ -503,7 +501,6 @@ Resources:
                             HostPort: 3306
                             ContainerPort: 3306
                             Protocol: "tcp"
-                    Essential: true
                     Image: 'mysql:5.7.20'
                     MemoryReservation: 256
                     MountPoints: 
