@@ -372,6 +372,30 @@ Resources:
             TaskRoleArn: !GetAtt TaskRole.Arn
             NetworkMode: "bridge"
             ContainerDefinitions:
+                - 
+                    Name: nginx
+                    PortMappings:
+                        - 
+                            ContainerPort: 80
+                            Protocol: "tcp"
+                        - 
+                            ContainerPort: 443
+                            Protocol: "tcp"
+                        - 
+                            ContainerPort: 8080
+                            Protocol: "tcp"
+                    Essential: true
+                    Image: !Ref NginxContainer
+                    MemoryReservation: 256
+                    Links:
+                        - react
+                        - php-fpm
+                    LogConfiguration:
+                        LogDriver: awslogs
+                        Options:
+                            awslogs-group: !Ref AWS::StackName
+                            awslogs-region: !Ref AWS::Region
+                            awslogs-stream-prefix: portal-nginx
                 -
                     Name: php-fpm
                     PortMappings:
@@ -395,6 +419,8 @@ Resources:
                           Value: false
                         - Name: APP_ENV
                           Value: 'prod'
+                        - Name: APP_SECRET
+                          Value: 'c5d3adbb98f43d650d12f0cc8fbcd7f8'
                         - Name: DATABASE_URL
                           Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "mysql", ":3306/", !Ref DatabaseName]]
                         - Name: MONGO_HOST
@@ -431,27 +457,6 @@ Resources:
                             awslogs-group: !Ref AWS::StackName
                             awslogs-region: !Ref AWS::Region
                             awslogs-stream-prefix: portal-react
-                - 
-                    Name: nginx
-                    PortMappings:
-                        - 
-                            ContainerPort: 80
-                            Protocol: "tcp"
-                        - 
-                            ContainerPort: 443
-                            Protocol: "tcp"
-                    Essential: true
-                    Image: !Ref NginxContainer
-                    MemoryReservation: 256
-                    Links:
-                        - react
-                        - php-fpm
-                    LogConfiguration:
-                        LogDriver: awslogs
-                        Options:
-                            awslogs-group: !Ref AWS::StackName
-                            awslogs-region: !Ref AWS::Region
-                            awslogs-stream-prefix: portal-nginx
                 - 
                     Name: mongodb
                     PortMappings:
