@@ -482,6 +482,10 @@ Resources:
                     Essential: true
                     Image: !Ref RedisContainer
                     MemoryReservation: 256
+                    MountPoints: 
+                        - 
+                            SourceVolume: "solodev-redis"
+                            ContainerPath: "/data"
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
@@ -501,6 +505,10 @@ Resources:
                     Host: 
                         SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/backup']]
                     Name: "solodev-backup"
+                - 
+                    Host: 
+                        SourcePath: !Join ['', ['/efs/', !Ref 'EnvironmentName', '/redis']]
+                    Name: "solodev-redis"
 
     ECSEventRole:
         Type: 'AWS::IAM::Role'
@@ -580,7 +588,6 @@ Resources:
 
     Listener:
         Type: 'AWS::ElasticLoadBalancingV2::Listener'
-        Condition: UseHTTP
         Properties:
             DefaultActions:
                 - Type: forward
@@ -604,7 +611,6 @@ Resources:
     
     ListenerRule:
         Type: AWS::ElasticLoadBalancingV2::ListenerRule
-        Condition: UseHTTP
         Properties:
             ListenerArn: !Ref Listener
             Priority: 1
