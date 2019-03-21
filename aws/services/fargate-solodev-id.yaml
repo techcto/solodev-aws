@@ -1,0 +1,294 @@
+Description: >
+    This template deploys Solodev Studio for Docker ECS
+
+Parameters: 
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VPC:
+        Description: The VPC that the ECS cluster is deployed to
+        Type: AWS::EC2::VPC::Id
+        
+    Cluster:
+        Description: Please provide the ECS Cluster ID that this service should run on
+        Type: String
+
+    ClusterArn:
+        Description: ECS Cluster ARN
+        Type: String
+
+    LoadBalancer:
+        Description: The VPC that the ECS cluster is deployed to
+        Type: String
+
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
+    Subnets:
+        Description: Choose which subnets this cluster should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
+    Path: 
+        Description: The path to register with the Application Load Balancer
+        Type: String
+        Default: /
+
+    ServiceRole:
+        Description: The Application Load Balancer Service Role
+        Type: String
+
+    DatabaseHost:
+      Type: String
+      Description: The database host
+
+    DatabaseName:
+      Type: String
+      Description: The database name
+
+    DatabaseUsername:
+      Type: String
+      Description: The database user name
+      Default: "solodev"
+
+    DatabasePassword:
+      Type: String
+      Description: The database user password
+        
+    DatabasePort:
+        Default: '3306'
+        Description: Database Port
+        Type: Number
+
+    AdminUsername:
+      Type: String
+      Description: The admin user name
+      Default: "solodev"
+
+    AdminPassword:
+      Type: String
+      Description: The admin user password
+
+    AppContainer:
+      Description: Solodev studio container image
+      Type: String
+
+    WebContainer:
+      Description: Web container image
+      Type: String
+
+    FQDN:
+      Type: String
+      Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
+      Default: ''
+
+    CertificateArn:
+      Type: String
+      Description: SSL cert for HTTPS listener that matches the FQDN
+      Default: ''
+
+    ContainerPort:
+      Type: Number
+      Default: 80
+      Description: What port number the application inside the docker container is binding to
+
+    ContainerCpu:
+      Type: Number
+      Default: 256
+      Description: How much CPU to give the container. 1024 is 1 CPU
+
+    ContainerMemory:
+      Type: Number
+      Default: 512
+      Description: How much memory in megabytes to give the container
+
+    DesiredCount:
+      Type: Number
+      Default: 2
+      Description: How many copies of the service task to run
+
+Conditions:
+    UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
+    UseHTTP: !Equals [ !Ref CertificateArn, "" ]
+    HasCustomRole: !Not [ !Equals [!Ref 'Role', ''] ]
+
+Resources:
+    # This is a role which is used by the ECS tasks themselves.
+    ECSTaskExecutionRole:
+        Type: AWS::IAM::Role
+        Properties:
+        AssumeRolePolicyDocument:
+            Statement:
+              - Effect: Allow
+                Principal:
+                    Service: [ecs-tasks.amazonaws.com]
+                Action: ['sts:AssumeRole']
+        Path: /
+        Policies:
+              - PolicyName: AmazonECSTaskExecutionRolePolicy
+                PolicyDocument:
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                        # Allow the ECS Tasks to download images from ECR
+                        - 'ecr:GetAuthorizationToken'
+                        - 'ecr:BatchCheckLayerAvailability'
+                        - 'ecr:GetDownloadUrlForLayer'
+                        - 'ecr:BatchGetImage'
+
+                        # Allow the ECS tasks to upload logs to CloudWatch
+                        - 'logs:CreateLogStream'
+                        - 'logs:PutLogEvents'
+                        Resource: '*'
+
+    TaskRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                - {Action: "sts:AssumeRole", Effect: Allow, Principal: {Service: ecs-tasks.amazonaws.com}}
+            Path: "/"
+            Policies: 
+                - 
+                    PolicyName: "solodev-inline"
+                    PolicyDocument: 
+                        Version: "2012-10-17"
+                        Statement: 
+                            - 
+                                Effect: "Allow"
+                                Action: [ "aws-marketplace:RegisterUsage" ]
+                                Resource: "*"
+
+    TaskDefinition:
+      Type: AWS::ECS::TaskDefinition
+      Properties:
+        Family: solodev-id
+        Cpu: !Ref 'ContainerCpu'
+        Memory: !Ref 'ContainerMemory'
+        NetworkMode: awsvpc
+        RequiresCompatibilities:
+          - FARGATE
+        ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+        TaskRoleArn: !GetAtt TaskRole.Arn
+        ContainerDefinitions:
+          - Name: solodev-id
+            Cpu: !Ref 'ContainerCpu'
+            Memory: !Ref 'ContainerMemory'
+            Image: !Ref 'AppContainer'
+            PortMappings:
+              - ContainerPort: !Ref 'ContainerPort'
+
+    Service:
+      Type: AWS::ECS::Service
+      DependsOn: LoadBalancerRule
+      Properties:
+        ServiceName: solodev-id
+        Cluster: !Ref Cluster
+        LaunchType: FARGATE
+        DeploymentConfiguration:
+          MaximumPercent: 200
+          MinimumHealthyPercent: 75
+        DesiredCount: !Ref 'DesiredCount'
+        NetworkConfiguration:
+          AwsvpcConfiguration:
+            SecurityGroups:
+              - !Ref 'ContainerSecurityGroup'
+            Subnets: !Ref Subnets
+        TaskDefinition: !Ref 'TaskDefinition'
+        LoadBalancers:
+          - ContainerName: solodev-id
+            ContainerPort: !Ref 'ContainerPort'
+            TargetGroupArn: !Ref 'TargetGroup'
+
+    ContainerSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Access to the Fargate containers
+        VpcId: !Ref VPC
+
+    EcsSecurityGroupIngressFromPublicALB:
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+        Description: Ingress from the public ALB
+        GroupId: !Ref 'ContainerSecurityGroup'
+        IpProtocol: -1
+        SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+
+    EcsSecurityGroupIngressFromSelf:
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+        Description: Ingress from other containers in the same security group
+        GroupId: !Ref 'ContainerSecurityGroup'
+        IpProtocol: -1
+        SourceSecurityGroupId: !Ref 'ContainerSecurityGroup'
+
+    TargetGroup:
+      Type: AWS::ElasticLoadBalancingV2::TargetGroup
+      Properties:
+        HealthCheckIntervalSeconds: 6
+        HealthCheckPath: /
+        HealthCheckProtocol: HTTP
+        HealthCheckTimeoutSeconds: 5
+        HealthyThresholdCount: 2
+        TargetType: ip
+        Name: !Join 
+                - '-'
+                - - !Ref 'EnvironmentName'
+                  - solodev
+        Port: !Ref 'ContainerPort'
+        Protocol: HTTP
+        UnhealthyThresholdCount: 2
+        VpcId: !Ref VPC
+
+    Listener:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Properties:
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: 80
+            Protocol: HTTP
+
+    ListenerSSL:
+        Type: 'AWS::ElasticLoadBalancingV2::Listener'
+        Condition: UseHTTPS
+        Properties:
+            Certificates: 
+                - CertificateArn: !Ref CertificateArn
+            DefaultActions:
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroup
+            LoadBalancerArn: !Ref LoadBalancer
+            Port: 443
+            Protocol: HTTPS
+    
+    ListenerRule:
+        Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Properties:
+            ListenerArn: !Ref Listener
+            Priority: 1
+            Conditions:
+                - Field: path-pattern
+                  Values: 
+                    - !Ref Path
+            Actions:
+                - TargetGroupArn: !Ref TargetGroup
+                  Type: forward
+
+    ListenerSSLRule:
+        Type: AWS::ElasticLoadBalancingV2::ListenerRule
+        Condition: UseHTTPS
+        Properties:
+            ListenerArn: !Ref ListenerSSL
+            Priority: 2
+            Conditions:
+                - Field: path-pattern
+                  Values: 
+                    - !Ref Path
+            Actions:
+                - TargetGroupArn: !Ref TargetGroup
+                  Type: forward

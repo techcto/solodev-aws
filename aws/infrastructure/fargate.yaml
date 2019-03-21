@@ -1,0 +1,89 @@
+Description: >
+    This template deploys a Fargate Task
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VPC:
+        Description: Choose which VPC this cluster should be deployed to
+        Type: AWS::EC2::VPC::Id
+
+    Subnets:
+        Description: Choose which subnets this cluster should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
+    LoadBalancerSecurityGroup:
+        Description: Select the Load Balancer Security Group to use for the cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
+Resources:
+
+    ECSCluster:
+        Type: AWS::ECS::Cluster
+        Properties:
+            ClusterName: !Ref EnvironmentName
+
+    ECSRole:
+        Type: AWS::IAM::Role
+        Properties: 
+            Path: /
+            RoleName: !Sub ${EnvironmentName}-ECSRole-${AWS::Region}
+            AssumeRolePolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Principal:
+                    Service: [ecs.amazonaws.com]
+                  Action: ['sts:AssumeRole']
+            Path: /
+            Policies: 
+                - PolicyName: ecs-service
+                  PolicyDocument:
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                        # Rules which allow ECS to attach network interfaces to instances
+                        # on your behalf in order for awsvpc networking mode to work right
+                        - 'ec2:AttachNetworkInterface'
+                        - 'ec2:CreateNetworkInterface'
+                        - 'ec2:CreateNetworkInterfacePermission'
+                        - 'ec2:DeleteNetworkInterface'
+                        - 'ec2:DeleteNetworkInterfacePermission'
+                        - 'ec2:Describe*'
+                        - 'ec2:DetachNetworkInterface'
+
+                        # Rules which allow ECS to update load balancers on your behalf
+                        # with the information sabout how to send traffic to your containers
+                        - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+                        - 'elasticloadbalancing:DeregisterTargets'
+                        - 'elasticloadbalancing:Describe*'
+                        - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+                        - 'elasticloadbalancing:RegisterTargets'
+                        Resource: '*'
+
+    ECSInstanceProfile: 
+        Type: AWS::IAM::InstanceProfile
+        Properties:
+            Path: /
+            Roles: 
+                - !Ref ECSRole
+
+Outputs:
+
+    Cluster:
+        Description: A reference to the ECS cluster
+        Value: !Ref ECSCluster
+
+    ClusterArn:
+        Description: A reference to the ECS cluster ARN
+        Value: !GetAtt ECSCluster.Arn
+
+    ECSRole:
+        Description: A reference to the ECSRole
+        Value: !Ref ECSRole
+
+    ECSTaskExecutionRole:
+        Description: The ARN of the ECS role
+        Value: !GetAtt 'ECSTaskExecutionRole.Arn'
