@@ -112,7 +112,6 @@ Parameters:
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
-    HasCustomRole: !Not [ !Equals [!Ref 'Role', ''] ]
 
 Resources:
     # This is a role which is used by the ECS tasks themselves.
