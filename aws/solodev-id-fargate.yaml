@@ -151,23 +151,21 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                Cluster: !GetAtt ECS.Outputs.Cluster
-                ClusterArn: !GetAtt ECS.Outputs.ClusterArn
+                Cluster: !GetAtt FARGATE.Outputs.Cluster
+                ClusterArn: !GetAtt FARGATE.Outputs.ClusterArn
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 AdminUsername: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
-                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
-                DatabaseName: !Ref DatabaseName
-                DatabaseUsername: 'root'
-                DatabasePassword: !Ref DatabasePassword
+                # DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                # DatabaseName: !Ref DatabaseName
+                # DatabaseUsername: 'root'
+                # DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                AppContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-1964206825/solodev-cms:8.9-latest'
-                WebContainer: '217273820646.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-1964206825/solodev-apache:8.9-latest'
-                RestoreBucketName: !Ref RestoreBucketName
+                AppContainer: 'php'
+                WebContainer: 'php'
                 DesiredCount: !Ref InstanceCount
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
-                DeletionPolicy: !Ref DeletionPolicy

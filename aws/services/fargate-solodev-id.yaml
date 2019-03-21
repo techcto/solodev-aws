@@ -43,6 +43,7 @@ Parameters:
     DatabaseHost:
       Type: String
       Description: The database host
+      Default: localhost
 
     DatabaseName:
       Type: String
