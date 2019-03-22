@@ -92,11 +92,6 @@ Parameters:
         AllowedPattern: .+
         ConstraintDescription: Please set database root password
 
-    RestoreBucketName:
-        Description: Name of S3 bucket containing files for restore
-        Type: String
-        Default: ""
-
     StorageEncrypted:
         Default: 'true'
         Description: Enable encryption for both Database (RDS) and Filesystem (EFS)

@@ -83,7 +83,3 @@ Outputs:
     ECSRole:
         Description: A reference to the ECSRole
         Value: !Ref ECSRole
-
-    ECSTaskExecutionRole:
-        Description: The ARN of the ECS role
-        Value: !GetAtt 'ECSTaskExecutionRole.Arn'
