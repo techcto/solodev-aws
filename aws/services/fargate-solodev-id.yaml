@@ -1,5 +1,5 @@
 Description: >
-  This template deploys Solodev ID for Fargate
+  This template deploys Solodev ID for Fargate.  https://aws.amazon.com/blogs/compute/introducing-private-registry-authentication-support-for-aws-fargate/
 
 Parameters: 
   EnvironmentName:
