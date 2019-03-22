@@ -74,6 +74,7 @@ Parameters:
   AppContainer:
     Description: Solodev studio container image
     Type: String
+    Default: "solodev/id"
 
   WebContainer:
     Description: Web container image
