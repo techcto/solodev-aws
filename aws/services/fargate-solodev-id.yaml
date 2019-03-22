@@ -116,7 +116,7 @@ Conditions:
 
 Resources:
     # This is a role which is used by the ECS tasks themselves.
-    ECSTaskExecutionRole:
+    TaskExecutionRole:
         Type: AWS::IAM::Role
         Properties:
           AssumeRolePolicyDocument:
