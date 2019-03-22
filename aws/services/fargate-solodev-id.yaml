@@ -183,7 +183,7 @@ Resources:
 
     Service:
       Type: AWS::ECS::Service
-      DependsOn: LoadBalancerRule
+      DependsOn: ListenerRule
       Properties:
         ServiceName: solodev-id
         Cluster: !Ref Cluster
