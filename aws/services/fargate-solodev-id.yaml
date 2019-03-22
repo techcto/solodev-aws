@@ -119,29 +119,29 @@ Resources:
     ECSTaskExecutionRole:
         Type: AWS::IAM::Role
         Properties:
-        AssumeRolePolicyDocument:
-            Statement:
-              - Effect: Allow
-                Principal:
-                    Service: [ecs-tasks.amazonaws.com]
-                Action: ['sts:AssumeRole']
-        Path: /
-        Policies:
-              - PolicyName: AmazonECSTaskExecutionRolePolicy
-                PolicyDocument:
-                    Statement:
-                      - Effect: Allow
-                        Action:
-                        # Allow the ECS Tasks to download images from ECR
-                        - 'ecr:GetAuthorizationToken'
-                        - 'ecr:BatchCheckLayerAvailability'
-                        - 'ecr:GetDownloadUrlForLayer'
-                        - 'ecr:BatchGetImage'
+          AssumeRolePolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Principal:
+                      Service: [ecs-tasks.amazonaws.com]
+                  Action: ['sts:AssumeRole']
+          Path: /
+          Policies:
+                - PolicyName: AmazonECSTaskExecutionRolePolicy
+                  PolicyDocument:
+                      Statement:
+                        - Effect: Allow
+                          Action:
+                          # Allow the ECS Tasks to download images from ECR
+                          - 'ecr:GetAuthorizationToken'
+                          - 'ecr:BatchCheckLayerAvailability'
+                          - 'ecr:GetDownloadUrlForLayer'
+                          - 'ecr:BatchGetImage'
 
-                        # Allow the ECS tasks to upload logs to CloudWatch
-                        - 'logs:CreateLogStream'
-                        - 'logs:PutLogEvents'
-                        Resource: '*'
+                          # Allow the ECS tasks to upload logs to CloudWatch
+                          - 'logs:CreateLogStream'
+                          - 'logs:PutLogEvents'
+                          Resource: '*'
 
     TaskRole:
         Type: AWS::IAM::Role
