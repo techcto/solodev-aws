@@ -184,7 +184,7 @@ Resources:
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'AppContainer'
             RepositoryCredentials:
-              - CredentialsParameter: !Ref 'CredentialsParameter'
+              CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
               - ContainerPort: !Ref 'ContainerPort'
 
