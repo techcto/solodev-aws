@@ -1,5 +1,5 @@
 Description: >
-  This template deploys Solodev ID for Fargate.  https://aws.amazon.com/blogs/compute/introducing-private-registry-authentication-support-for-aws-fargate/
+  This template deploys Solodev ID for Fargate. 
 
 Parameters: 
   EnvironmentName:
@@ -79,6 +79,7 @@ Parameters:
   WebContainer:
     Description: Web container image
     Type: String
+    Default: "solodev/id-web"
 
   FQDN:
     Type: String
@@ -142,7 +143,7 @@ Resources:
                         - 'ecr:BatchCheckLayerAvailability'
                         - 'ecr:GetDownloadUrlForLayer'
                         - 'ecr:BatchGetImage'
-
+                        - 'secretsmanager:GetSecretValue'
                         # Allow the ECS tasks to upload logs to CloudWatch
                         - 'logs:CreateLogStream'
                         - 'logs:PutLogEvents'
@@ -179,10 +180,18 @@ Resources:
         ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
         TaskRoleArn: !GetAtt TaskRole.Arn
         ContainerDefinitions:
-          - Name: solodev-id
+          - Name: id-app
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'AppContainer'
+            RepositoryCredentials:
+              CredentialsParameter: !Ref 'CredentialsParameter'
+            PortMappings:
+              - ContainerPort: !Ref 'ContainerPort'
+          - Name: id-web
+            Cpu: !Ref 'ContainerCpu'
+            Memory: !Ref 'ContainerMemory'
+            Image: !Ref 'WebContainer'
             RepositoryCredentials:
               CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
