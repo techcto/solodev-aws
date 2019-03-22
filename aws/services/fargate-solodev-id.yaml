@@ -146,7 +146,7 @@ Resources:
                       # Allow the ECS tasks to upload logs to CloudWatch
                       - 'logs:CreateLogStream'
                       - 'logs:PutLogEvents'
-                        Resource: '*'
+                      Resource: '*'
 
     TaskRole:
       Type: AWS::IAM::Role
