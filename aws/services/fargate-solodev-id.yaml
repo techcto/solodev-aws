@@ -1,5 +1,5 @@
 Description: >
-  This template deploys Solodev Studio for Docker ECS
+  This template deploys Solodev ID for Fargate
 
 Parameters: 
   EnvironmentName:
