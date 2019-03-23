@@ -230,7 +230,7 @@ Resources:
             Subnets: !Ref Subnets
         TaskDefinition: !Ref 'TaskDefinition'
         LoadBalancers:
-          - ContainerName: solodev-id
+          - ContainerName: id-web
             ContainerPort: !Ref 'WebContainerPort'
             TargetGroupArn: !Ref 'TargetGroup'
 
