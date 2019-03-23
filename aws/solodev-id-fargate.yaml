@@ -166,8 +166,6 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                AppContainer: 'php'
-                WebContainer: 'php'
                 DesiredCount: !Ref InstanceCount
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
