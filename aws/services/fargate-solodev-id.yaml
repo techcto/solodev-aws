@@ -108,7 +108,7 @@ Parameters:
 
   ServiceMemory:
     Type: Number
-    Default: 512
+    Default: 1024
     Description: How much memory in megabytes to give the service
 
   ContainerCpu:
@@ -118,7 +118,7 @@ Parameters:
 
   ContainerMemory:
     Type: Number
-    Default: 256
+    Default: 512
     Description: How much memory in megabytes to give the container
 
   DesiredCount:
