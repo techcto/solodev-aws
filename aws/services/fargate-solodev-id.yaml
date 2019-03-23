@@ -221,7 +221,7 @@ Resources:
         TaskDefinition: !Ref 'TaskDefinition'
         LoadBalancers:
           - ContainerName: solodev-id
-            ContainerPort: !Ref 'ContainerPort'
+            ContainerPort: !Ref 'WebContainerPort'
             TargetGroupArn: !Ref 'TargetGroup'
 
     ContainerSecurityGroup:
@@ -259,7 +259,7 @@ Resources:
                 - '-'
                 - - !Ref 'EnvironmentName'
                   - solodev
-        Port: !Ref 'ContainerPort'
+        Port: !Ref 'WebContainerPort'
         Protocol: HTTP
         UnhealthyThresholdCount: 2
         VpcId: !Ref VPC
