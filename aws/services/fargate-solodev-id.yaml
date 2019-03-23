@@ -101,6 +101,16 @@ Parameters:
     Default: 9000
     Description: What port number the application inside the docker container is binding to
 
+  ServiceCpu:
+    Type: Number
+    Default: 512
+    Description: How much CPU to give the container. 1024 is 1 CPU
+
+  ServiceMemory:
+    Type: Number
+    Default: 512
+    Description: How much memory in megabytes to give the service
+
   ContainerCpu:
     Type: Number
     Default: 256
@@ -108,7 +118,7 @@ Parameters:
 
   ContainerMemory:
     Type: Number
-    Default: 512
+    Default: 256
     Description: How much memory in megabytes to give the container
 
   DesiredCount:
@@ -177,8 +187,8 @@ Resources:
       Type: AWS::ECS::TaskDefinition
       Properties:
         Family: solodev-id
-        Cpu: !Ref 'ContainerCpu'
-        Memory: !Ref 'ContainerMemory'
+        Cpu: !Ref 'ServiceCpu'
+        Memory: !Ref 'ServiceMemory'
         NetworkMode: awsvpc
         RequiresCompatibilities:
           - FARGATE
