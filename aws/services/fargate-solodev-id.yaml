@@ -91,9 +91,14 @@ Parameters:
     Description: SSL cert for HTTPS listener that matches the FQDN
     Default: ''
 
-  ContainerPort:
+  WebContainerPort:
     Type: Number
     Default: 80
+    Description: What port number the application inside the docker container is binding to
+
+  AppContainerPort:
+    Type: Number
+    Default: 9000
     Description: What port number the application inside the docker container is binding to
 
   ContainerCpu:
@@ -187,7 +192,7 @@ Resources:
             RepositoryCredentials:
               CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
-              - ContainerPort: !Ref 'ContainerPort'
+              - ContainerPort: !Ref 'AppContainerPort'
           - Name: id-web
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
@@ -195,7 +200,7 @@ Resources:
             RepositoryCredentials:
               CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
-              - ContainerPort: !Ref 'ContainerPort'
+              - ContainerPort: !Ref 'WebContainerPort'
 
     Service:
       Type: AWS::ECS::Service
