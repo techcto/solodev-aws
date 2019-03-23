@@ -228,6 +228,7 @@ Resources:
             SecurityGroups:
               - !Ref 'ContainerSecurityGroup'
             Subnets: !Ref Subnets
+            AssignPublicIp: ENABLED
         TaskDefinition: !Ref 'TaskDefinition'
         LoadBalancers:
           - ContainerName: id-web
