@@ -1,5 +1,5 @@
 Description: >
-    This template deploys a Fargate Task
+    This template deploys a ECS Fargate Cluster
 
 Parameters:
 
