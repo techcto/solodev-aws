@@ -81,6 +81,21 @@ Parameters:
     Type: String
     Default: "solodev/id-web"
 
+  DBContainer:
+    Description: DB container image
+    Type: String
+    Default: "mysql:5.7"
+
+  AppContainerPort:
+    Type: Number
+    Default: 9000
+    Description: What port number the application inside the docker container is binding to
+
+  DBPort:
+    Type: Number
+    Default: 3306
+    Description: What port number the DB is binding to
+
   FQDN:
     Type: String
     Description: URL for app. FQDN must be pointed to CNAME of the load balancer.
@@ -91,25 +106,25 @@ Parameters:
     Description: SSL cert for HTTPS listener that matches the FQDN
     Default: ''
 
-  WebContainerPort:
-    Type: Number
-    Default: 80
-    Description: What port number the application inside the docker container is binding to
-
-  AppContainerPort:
-    Type: Number
-    Default: 9000
-    Description: What port number the application inside the docker container is binding to
-
   ServiceCpu:
     Type: Number
-    Default: 512
+    Default: 1024
     Description: How much CPU to give the container. 1024 is 1 CPU
 
   ServiceMemory:
     Type: Number
-    Default: 1024
+    Default: 2048
     Description: How much memory in megabytes to give the service
+
+  DBCpu:
+    Type: Number
+    Default: 256
+    Description: How much CPU to give the container. 1024 is 1 CPU
+
+  DBMemory:
+    Type: Number
+    Default: 512
+    Description: How much memory in megabytes to give the container
 
   ContainerCpu:
     Type: Number
@@ -195,7 +210,7 @@ Resources:
         ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
         TaskRoleArn: !GetAtt TaskRole.Arn
         ContainerDefinitions:
-          - Name: id-app
+          - Name: nginx
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'AppContainer'
@@ -203,14 +218,78 @@ Resources:
               CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
               - ContainerPort: !Ref 'AppContainerPort'
-          - Name: id-web
+            Environment:
+                - Name: APP_DEBUG
+                  Value: false
+                - Name: APP_ENV
+                  Value: 'prod'
+                - Name: APP_SECRET
+                  Value: AppSecret
+                - Name: DB_URL
+                  Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "mysql", ":3306/", !Ref DatabaseName]]
+                - Name: ADMIN_USER
+                  Value: !Ref AdminUsername
+                - Name: ADMIN_PASSWORD
+                  Value: !Ref AdminPassword
+                - Name: FQDN
+                  Value: !Ref FQDN
+                - Name: AWS_POOL_ID
+                  Value: !Ref PoolId
+                - Name: AWS_ACCESS_KEY
+                  Value: !Ref AccessKey
+                - Name: AWS_ACCESS_SECRET
+                  Value: !Ref AccessSecret
+                - Name: AWS_CLIENT_ID
+                  Value: !Ref ClientId
+                - Name: AWS_CLIENT_SECRET
+                  Value: !Ref ClientSecret
+            LogConfiguration:
+                LogDriver: awslogs
+                Options:
+                    awslogs-group: !Ref AWS::StackName
+                    awslogs-region: !Ref AWS::Region
+                    awslogs-stream-prefix: nginx
+          - Name: php-fpm
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'WebContainer'
             RepositoryCredentials:
               CredentialsParameter: !Ref 'CredentialsParameter'
             PortMappings:
-              - ContainerPort: !Ref 'WebContainerPort'
+                - 
+                    ContainerPort: 80
+                    Protocol: "tcp"
+                - 
+                    ContainerPort: 443
+                    Protocol: "tcp"
+            LogConfiguration:
+              LogDriver: awslogs
+              Options:
+                  awslogs-group: !Ref AWS::StackName
+                  awslogs-region: !Ref AWS::Region
+                  awslogs-stream-prefix: app
+          - Name: mysql
+            Cpu: !Ref 'DBCpu'
+            Memory: !Ref 'DBMemory'
+            Image: !Ref 'DBContainer'
+            PortMappings:
+                - ContainerPort: !Ref 'DBPort'
+            Command: ["--sql_mode="]
+            Environment:
+                - Name: MYSQL_DATABASE
+                  Value: !Ref DatabaseName
+                - Name: MYSQL_PASSWORD
+                  Value: !Ref DatabasePassword
+                - Name: MYSQL_ROOT_PASSWORD
+                  Value: !Ref DatabasePassword
+                - Name: MYSQL_USER
+                  Value: !Ref DatabaseUsername
+            LogConfiguration:
+                LogDriver: awslogs
+                Options:
+                    awslogs-group: !Ref AWS::StackName
+                    awslogs-region: !Ref AWS::Region
+                    awslogs-stream-prefix: mysql
 
     Service:
       Type: AWS::ECS::Service
