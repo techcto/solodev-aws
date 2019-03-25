@@ -187,5 +187,10 @@ Resources:
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
                 DesiredCount: !Ref InstanceCount
+                AccessSecret: !Ref AccessSecret
+                PoolId: !Ref PoolId
+                ClientSecret: !Ref ClientSecret
+                ClientId: !Ref ClientId
+                AccessKey: !Ref AccessKey
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
