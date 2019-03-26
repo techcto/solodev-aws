@@ -335,7 +335,7 @@ Resources:
             AssignPublicIp: ENABLED
         TaskDefinition: !Ref 'TaskDefinition'
         LoadBalancers:
-          - ContainerName: id-web
+          - ContainerName: nginx
             ContainerPort: !Ref 'WebContainerPort'
             TargetGroupArn: !Ref 'TargetGroup'
 
