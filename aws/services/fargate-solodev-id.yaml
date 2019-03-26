@@ -308,6 +308,9 @@ Resources:
                 - 
                     ContainerPort: 443
                     Protocol: "tcp"
+            Environment:
+                - Name: APP_URL
+                  Value: 'php-fpm'
             LogConfiguration:
               LogDriver: awslogs
               Options:
