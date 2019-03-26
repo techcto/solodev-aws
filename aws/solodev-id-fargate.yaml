@@ -194,3 +194,14 @@ Resources:
                 AccessKey: !Ref AccessKey
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
                 Path: / 
+
+Outputs:
+    AdminUrl: 
+        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl
+    AdminUsername: 
+        Description: Portal admin username.
+        Value: !Ref AdminUser
+    AdminPassword: 
+        Description: Portal admin password.
+        Value: !Ref AdminPassword
