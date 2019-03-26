@@ -319,28 +319,28 @@ Resources:
                   awslogs-group: !Ref AWS::StackName
                   awslogs-region: !Ref AWS::Region
                   awslogs-stream-prefix: app
-          - Name: mysql
-            Cpu: !Ref 'DBCpu'
-            Memory: !Ref 'DBMemory'
-            Image: !Ref 'DBContainer'
-            PortMappings:
-                - ContainerPort: !Ref 'DBPort'
-            Command: ["--sql_mode="]
-            Environment:
-                - Name: MYSQL_DATABASE
-                  Value: !Ref DatabaseName
-                - Name: MYSQL_PASSWORD
-                  Value: !Ref DatabasePassword
-                - Name: MYSQL_ROOT_PASSWORD
-                  Value: !Ref DatabasePassword
-                - Name: MYSQL_USER
-                  Value: !Ref DatabaseUsername
-            LogConfiguration:
-                LogDriver: awslogs
-                Options:
-                    awslogs-group: !Ref AWS::StackName
-                    awslogs-region: !Ref AWS::Region
-                    awslogs-stream-prefix: mysql
+          # - Name: mysql
+          #   Cpu: !Ref 'DBCpu'
+          #   Memory: !Ref 'DBMemory'
+          #   Image: !Ref 'DBContainer'
+          #   PortMappings:
+          #       - ContainerPort: !Ref 'DBPort'
+          #   Command: ["--sql_mode="]
+          #   Environment:
+          #       - Name: MYSQL_DATABASE
+          #         Value: !Ref DatabaseName
+          #       - Name: MYSQL_PASSWORD
+          #         Value: !Ref DatabasePassword
+          #       - Name: MYSQL_ROOT_PASSWORD
+          #         Value: !Ref DatabasePassword
+          #       - Name: MYSQL_USER
+          #         Value: !Ref DatabaseUsername
+          #   LogConfiguration:
+          #       LogDriver: awslogs
+          #       Options:
+          #           awslogs-group: !Ref AWS::StackName
+          #           awslogs-region: !Ref AWS::Region
+          #           awslogs-stream-prefix: mysql
 
     Service:
       Type: AWS::ECS::Service
