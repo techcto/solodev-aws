@@ -24,6 +24,7 @@ Metadata:
             - DatabaseName
             - DatabasePassword
             - StorageEncrypted
+            - DeletionPolicy
       - 
         Label: 
           default: "Optional: SSL Configuration"
@@ -126,6 +127,11 @@ Parameters:
         - 'true'
         - 'false'
         ConstraintDescription: must be either true or false.
+
+    DeletionPolicy:
+        Default: 'Delete'
+        Type: String
+        Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
 
 Resources:
 
