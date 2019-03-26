@@ -62,7 +62,7 @@ Parameters:
   DatabaseHost:
     Type: String
     Description: The database host
-    Default: localhost
+    Default: '127.0.0.1'
 
   DatabaseName:
     Type: String
@@ -272,7 +272,7 @@ Resources:
                 - Name: APP_SECRET
                   Value: AppSecret
                 - Name: DB_URL
-                  Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", "mysql", ":3306/", !Ref DatabaseName]]
+                  Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", !Ref DatabaseHost, ":3306/", !Ref DatabaseName]]
                 - Name: ADMIN_USER
                   Value: !Ref AdminUsername
                 - Name: ADMIN_PASSWORD
