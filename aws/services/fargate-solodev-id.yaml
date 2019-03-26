@@ -399,6 +399,8 @@ Resources:
         HealthCheckTimeoutSeconds: 5
         HealthyThresholdCount: 2
         TargetType: ip
+        Matcher: 
+                HttpCode: 200-302
         Name: !Join 
                 - '-'
                 - - !Ref 'EnvironmentName'
