@@ -157,7 +157,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 DatabaseName: !Ref DatabaseName
                 VPC: !Ref VPCID
-                LoadBalancerSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
                 DeletionPolicy: !Ref DeletionPolicy
