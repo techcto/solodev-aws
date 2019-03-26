@@ -181,6 +181,22 @@ Resources:
         Properties: 
             LogGroupName: !Ref AWS::StackName
             RetentionInDays: 30  
+
+    # ServiceDiscoveryNamespace:
+    #     Type: AWS::ServiceDiscovery::PrivateDnsNamespace
+    #     Properties:
+    #         Name: !Join ['.', ['ecs', !Ref 'AWS::StackName', 'net']]
+    #         Vpc: !Ref VPC
+
+    # SolodevServiceDiscovery:
+    #     Type: AWS::ServiceDiscovery::Service
+    #     Properties:
+    #         Name: solodev-cms
+    #         DnsConfig:
+    #             DnsRecords: [{Type: SRV, TTL: "10"}]
+    #             NamespaceId: !Ref ServiceDiscoveryNamespace
+    #         HealthCheckCustomConfig:
+    #             FailureThreshold: 1
             
     TaskExecutionRole:
       Type: AWS::IAM::Role
@@ -328,6 +344,9 @@ Resources:
         ServiceName: solodev-id
         Cluster: !Ref Cluster
         LaunchType: FARGATE
+        # ServiceName: solodev-id
+        # ServiceRegistries:
+        #   - RegistryArn: !GetAtt ServiceDiscoveryNamespace.Arn
         DeploymentConfiguration:
           MaximumPercent: 200
           MinimumHealthyPercent: 75
