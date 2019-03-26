@@ -176,7 +176,12 @@ Conditions:
   UseHTTP: !Equals [ !Ref CertificateArn, "" ]
 
 Resources:
-    # This is a role which is used by the ECS tasks themselves.
+    CloudWatchLogsGroup:
+        Type: AWS::Logs::LogGroup
+        Properties: 
+            LogGroupName: !Ref AWS::StackName
+            RetentionInDays: 30  
+            
     TaskExecutionRole:
       Type: AWS::IAM::Role
       Properties:
