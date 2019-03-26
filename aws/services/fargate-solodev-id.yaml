@@ -235,7 +235,7 @@ Resources:
         ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
         TaskRoleArn: !GetAtt TaskRole.Arn
         ContainerDefinitions:
-          - Name: nginx
+          - Name: php-fpm
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'AppContainer'
@@ -274,7 +274,7 @@ Resources:
                     awslogs-group: !Ref AWS::StackName
                     awslogs-region: !Ref AWS::Region
                     awslogs-stream-prefix: nginx
-          - Name: php-fpm
+          - Name: nginx
             Cpu: !Ref 'ContainerCpu'
             Memory: !Ref 'ContainerMemory'
             Image: !Ref 'WebContainer'
