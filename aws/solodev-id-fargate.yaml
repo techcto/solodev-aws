@@ -166,6 +166,7 @@ Resources:
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
+                DatabaseClass: 'db.t2.medium'
                 DeletionPolicy: !Ref DeletionPolicy
                 StorageEncrypted: !Ref StorageEncrypted
                 MultiAZDatabase: 'false'
@@ -189,7 +190,6 @@ Resources:
                 DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
                 DatabaseUsername: 'identity'
-                DatabaseClass: 'db.t2.medium'
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
