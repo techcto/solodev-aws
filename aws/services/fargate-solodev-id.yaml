@@ -271,6 +271,8 @@ Resources:
                   Value: 'prod'
                 - Name: APP_SECRET
                   Value: AppSecret
+                - Name: MYSQL_HOST
+                  Value: !Ref DatabaseHost
                 - Name: DB_URL
                   Value: !Join ["", ["mysql://", !Ref DatabaseUsername, ":", !Ref DatabasePassword, "@", !Ref DatabaseHost, ":3306/", !Ref DatabaseName]]
                 - Name: ADMIN_USER
