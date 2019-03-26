@@ -149,24 +149,24 @@ Resources:
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
-    # RDS:
-    #     Type: AWS::CloudFormation::Stack
-    #     Properties:
-    #         TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
-    #         Parameters:
-    #             EnvironmentName: !Ref AWS::StackName
-    #             DatabaseName: !Ref DatabaseName
-    #             VPC: !Ref VPCID
-    #             LoadBalancerSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
-    #             Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-    #             DatabasePassword: !Ref DatabasePassword
-    #             DeletionPolicy: !Ref DeletionPolicy
-    #             StorageEncrypted: !Ref StorageEncrypted
-    #             MultiAZDatabase: 'true'
+    RDS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                DatabaseName: !Ref DatabaseName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt ECS.Outputs.ECSHostSecurityGroup
+                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                DatabasePassword: !Ref DatabasePassword
+                DeletionPolicy: !Ref DeletionPolicy
+                StorageEncrypted: !Ref StorageEncrypted
+                MultiAZDatabase: 'false'
 
     ID:
         Type: AWS::CloudFormation::Stack
-        # DependsOn: RDS
+        DependsOn: RDS
         Properties:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/services/fargate-solodev-id.yaml
             Parameters:
@@ -180,9 +180,10 @@ Resources:
                 AdminUsername: !Ref AdminUser
                 AdminPassword: !Ref AdminPassword
                 CredentialsParameter: !Ref CredentialsParameter
-                # DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
                 DatabaseName: !Ref DatabaseName
                 DatabaseUsername: 'identity'
+                DatabaseClass: 'db.t2.medium'
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
