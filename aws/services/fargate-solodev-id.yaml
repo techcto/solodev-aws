@@ -360,6 +360,7 @@ Resources:
           AwsvpcConfiguration:
             SecurityGroups:
               - !Ref 'ContainerSecurityGroup'
+              - !Ref LoadBalancerSecurityGroup
             Subnets: !Ref Subnets
             AssignPublicIp: ENABLED
         TaskDefinition: !Ref 'TaskDefinition'
