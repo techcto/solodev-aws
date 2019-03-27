@@ -104,8 +104,8 @@ Parameters:
         AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
         ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
         Default: 'solodevid'
-
-  DatabaseUsername:
+        
+    DatabaseUsername:
         Default: root
         NoEcho: 'true'
         Description: The database admin account username
