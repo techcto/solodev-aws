@@ -35,7 +35,8 @@ Metadata:
       - 
         Label: 
           default: "Optional: Advanced"
-        Parameters: 
+        Parameters:
+          - WebsiteUrl
           - RestoreBucketName
           - DeletionPolicy
 
@@ -136,6 +137,11 @@ Parameters:
         MaxLength: 41
         AllowedPattern: .+
         ConstraintDescription: Please set database root password
+        
+    WebsiteUrl:
+        Description: Name of initital Solodev website
+        Type: String
+        Default: ""        
 
     RestoreBucketName:
         Description: Name of S3 bucket containing files for restore
@@ -229,3 +235,6 @@ Outputs:
     AdminPassword: 
         Description: Solodev admin password.
         Value: !Ref AdminPassword
+    WebsiteUrl: 
+        Description: Initital Solodev Website
+        Value: !Ref WebsiteUrl        

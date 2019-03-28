@@ -18,7 +18,8 @@ Metadata:
       - 
         Label: 
           default: "Optional: Advanced"
-        Parameters: 
+        Parameters:
+          - WebsiteUrl
           - HostVolumeSize
           - DeletionPolicy
 
@@ -51,6 +52,11 @@ Parameters:
         c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
         r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
         ConstraintDescription: Please choose a valid instance type.
+        
+    WebsiteUrl:
+        Description: Name of initital Solodev website
+        Type: String
+        Default: ""        
 
     DeletionPolicy:
         Default: 'Delete'
@@ -191,3 +197,6 @@ Outputs:
     AdminPassword: 
         Description: Solodev admin password.
         Value: !Ref WebServerInstance
+    WebsiteUrl: 
+        Description: Initital Solodev Website
+        Value: !Ref WebsiteUrl        
