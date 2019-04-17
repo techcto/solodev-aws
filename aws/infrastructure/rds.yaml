@@ -144,6 +144,7 @@ Resources:
       PreferredMaintenanceWindow: 'sat:04:00-sat:05:30'
       DBInstanceClass: !Ref DatabaseClass
       Engine: MySQL
+      EngineVersion: '5.7'
       MasterUsername: !Ref DatabaseUsername
       MasterUserPassword: !Ref DatabasePassword
       DBSubnetGroupName: !Ref DBSubnetGroup
