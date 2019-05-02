@@ -92,7 +92,7 @@ Parameters:
 
     InstanceCount:
         Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
-        Default: 2
+        Default: 1
         AllowedValues: [1, 2, 3, 4, 5]
         Type: Number
 
