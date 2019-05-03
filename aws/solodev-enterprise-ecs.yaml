@@ -233,7 +233,7 @@ Resources:
                 CertificateArn: !Ref CertificateArn
                 SolodevContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-527551308/solodev-cms:9.0-latest'
                 ApacheContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-527551308/solodev-apache:9.0-latest'
-                MongoContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-527551308/mongo:9.0-latest'
+                MongoContainer: 'techcto/mongo:latest'
                 UseMarketplace: 'true'
                 RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: !Ref InstanceCount
