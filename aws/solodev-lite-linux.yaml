@@ -79,7 +79,7 @@ Parameters:
 Mappings:
     AWSRegionToAMI:
       us-east-1:
-        AMI: "ami-0714a481459dd4a9b"
+        AMI: "ami-0a9689df7a0b0c0cb"
       us-west-1:
         AMI: ""
       us-west-2:
