@@ -115,7 +115,7 @@ Parameters:
 
     CronSchedule:
       Type: String
-      Default: "cron(0,15,30,45 * * * ? *)"
+      Default: "cron(0 * * * ? *)"
       Description: "Backup cron schedule"
 
     RestoreBucketName:
