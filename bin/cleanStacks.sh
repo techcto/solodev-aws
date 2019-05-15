@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #echo $(aws cloudformation describe-stacks)
-for BUCKET in $(aws s3api list-buckets --query "Buckets[].Name")
+for BUCKET in $(aws s3api list-buckets --region us-east-1 | ./jq -r '.Buckets[].Name')
 do
     if [[ $BUCKET == *"-tmp-"* ]]; then
         echo "I found one. Time to delete a bucket: ${BUCKET}.  Bye-Bye!"
