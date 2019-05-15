@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 LEGACY=0
-LITE=0
+LITE=1
 PRO=0
 WESTCOAST=0
 ENTERPRISE=0
 DOCKER=0
-MARKETPLACE=1
+MARKETPLACE=0
 
 if [ $LEGACY == 1 ]; then
     echo "Create Legacy Stacks:" 
@@ -27,9 +27,9 @@ fi
 if [ $LITE == 1 ]; then
     echo "Create Solodev Lite"
     echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
-    aws cloudformation create-stack --disable-rollback --stack-name lite-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-lite-single.json
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-lite-linux.yaml
+    aws cloudformation create-stack --disable-rollback --stack-name lite-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+        --parameters file:///${CODEBUILD_SRC_DIR}/solodev-lite-single.json \
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-lite-linux.yaml \
         --notification-arns $NOTIFICATION_ARN
 fi
 
