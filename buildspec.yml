@@ -22,14 +22,14 @@ phases:
       - chmod 700 bin/cleanStacks.sh
       - ./bin/cleanStacks.sh
 
+      - LEGACY=0
+      - LITE=0
+      - PRO=0
+      - WESTCOAST=0
+      - ENTERPRISE=0
+      - DOCKER=0
+      - MARKETPLACE=1
       - |
-        LEGACY=0
-        LITE=0
-        PRO=0
-        WESTCOAST=0
-        ENTERPRISE=0
-        DOCKER=0
-        MARKETPLACE=1
         if [ $LEGACY == 1 ]; then
           echo "Create Legacy Stacks:" 
           echo "Create Solodev Pro for Opsworks Legacy"
@@ -45,6 +45,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/legacy/solodev-enterprise-opsworks.json
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $LITE == 1 ]; then
           echo "Create Solodev Lite"
           echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
@@ -53,6 +54,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-lite-linux.yaml
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $PRO == 1 ]; then
           echo "Create Solodev Pro for Opsworks"
           echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single.json
@@ -67,6 +69,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks-byol.yaml
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $WESTCOAST == 1 ]; then
           echo "Create Solodev Pro for Opsworks - California"
           echo $(aws s3 cp s3://build-secure/params/solodev-pro-opsworks-us-west-1.json - ) > solodev-pro-single.json
@@ -81,6 +84,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-pro-opsworks-byol.yaml
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $ENTERPRISE == 1 ]; then
           echo "Create Solodev Enterprise for Opsworks"
           echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json
@@ -95,6 +99,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-opsworks-byol.yaml
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $DOCKER == 1 ]; then
           echo "Create Solodev Enterprise for Docker (MarketPlace)"
           echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs.json - ) > solodev-enterprise-ecs.json
@@ -103,6 +108,7 @@ phases:
             --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.yaml
             --notification-arns $NOTIFICATION_ARN
         fi
+      - |
         if [ $MARKETPLACE == 1 ]; then
           echo "Create Marketplace Solodev Lite"
           echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
