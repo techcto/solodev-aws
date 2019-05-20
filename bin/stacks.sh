@@ -92,7 +92,7 @@ if [ $MARKETPLACE == 1 ]; then
     echo $(aws s3 cp s3://build-secure/params/solodev-lite-single.json - ) > solodev-lite-single.json
     aws cloudformation create-stack --disable-rollback --stack-name mp-lite-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-lite-single.json \
-        --template-url https://s3.amazonaws.com/awsmp-fulfillment-cf-templates-prod/b7a90f58-6c9b-4c2c-a67f-2048934703bf.5fd3328d-d502-4e33-8960-54478810989d.template \
+        --template-url https://s3.amazonaws.com/awsmp-fulfillment-cf-templates-prod/44f2ab80-ed37-4b80-a5ce-81defb0ca8b7.359a0410-0e42-4901-a26c-8b03fc331fa1.template \
         --notification-arns $NOTIFICATION_ARN
     echo "Create Marketplace Solodev Pro for Opsworks"
     echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single.json
@@ -104,7 +104,7 @@ if [ $MARKETPLACE == 1 ]; then
     echo $(aws s3 cp s3://build-secure/params/solodev-pro-single.json - ) > solodev-pro-single-byol.json
     aws cloudformation create-stack --disable-rollback --stack-name mp-pro-byol-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-pro-single-byol.json \
-        --template-url https://s3.amazonaws.com/awsmp-fulfillment-cf-templates-prod/0a88415f-fbe6-4adf-af4b-699f96285513.70851900-9166-46dd-809d-7e8bec604989.template \
+        --template-url https://s3.amazonaws.com/awsmp-fulfillment-cf-templates-prod/61e198f6-4f84-49a2-89b8-0e269a1f0e99.cd206970-f449-4667-84b4-0392bfef1532.template \
         --notification-arns $NOTIFICATION_ARN
     echo "Create Marketplace Solodev Enterprise for Opsworks"
     echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-opsworks.json - ) > solodev-enterprise-opsworks.json
@@ -122,6 +122,6 @@ if [ $MARKETPLACE == 1 ]; then
     echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs-dev.json - ) > solodev-enterprise-ecs-dev.json
     aws cloudformation create-stack --disable-rollback --stack-name mp-ecs-dev-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-ecs-dev.json \
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.dev.yaml \
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.yaml \
         --notification-arns $NOTIFICATION_ARN
 fi
