@@ -122,6 +122,6 @@ if [ $MARKETPLACE == 1 ]; then
     echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs-dev.json - ) > solodev-enterprise-ecs-dev.json
     aws cloudformation create-stack --disable-rollback --stack-name mp-ecs-dev-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-ecs-dev.json \
-        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.yaml \
+        --template-url https://s3.amazonaws.com/solodev-aws-ha/aws/solodev-enterprise-ecs.dev.yaml \
         --notification-arns $NOTIFICATION_ARN
 fi
