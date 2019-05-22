@@ -79,7 +79,7 @@ if [ $ENTERPRISE == 1 ]; then
 fi
 
 if [ $DOCKER == 1 ]; then
-    echo "Create Solodev Enterprise for Docker (MarketPlace)"
+    echo "Create Solodev Enterprise for Docker (DockerHub)"
     echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs-dev.json - ) > solodev-enterprise-ecs-dev.json
     aws cloudformation create-stack --disable-rollback --stack-name ecs-dev-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-ecs-dev.json \
@@ -118,7 +118,7 @@ if [ $MARKETPLACE == 1 ]; then
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-opsworks.json \
         --template-url https://s3.amazonaws.com/awsmp-fulfillment-cf-templates-prod/0a88415f-fbe6-4adf-af4b-699f96285513.70851900-9166-46dd-809d-7e8bec604989.template \
         --notification-arns $NOTIFICATION_ARN
-    echo "Create Solodev Enterprise for Docker (DockerHub)"
+    echo "Create Solodev Enterprise for Docker (MarketPlace)"
     echo $(aws s3 cp s3://build-secure/params/solodev-enterprise-ecs.json - ) > solodev-enterprise-ecs.json
     aws cloudformation create-stack --disable-rollback --stack-name mp-ecs-tmp-${DATE} --disable-rollback --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
         --parameters file:///${CODEBUILD_SRC_DIR}/solodev-enterprise-ecs.json \
