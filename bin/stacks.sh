@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 LEGACY=0
-LITE=1
+LITE=0
 PRO=0
 WESTCOAST=0
 ENTERPRISE=0
