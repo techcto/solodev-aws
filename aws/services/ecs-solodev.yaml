@@ -443,7 +443,7 @@ Resources:
                     MemoryReservation: 256
                     Environment:
                       - Name: APP_URL
-                        Value: 'solodev'
+                        Value: '127.0.0.1:9000'
                     LogConfiguration:
                         LogDriver: awslogs
                         Options:
