@@ -6,7 +6,7 @@ PRO=0
 WESTCOAST=0
 ENTERPRISE=0
 DOCKER=1
-MARKETPLACE=1
+MARKETPLACE=0
 
 if [ $LEGACY == 1 ]; then
     echo "Create Legacy Stacks:" 
