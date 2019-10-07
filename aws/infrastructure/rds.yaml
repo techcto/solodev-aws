@@ -52,7 +52,7 @@ Parameters:
     Type: Number
 
   DatabaseClass:
-    Default: db.m3.medium
+    Default: db.t2.medium
     Description: Database instance class
     Type: String
     AllowedValues:
