@@ -190,7 +190,7 @@ Outputs:
 
     AdminUrl: 
         Description: Dedicated IP for web server.  Point your DNS to this IP.
-        Value: !Join ["", [ "http://", !GetAtt WebServerInstance.PublicIp, "/" ]]
+        Value: !GetAtt WebServerInstance.PublicIp
     AdminUsername: 
         Description: Solodev admin username.
         Value: "solodev"
