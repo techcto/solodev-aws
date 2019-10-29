@@ -101,7 +101,6 @@ Parameters:
     RedisContainer:
       Description: Mongo container image
       Type: String
-      Default: 'redis:alpine'
 
     FQDN:
       Type: String

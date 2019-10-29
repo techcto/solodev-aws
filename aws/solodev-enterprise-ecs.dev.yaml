@@ -288,10 +288,10 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                SolodevContainer: !If [UseMarketplace, '709373726912.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3569727052/solodev-cms:9.1-latest', 'solodev/cms:latest']
-                ApacheContainer: !If [UseMarketplace, '709373726912.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3569727052/solodev-apache:9.1-latest', 'solodev/cms-apache:latest']
-                MongoContainer: !If [UseMarketplace, '709373726912.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-3569727052/techcto/mongo:9.1-latest', 'techcto/mongo:latest']
-                UseMarketplace: !If [UseMarketplace, 'true', 'false']
+                SolodevContainer: 'solodev/cms:latest'
+                ApacheContainer: 'solodev/cms-apache:latest'
+                MongoContainer: 'techcto/mongo:latest'
+                RedisContainer: 'techcto/redis:latest'
                 RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: !Ref InstanceCount
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
