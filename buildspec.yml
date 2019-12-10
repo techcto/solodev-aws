@@ -20,7 +20,7 @@ phases:
       
       - echo "Delete Old Stacks"
       - chmod 700 bin/cleanStacks.sh bin/stacks.sh
-      # - ./bin/cleanStacks.sh
+      - ./bin/cleanStacks.sh
       - ./bin/stacks.sh
       - echo "Cleanup" | rm -f *json
   post_build:
