@@ -348,12 +348,12 @@ Resources:
                     - 'solodev::mount_EFS'
                     - 'solodev::deploy_base'
                     - 'mongo::deploy_mongo'
+                    - 'mongo::deploy_mongo_single'
                     - 'solodev::deploy_scripts'
                     - 'solodev::deploy_duplicity'
                     - 'solodev::client_settings'
                     - 'solodev::deploy_solodev'
                 Configure: 
-                    - 'mongo::deploy_mongo_single'
                     - 'solodev::update_solodev'
                 Deploy:
                     - 'solodev::deploy_solodev'
