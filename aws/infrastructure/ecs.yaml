@@ -87,7 +87,7 @@ Parameters:
     BlockVolumeSize:
         Description: Size in GB of additional non-root volume
         Type: String
-        Default: '256'
+        Default: '64'
         AllowedValues:
         - '8'
         - '16'
