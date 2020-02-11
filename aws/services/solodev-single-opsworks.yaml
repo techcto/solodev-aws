@@ -49,26 +49,10 @@ Parameters:
         Description: SSL cert for AWS ALB HTTPS listener
         Default: ''
 
-    HostVolumeSize:
-        Description: Size in GB of additional non-root volume
-        Type: String
-        Default: '128'
-        AllowedValues:
-        - '8'
-        - '16'
-        - '32'
-        - '64'
-        - '128'
-        - '256'
-        - '512'
-        - '1024'
-        - '2048'
-        - '4096'
-
     BlockVolumeSize:
         Description: Size in GB of additional non-root volume
         Type: String
-        Default: '64'
+        Default: '32'
         AllowedValues:
         - '8'
         - '16'
