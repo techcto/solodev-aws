@@ -206,7 +206,6 @@ Resources:
                 DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
                 DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
                 DeploymentType: "SolodevProduction"
-                LicenseServer: "license.solodev.org"
                 RestoreBucketName: !Ref RestoreBucketName
                 DeletionPolicy: !Ref DeletionPolicy
 

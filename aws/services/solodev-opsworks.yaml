@@ -369,6 +369,7 @@ Resources:
                     ApacheConfDir: /etc/httpd/conf.d
                     DeploymentType: !Ref DeploymentType
                     EnterpriseMode: !Ref BYOL
+                    LicenseServer: "license.solodev.org"
                     
                     RestoreBucketName: !Ref RestoreBucketName
                     BackupBucketName: !Join ['-', [!Ref 'EnvironmentName', 'solodev']]
