@@ -81,7 +81,7 @@ Parameters:
 
     InstanceType:
         Type: String
-        Default: m3.medium
+        Default: t2.medium
         AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
         m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
         c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, c3.large, c3.xlarge,
@@ -159,10 +159,10 @@ Parameters:
 
 Resources:
 
-    LB:
+    ALB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/elb.yaml"
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
@@ -176,7 +176,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
 
@@ -187,7 +187,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
@@ -210,7 +210,7 @@ Resources:
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
-                LoadBalancer: !GetAtt LB.Outputs.LoadBalancer
+                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
                 BYOL: False
                 CookbookURL: !Ref CookbookURL
@@ -228,7 +228,7 @@ Outputs:
 
     AdminUrl: 
         Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
-        Value: !GetAtt LB.Outputs.LoadBalancerUrl
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl
     AdminUsername: 
         Description: Solodev admin username.
         Value: !Ref AdminUser
