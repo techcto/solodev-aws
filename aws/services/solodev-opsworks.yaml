@@ -455,7 +455,6 @@ Resources:
                 - !Ref LoadBalancerSecurityGroup
             CustomRecipes:
                 Setup:
-                    - 'alb_support::install_http_server'
                     - 'alb_support::attach_to_alb'
                     - 'solodev::mount_EFS'
                     - 'mongo::deploy_mongo'
@@ -466,7 +465,6 @@ Resources:
                     - 'solodev::deploy_solodev'
                 Shutdown:
                     - 'alb_support::detach_from_alb'
-                    - 'alb_support::uninstall_http_server'
                 Undeploy: []
             VolumeConfigurations:
                 - 
