@@ -353,7 +353,8 @@ Resources:
                 Url: !Ref CookbookURL
             CustomJson:
                 private_dns: 'solodev'
-                target_group_arn: !Ref LoadBalancer
+                alb_helper:
+                    target_group_arn: !Ref LoadBalancer
                 install:
                     StackName: !Ref 'EnvironmentName'
                     HostedZoneName: !Ref FQDN
