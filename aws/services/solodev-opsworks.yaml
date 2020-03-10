@@ -354,7 +354,7 @@ Resources:
             CustomJson:
                 private_dns: 'solodev'
                 alb_helper:
-                    target_group_arn: !Ref LoadBalancer
+                    target_group_arn: !Ref TargetGroup
                 install:
                     StackName: !Ref 'EnvironmentName'
                     HostedZoneName: !Ref FQDN
