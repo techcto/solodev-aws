@@ -211,7 +211,7 @@ Resources:
                 CertificateArn: !Ref CertificateArn
                 Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
-                LoadBalancerSecurityGroup: !GetAtt LB.Outputs.LoadBalancerSecurityGroup
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 BYOL: False
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser
