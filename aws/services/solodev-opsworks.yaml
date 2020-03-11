@@ -457,12 +457,12 @@ Resources:
                 - !Ref LoadBalancerSecurityGroup
             CustomRecipes:
                 Setup:
-                    - 'alb_support::attach_to_alb'
                     - 'solodev::mount_EFS'
                     - 'mongo::deploy_mongo'
                     - 'solodev::deploy_scripts'
                 Configure:
                     - 'solodev::deploy_solodev'
+                    - 'alb_support::attach_to_alb'
                 Deploy:
                     - 'solodev::deploy_solodev'
                 Shutdown:
