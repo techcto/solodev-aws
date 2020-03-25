@@ -36,7 +36,7 @@ Metadata:
 Mappings:
   BYOL:
     us-east-1:
-      AMI: "ami-02adc182355c6de99"
+      AMI: "ami-091693ce07cd0b954"
     us-west-1:
       AMI: ""
     us-west-2:
