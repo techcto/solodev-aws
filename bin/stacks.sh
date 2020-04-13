@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 LEGACY=0
-LITE=1
-PRO=1
+LITE=0
+PRO=0
 WESTCOAST=0
-ENTERPRISE=1
+ENTERPRISE=0
 DOCKER=1
-MARKETPLACE=0
+MARKETPLACE=1
 
 if [ $LEGACY == 1 ]; then
     echo "Create Legacy Stacks:" 
