@@ -565,27 +565,6 @@ Resources:
             RootDeviceType: ebs
             SshKeyName: !Ref KeyName
 
-    IPAddress:
-        Type: 'Custom::PublicIpLookUp'
-        Properties:
-            ServiceToken: !GetAtt 
-                - IPLookup
-                - Arn
-            OWInstanceId: !Ref SolodevInstance1
-
-    IPLookup:
-        Type: 'AWS::Lambda::Function'
-        Properties:
-            Handler: cfn_python_opsworks.lambda_handler
-            Role: !GetAtt 
-                - LambdaExecutionRole
-                - Arn
-            Code:
-                S3Bucket: solodev-aws-ha
-                S3Key: opsworks_getip.zip
-            Runtime: python2.7
-            Timeout: '25'
-
     TargetGroup:
         Type: AWS::ElasticLoadBalancingV2::TargetGroup
         Properties:
@@ -689,11 +668,3 @@ Resources:
                                 Effect: Allow
                                 NotAction: 'iam:*'
                                 Resource: '*'
-
-Outputs:
-
-    DedicatedIP:
-        Value: !GetAtt 
-        - IPAddress
-        - PublicIp
-        Description: Point DNS A records to this IP and server will redirect to the server CNAME.  If your DNS supports pointing A records to CNAME's please use CNAME instead.
