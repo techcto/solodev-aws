@@ -45,7 +45,7 @@ Mappings:
     us-east-1:
       AMI: "ami-0fc23417ee186792a"
     us-west-1:
-      AMI: ""
+      AMI: "ami-0fc23417ee186792a"
     us-west-2:
       AMI: ""
     eu-central-1:
