@@ -43,23 +43,45 @@ Metadata:
 Mappings:
   BYOL:
     us-east-1:
-      AMI: "ami-06b9e72a9f9747f3b"
+      AMI: "ami-00c59c144f42a0019"
+    us-east-2:
+      AMI: "ami-0ec185a9b96cb5388"
     us-west-1:
-      AMI: "ami-0208c09295cf8a0ef"
+      AMI: "ami-0fe31b3174038a1b7"
     us-west-2:
-      AMI: ""
+      AMI: "ami-051eb13bd5d37cccb"
+    us-gov-west-1:
+      AMI: "ami-f8576499"
+    us-gov-east-1:
+      AMI: "ami-55dd3124"
+    ca-central-1:
+      AMI: "ami-056830842c94e9d4c"
     eu-central-1:
-      AMI: ""
+      AMI: "ami-0d32c91b4e1b91a0f"
     eu-west-1:
-      AMI: ""
-    sa-east-1:
-      AMI: ""
+      AMI: "ami-0c4d4b57295c5d65e"
+    eu-west-2:
+      AMI: "ami-07cd337892e0de9a4"
+    eu-west-3:
+      AMI: "ami-03dde972527035379"
+    eu-north-1:
+      AMI: "ami-0a449f9396d78d006"
     ap-southeast-1:
-      AMI: ""
+      AMI: "ami-0ece00df1e6852cb5"
     ap-southeast-2:
-      AMI: ""
+      AMI: "ami-0969acf2373e2acfa"
+    ap-south-1:
+      AMI: "ami-03feba8b70b66338f"
     ap-northeast-1:
-      AMI: ""
+      AMI: "ami-0d5d16fb69e3a2636"
+    ap-northeast-2:
+      AMI: "ami-0db061d0e9fd4695d"
+    ap-east-1:
+      AMI: "ami-0850d4e51f9317a34"
+    sa-east-1:
+      AMI: "ami-072536820e5b66c89"
+    me-south-1:
+      AMI: "ami-06fb338679eb5af89"
 
 Parameters:
 
