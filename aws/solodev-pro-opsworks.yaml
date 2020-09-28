@@ -36,21 +36,45 @@ Metadata:
 Mappings:
   Marketplace:
     us-east-1:
-      AMI: "ami-0df2ba4d3343f78cd"
+      AMI: "ami-06501a8bf90af8e0c"
+    us-east-2:
+      AMI: "ami-0c1a2807b5953243a"
     us-west-1:
-      AMI: ""
+      AMI: "ami-0ca8a94deac48a92c"
     us-west-2:
-      AMI: ""
+      AMI: "ami-0ff49440b17bd2a44"
+    us-gov-west-1:
+      AMI: "ami-0bb570b09e590228c"
+    us-gov-east-1:
+      AMI: "ami-0d057c68225f02f30"
+    ca-central-1:
+      AMI: "ami-031f628fb2c63c070"
+    eu-central-1:
+      AMI: "ami-07eeea66bf7d994b2"
     eu-west-1:
-      AMI: ""
-    sa-east-1:
-      AMI: ""
+      AMI: "ami-07998ba0a439f9d22"
+    eu-west-2:
+      AMI: "ami-09c1e6428c4f782fd"
+    eu-west-3:
+      AMI: "ami-0a1df1ebbe7cd6319"
+    eu-north-1:
+      AMI: "ami-074b87533c3aca7d5"
     ap-southeast-1:
-      AMI: ""
+      AMI: "ami-0c9592607732aca4d"
     ap-southeast-2:
-      AMI: ""
+      AMI: "ami-0c948615887c23650"
+    ap-south-1:
+      AMI: "ami-031faa3a21cae16c2"
     ap-northeast-1:
-      AMI: ""
+      AMI: "ami-006d8a8154b40b235"
+    ap-northeast-2:
+      AMI: "ami-0432e5686ef22ba91"
+    ap-east-1:
+      AMI: "ami-0808e7f2dfa8b6c21"
+    sa-east-1:
+      AMI: "ami-0927f83b7ef8a228f"
+    me-south-1:
+      AMI: "ami-00914a0ba85b737af"
 
 Parameters:
 

@@ -231,10 +231,10 @@ Resources:
                 DatabasePassword: !Ref DatabasePassword
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                SolodevContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2923706988/solodev-cms:9.2b-latest'
-                ApacheContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2923706988/solodev-apache:9.2b-latest'
-                MongoContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2923706988/techcto/mongo:9.2b-latest'
-                RedisContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2923706988/techcto/redis:9.2b-latest'
+                SolodevContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2718678348/solodev-cms:9.3.1-latest'
+                ApacheContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2718678348/solodev-apache:9.3.1-latest'
+                MongoContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2718678348/techcto/mongo:9.3.1-latest'
+                RedisContainer: '117940112483.dkr.ecr.us-east-1.amazonaws.com/cb5d26e2-0bcb-4e18-9526-570f3b241da1/cg-2718678348/techcto/redis:9.3.1-latest'
                 RestoreBucketName: !Ref RestoreBucketName
                 DesiredCount: !Ref InstanceCount
                 ServiceRole: !GetAtt ALB.Outputs.ServiceRole 
