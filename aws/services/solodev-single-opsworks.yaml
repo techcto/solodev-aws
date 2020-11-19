@@ -113,6 +113,10 @@ Parameters:
         Type: String
         Description: 'Asset Deletion Policy'
 
+    SSOEnabled:
+        Default: 'false'
+        Type: String
+
     BYOL:
         Default: 'False'
         Type: String
@@ -311,6 +315,7 @@ Resources:
 
                     SolodevUser: !Ref AdminUser
                     SolodevPassword: !Ref AdminPassword
+                    SSOEnabled: !Ref SSOEnabled
                     SolodevTheme: ''
                     SolodevWebsite: ''
 

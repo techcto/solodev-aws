@@ -30,6 +30,7 @@ Metadata:
           default: "Optional: Advanced"
         Parameters:
           - WebsiteUrl
+          - SSOEnabled
           - RestoreBucketName
           - DeletionPolicy
 
@@ -153,7 +154,16 @@ Parameters:
     WebsiteUrl:
         Description: Name of initital Solodev website
         Type: String
-        Default: ""          
+        Default: ""
+
+    SSOEnabled:
+        Default: 'false'
+        Description: Enable deployment to utilize Solodev Cloud
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.          
 
     RestoreBucketName:
         Description: Name of S3 bucket containing files for restore
@@ -234,6 +244,7 @@ Resources:
                 DeploymentType: "SolodevProduction"
                 RestoreBucketName: !Ref RestoreBucketName
                 DeletionPolicy: !Ref DeletionPolicy
+                SSOEnabled: !Ref SSOEnabled
 
 Outputs:
 
