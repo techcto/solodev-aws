@@ -13,6 +13,8 @@ Metadata:
           default: "Network Setup"
         Parameters: 
           - VPCID
+          - PublicSubnet1ID
+          - PublicSubnet2ID
           - Subnets
           - InstanceType
           - KeyName
@@ -91,6 +93,16 @@ Parameters:
         Type: List<AWS::EC2::Subnet::Id>
         AllowedPattern: .+
         ConstraintDescription: Please choose Subnets
+
+    PublicSubnet1ID:
+        Type: String
+        Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
+        Default: ""
+
+    PublicSubnet2ID:
+        Type: String
+        Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
+        Default: ""        
 
     KeyName:
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
