@@ -113,9 +113,15 @@ Parameters:
         Type: String
         Description: 'Asset Deletion Policy'
 
-    SSOEnabled:
-        Default: 'false'
+    ClientId:
+        Description: Keep blank unless deploying via Solodev Cloud
         Type: String
+        Default: ""
+    
+    ClientSecret:
+        Description: Keep blank unless deploying via Solodev Cloud
+        Type: String
+        Default: ""
 
     BYOL:
         Default: 'False'
@@ -315,7 +321,8 @@ Resources:
 
                     SolodevUser: !Ref AdminUser
                     SolodevPassword: !Ref AdminPassword
-                    SSOEnabled: !Ref SSOEnabled
+                    ClientId: !Ref ClientId
+                    ClientSecret: !Ref ClientSecret
                     SolodevTheme: ''
                     SolodevWebsite: ''
 
