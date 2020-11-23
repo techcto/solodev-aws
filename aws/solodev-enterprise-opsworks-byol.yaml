@@ -13,7 +13,8 @@ Metadata:
           default: "Network Setup"
         Parameters: 
           - VPCID
-          - Subnets
+          - PublicSubnet1ID
+          - PublicSubnet2ID
           - InstanceType
           - InstanceCount
           - KeyName
@@ -37,6 +38,8 @@ Metadata:
           default: "Optional: Advanced"
         Parameters:
           - WebsiteUrl
+          - ClientId
+          - ClientSecret
           - RestoreBucketName
           - DeletionPolicy
 
@@ -91,11 +94,15 @@ Parameters:
         AllowedPattern: .+
         ConstraintDescription: Please choose VPC
 
-    Subnets:
-        Description: Choose at least two public subnets for this application
-        Type: List<AWS::EC2::Subnet::Id>
-        AllowedPattern: .+
-        ConstraintDescription: Please choose Subnets
+    PublicSubnet1ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
+        Default: ""
+
+    PublicSubnet2ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
+        Default: ""  
 
     KeyName:
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -165,7 +172,17 @@ Parameters:
     WebsiteUrl:
         Description: Name of initital Solodev website
         Type: String
-        Default: ""        
+        Default: ""
+
+    ClientId:
+        Description: Keep blank unless deploying via Solodev Cloud
+        Type: String
+        Default: ""
+    
+    ClientSecret:
+        Description: Keep blank unless deploying via Solodev Cloud
+        Type: String
+        Default: ""          
 
     RestoreBucketName:
         Description: Name of S3 bucket containing files for restore
@@ -191,7 +208,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
                 CertificateArn: !Ref CertificateArn
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
     EFS:
         Type: AWS::CloudFormation::Stack
@@ -202,7 +219,7 @@ Resources:
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
     RDS:
         Type: AWS::CloudFormation::Stack
@@ -212,7 +229,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
                 DeletionPolicy: !Ref DeletionPolicy
@@ -233,7 +250,7 @@ Resources:
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 BYOL: "True"
