@@ -264,6 +264,8 @@ Resources:
                 DeploymentType: "SolodevProduction"
                 RestoreBucketName: !Ref RestoreBucketName
                 DeletionPolicy: !Ref DeletionPolicy
+                ClientId: !Ref ClientId
+                ClientSecret: !Ref ClientSecret
 
 Outputs:
 
