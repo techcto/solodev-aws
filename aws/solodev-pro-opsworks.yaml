@@ -237,7 +237,7 @@ Outputs:
 
     AdminUrl: 
         Description: Dedicated IP for web server.  Point your DNS to this IP.
-        Value: !Join ["", [ "http://", !GetAtt EC2.Outputs.DedicatedIP, "/" ]]
+        Value: !GetAtt EC2.Outputs.DedicatedIP
     AdminUsername: 
         Description: Solodev admin username.
         Value: !Ref AdminUser
