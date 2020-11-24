@@ -1,0 +1,245 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+
+    Solodev CMS Enterprise for Opsworks on AWS
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Network Setup"
+        Parameters: 
+          - VPCID
+          - PublicSubnet1ID
+          - PublicSubnet2ID
+          - InstanceType
+          - InstanceCount
+          - KeyName
+          - CookbookURL
+      - 
+        Label: 
+          default: "CMS Settings"
+        Parameters: 
+            - AdminUser
+            - AdminPassword
+            - DatabasePassword
+            - StorageEncrypted
+      - 
+        Label: 
+          default: "Optional: SSL Configuration"
+        Parameters: 
+          - FQDN
+          - CertificateArn
+      - 
+        Label: 
+          default: "Optional: Advanced"
+        Parameters:
+          - WebsiteUrl
+          - ClientId
+          - ClientSecret
+          - RestoreBucketName
+          - DeletionPolicy
+
+Mappings:
+  BYOL:
+    us-east-1:
+      AMI: "ami-0e3bc3ebeb7e031d4"
+
+Parameters:
+
+    VPCID: 
+        Type: AWS::EC2::VPC::Id
+        Description: Choose which VPC the Application should be deployed to
+        AllowedPattern: .+
+        ConstraintDescription: Please choose VPC
+
+    PublicSubnet1ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
+        Default: ""
+
+    PublicSubnet2ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
+        Default: ""  
+
+    KeyName:
+        Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+        Type: 'AWS::EC2::KeyPair::KeyName'
+        AllowedPattern: .+
+        ConstraintDescription: Please choose EC2 KeyPair
+
+    InstanceType:
+        Type: String
+        Default: m3.medium
+        AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
+        m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
+        c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, c3.large, c3.xlarge,
+        c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
+        r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
+        ConstraintDescription: Please choose a valid instance type.
+
+    InstanceCount:
+        Description: 'Number of instances behind load balancer.  Minimum 2 required for high availability.'
+        Default: 1
+        AllowedValues: [1, 2, 3, 4, 5]
+        Type: Number
+
+    DeletionPolicy:
+        Default: 'Delete'
+        Type: String
+        Description: 'Experimental: Deletion Policy (Retain, Delete, Snapshot)'
+
+    FQDN:
+        Type: String
+        Description: URL for app. FQDN must be pointed to CNAME of ALB.
+
+    CertificateArn:
+        Type: String
+        Description: CertificateArn for SSL cert that matches the FQDN above. Please visit the AWS Certificate Manager.
+
+    CookbookURL:
+        Type: String
+        Default: ''
+        Description: 'https://s3.amazonaws.com/solodev-aws-ha/cookbooks.tar.gz | Download and host on your own S3 bucket or copy this URL.'
+
+    AdminUser:
+        Description: The solodev admin username
+        Type: String
+        Default: 'solodev'
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin username
+
+    AdminPassword:
+        NoEcho: true
+        Description: The solodev admin password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set admin password
+
+    DatabasePassword:
+        NoEcho: true
+        Description: The database root password
+        Type: String
+        MinLength: 1
+        MaxLength: 41
+        AllowedPattern: .+
+        ConstraintDescription: Please set database root password
+        
+    WebsiteUrl:
+        Description: Name of initital Solodev website
+        Type: String
+        Default: ""
+
+    ClientId:
+        Description: Keep blank unless deploying via Solodev Cloud
+        Type: String
+        Default: ""
+    
+    ClientSecret:
+        Description: Keep blank unless deploying via Solodev Cloud
+        Type: String
+        Default: ""          
+
+    RestoreBucketName:
+        Description: Name of S3 bucket containing files for restore
+        Type: String
+        Default: ""
+
+    StorageEncrypted:
+        Default: 'true'
+        Description: Enable encryption for both Database (RDS) and Filesystem (EFS)
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.
+
+Resources:
+
+    ALB:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/alb.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                CertificateArn: !Ref CertificateArn
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
+
+    EFS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/efs.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                StorageEncrypted: !Ref StorageEncrypted
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
+
+    RDS:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/rds.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
+                DatabasePassword: !Ref DatabasePassword
+                DatabaseName: 'solodev'
+                DeletionPolicy: !Ref DeletionPolicy
+                StorageEncrypted: !Ref StorageEncrypted
+                MultiAZDatabase: 'true'
+
+    EC2:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: "https://s3.amazonaws.com/solodev-aws-ha/aws/services/solodev-opsworks.yaml"
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                InstanceType: !Ref InstanceType
+                ClusterSize: !Ref InstanceCount
+                VPC: !Ref VPCID
+                AMI: !FindInMap ["BYOL", !Ref "AWS::Region", AMI]
+                EFS: !GetAtt EFS.Outputs.EFS
+                KeyName: !Ref KeyName
+                FQDN: !Ref FQDN
+                CertificateArn: !Ref CertificateArn
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
+                LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                BYOL: "True"
+                CookbookURL: !Ref CookbookURL
+                AdminUser: !Ref AdminUser
+                AdminPassword: !Ref AdminPassword
+                DatabaseName: !GetAtt RDS.Outputs.DatabaseName
+                DatabaseHost: !GetAtt RDS.Outputs.DatabaseHost
+                DatabaseUsername: !GetAtt RDS.Outputs.DatabaseUsername
+                DatabasePassword: !GetAtt RDS.Outputs.DatabasePassword
+                DeploymentType: "SolodevProduction"
+                RestoreBucketName: !Ref RestoreBucketName
+                DeletionPolicy: !Ref DeletionPolicy
+                ClientId: !Ref ClientId
+                ClientSecret: !Ref ClientSecret
+
+Outputs:
+
+    AdminUrl: 
+        Description: The URL endpoint for the load balancer. Point your DNS to this CNAME.
+        Value: !GetAtt ALB.Outputs.LoadBalancerUrl
+    AdminUsername: 
+        Description: Solodev admin username.
+        Value: !Ref AdminUser
+    AdminPassword: 
+        Description: Solodev admin password.
+        Value: !Ref AdminPassword
+    WebsiteUrl: 
+        Description: Initital Solodev Website
+        Value: !Ref WebsiteUrl        
