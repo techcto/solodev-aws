@@ -105,14 +105,7 @@ Outputs:
 
     LoadBalancerUrl: 
         Description: CNAME of Load Balancer.  Point your DNS to this CNAME.
-        Value: !Join 
-                - ''
-                - - !If
-                    - UseSSL
-                    - "https://"
-                    - "http://"
-                  - !GetAtt LoadBalancer.DNSName
-                  - "/"
+        Value: !GetAtt LoadBalancer.DNSName
 
     LoadBalancerSecurityGroup:
         Description: A reference to LoadBalancerSecurityGroup
