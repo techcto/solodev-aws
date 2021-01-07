@@ -34,7 +34,7 @@ Resources:
   ElasticacheSubnetGroup:
     Type: 'AWS::ElastiCache::SubnetGroup'
     Properties:
-      ElastiCacheSubnetGroupDescription: Subnets available for the ElastiCache Instance
+      Description: Subnets available for the ElastiCache Instance
       SubnetIds: !Ref Subnets
       Tags:
         - Key: Name
