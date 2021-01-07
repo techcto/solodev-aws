@@ -42,6 +42,7 @@ Metadata:
           - ClientSecret
           - RestoreBucketName
           - DeletionPolicy
+          - RedisEnabled
 
 Mappings:
   BYOL:
@@ -198,6 +199,15 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.
 
+    RedisEnabled:
+        Default: 'false'
+        Description: Enable Redis ElastiCache cluster
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.        
+
 Resources:
 
     ALB:
@@ -235,6 +245,20 @@ Resources:
                 DeletionPolicy: !Ref DeletionPolicy
                 StorageEncrypted: !Ref StorageEncrypted
                 MultiAZDatabase: 'true'
+
+    Redis:
+        Conditions:
+          RedisEnabled: !Equals
+            - !Ref RedisEnabled
+            - 'true'
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/redis.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]             
 
     EC2:
         Type: AWS::CloudFormation::Stack

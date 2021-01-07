@@ -1,0 +1,84 @@
+Description: >
+  This template deploys an ElastiCache Redis Cluster
+
+Parameters:
+
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+
+  VPC:
+    Type: 'AWS::EC2::VPC::Id'
+    Description: Choose which VPC the Application Load Balancer should be deployed to
+
+  LoadBalancerSecurityGroup:
+    Description: Select the Load Balancer Security Group to use for the cluster hosts
+    Type: AWS::EC2::SecurityGroup::Id
+
+  Subnets:
+    Description: Choose which subnets the Application Load Balancer should be deployed to
+    Type: 'List<AWS::EC2::Subnet::Id>'
+
+  NodeType:
+    Default: cache.t2.small
+    Description: Node Type
+    Type: String
+    AllowedValues:
+      - cache.t2.micro
+      - cache.t2.small
+      - cache.t2.medium
+    ConstraintDescription: must select a valid node type.
+
+Resources:
+
+  ElasticacheSubnetGroup:
+    Type: 'AWS::ElastiCache::SubnetGroup'
+    Properties:
+      ElastiCacheSubnetGroupDescription: Subnets available for the ElastiCache Instance
+      SubnetIds: !Ref Subnets
+      Tags:
+        - Key: Name
+          Value: !Join 
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - ElastiCacheSubnetGroup
+
+  ElasticacheSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: ElastiCache Security Group
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '11211'
+          ToPort: '11211'
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Join 
+            - '-'
+            - - !Ref 'AWS::StackName'
+              - ElastiCache-SecurityGroup
+
+  ElasticacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    Properties:
+      AutoMinorVersionUpgrade: 'true'
+      Engine: redis
+      CacheNodeType: !Ref NodeType
+      NumCacheNodes: '1'
+      CacheSubnetGroupName: !Ref ElasticacheSubnetGroup
+      VpcSecurityGroupIds:
+        - !GetAtt 
+          - ElasticacheSecurityGroup
+          - GroupId
+
+Outputs:
+
+  ElastiCacheStackName:
+    Description: ElastiCache Stack Name
+    Value: !Ref AWS::StackName
+
+  RedisHost:
+    Description: ElastiCache endpoint address
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
