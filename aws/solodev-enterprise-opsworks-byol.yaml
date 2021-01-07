@@ -209,6 +209,7 @@ Parameters:
         ConstraintDescription: must be either true or false.   
 
 Conditions:
+
   RedisEnabled: !Equals
     - !Ref RedisEnabled
     - 'true'             
@@ -292,6 +293,7 @@ Resources:
                 DeletionPolicy: !Ref DeletionPolicy
                 ClientId: !Ref ClientId
                 ClientSecret: !Ref ClientSecret
+                RedisHost: !GetAtt Redis.Outputs.RedisHost
 
 Outputs:
 

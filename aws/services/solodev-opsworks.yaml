@@ -165,6 +165,11 @@ Parameters:
     CookbookURL:
         Type: String
 
+    RedisHost:
+        Description: Host of Redis ElasticCache Cluster
+        Type: String
+        Default: ""
+
 Conditions:
     UseHTTPS: !Not [!Equals [ !Ref CertificateArn, "" ]]
     UseHTTP: !Equals [ !Ref CertificateArn, "" ]
@@ -392,6 +397,7 @@ Resources:
                     DBPassword: !Ref DatabasePassword
                     EFSHost: !Ref EFS
                     MongoHost: "instance['private_ip']"
+                    RedisHost: !Ref RedisHost
 
                     SolodevUser: !Ref AdminUser
                     SolodevPassword: !Ref AdminPassword

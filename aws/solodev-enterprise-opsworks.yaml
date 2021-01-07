@@ -181,6 +181,12 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false
 
+Conditions:
+
+  RedisEnabled: !Equals
+    - !Ref RedisEnabled
+    - 'true'          
+
 Resources:
 
     ALB:
@@ -219,6 +225,17 @@ Resources:
                 StorageEncrypted: !Ref StorageEncrypted
                 MultiAZDatabase: 'true'
 
+    Redis:
+        Condition: RedisEnabled
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/redis.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !Ref VPCID
+                LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]                    
+
     EC2:
         Type: AWS::CloudFormation::Stack
         Properties:
@@ -247,6 +264,7 @@ Resources:
                 DeploymentType: "SolodevProduction"
                 RestoreBucketName: !Ref RestoreBucketName
                 DeletionPolicy: !Ref DeletionPolicy
+                RedisHost: !GetAtt Redis.Outputs.RedisHost
 
 Outputs:
 
