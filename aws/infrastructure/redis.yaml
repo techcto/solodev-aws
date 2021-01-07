@@ -36,12 +36,6 @@ Resources:
     Properties:
       Description: Subnets available for the ElastiCache Instance
       SubnetIds: !Ref Subnets
-      Tags:
-        - Key: Name
-          Value: !Join 
-            - '-'
-            - - !Ref 'AWS::StackName'
-              - ElastiCacheSubnetGroup
 
   ElasticacheSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
