@@ -206,7 +206,12 @@ Parameters:
         AllowedValues:
         - 'true'
         - 'false'
-        ConstraintDescription: must be either true or false.        
+        ConstraintDescription: must be either true or false.   
+
+Conditions:
+  RedisEnabled: !Equals
+    - !Ref RedisEnabled
+    - 'true'             
 
 Resources:
 
@@ -247,10 +252,7 @@ Resources:
                 MultiAZDatabase: 'true'
 
     Redis:
-        Conditions:
-          RedisEnabled: !Equals
-            - !Ref RedisEnabled
-            - 'true'
+        Condition: RedisEnabled
         Type: AWS::CloudFormation::Stack
         Properties:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/redis.yaml
