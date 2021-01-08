@@ -264,7 +264,7 @@ Resources:
                 DeploymentType: "SolodevProduction"
                 RestoreBucketName: !Ref RestoreBucketName
                 DeletionPolicy: !Ref DeletionPolicy
-                RedisHost: !GetAtt Redis.Outputs.RedisHost
+                RedisHost: !If [ RedisEnabled, !GetAtt Redis.Outputs.RedisHost, !Ref 'AWS::NoValue' ]
 
 Outputs:
 
