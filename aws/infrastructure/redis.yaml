@@ -61,7 +61,6 @@ Resources:
       AutoMinorVersionUpgrade: 'true'
       Engine: redis
       CacheNodeType: !Ref NodeType
-      NumNodeGroups: '1'
       NumCacheClusters: '2'
       CacheSubnetGroupName: !Ref ElasticacheSubnetGroup
       SecurityGroupIds:
