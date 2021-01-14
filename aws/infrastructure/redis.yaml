@@ -57,6 +57,7 @@ Resources:
   ElasticacheCluster:
     Type: 'AWS::ElastiCache::ReplicationGroup'
     Properties:
+      ReplicationGroupDescription: ElasticCache Replication Group
       AutoMinorVersionUpgrade: 'true'
       Engine: redis
       CacheNodeType: !Ref NodeType
