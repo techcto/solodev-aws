@@ -76,4 +76,4 @@ Outputs:
 
   RedisHost:
     Description: ElastiCache endpoint address
-    Value: !GetAtt ElasticacheCluster.RedisEndpoint.Address
+    Value: !GetAtt ElasticacheCluster.PrimaryEndPoint.Address
