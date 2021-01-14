@@ -55,12 +55,13 @@ Resources:
               - ElastiCache-SecurityGroup
 
   ElasticacheCluster:
-    Type: 'AWS::ElastiCache::CacheCluster'
+    Type: 'AWS::ElastiCache::ReplicationGroup'
     Properties:
       AutoMinorVersionUpgrade: 'true'
       Engine: redis
       CacheNodeType: !Ref NodeType
-      NumCacheNodes: '2'
+      NumNodeGroups: '1'
+      NumCacheClusters: '2'
       CacheSubnetGroupName: !Ref ElasticacheSubnetGroup
       VpcSecurityGroupIds:
         - !GetAtt 
