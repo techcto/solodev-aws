@@ -63,7 +63,7 @@ Resources:
       NumNodeGroups: '1'
       NumCacheClusters: '2'
       CacheSubnetGroupName: !Ref ElasticacheSubnetGroup
-      VpcSecurityGroupIds:
+      SecurityGroupIds:
         - !GetAtt 
           - ElasticacheSecurityGroup
           - GroupId
