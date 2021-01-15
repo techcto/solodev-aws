@@ -181,6 +181,15 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false
 
+    RedisEnabled:
+        Default: 'true'
+        Description: Enable Redis ElastiCache cluster
+        Type: String
+        AllowedValues:
+        - 'true'
+        - 'false'
+        ConstraintDescription: must be either true or false.        
+
 Conditions:
 
   RedisEnabled: !Equals

@@ -200,7 +200,7 @@ Parameters:
         ConstraintDescription: must be either true or false.
 
     RedisEnabled:
-        Default: 'false'
+        Default: 'true'
         Description: Enable Redis ElastiCache cluster
         Type: String
         AllowedValues:
