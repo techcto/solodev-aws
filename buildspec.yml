@@ -5,9 +5,9 @@ phases:
   build:
     commands:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
-      - curl -O https://bootstrap.pypa.io/get-pip.py
-      - python get-pip.py
-      - pip install awscli
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - ./aws/install
       - aws --version
       - curl -qL -o aws_credentials.json http://169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > aws_credentials.json
       - aws configure set region $AWS_REGION
