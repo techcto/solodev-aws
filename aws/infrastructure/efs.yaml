@@ -78,4 +78,8 @@ Outputs:
       Description: EFS Filesystem
       Value: !Ref EFS
 
+    Tag:
+      Description: EFS tag value for backup
+      Value: !Join ['-', [!Ref 'AWS::StackName', EFS]]
+
     

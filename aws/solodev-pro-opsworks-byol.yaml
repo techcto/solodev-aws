@@ -217,7 +217,9 @@ Resources:
             TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/backup.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
-                EFS: !GetAtt EFS.Outputs.EFS
+                BackupSelectionName: !Join ["-", ['EFS', !GetAtt EFS.Outputs.EFS]]
+                BackupTagKey: 'Name'
+                BackupTagValue: !GetAtt EFS.Outputs.Tag
 
     RDS:
         Type: AWS::CloudFormation::Stack
