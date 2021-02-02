@@ -46,6 +46,8 @@ Resources:
             RuleName: "DailyBackups"
             TargetBackupVault: !Ref BackupVault
             ScheduleExpression: "cron(0 5 ? * * *)"
+            Lifecycle:
+              DeleteAfterDays: 35
 
     DependsOn: BackupVault
 

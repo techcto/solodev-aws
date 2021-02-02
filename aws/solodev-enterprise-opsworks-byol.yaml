@@ -237,6 +237,14 @@ Resources:
                 StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
+    Backup:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/backup.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                EFS: !GetAtt EFS.Outputs.EFS                
+
     RDS:
         Type: AWS::CloudFormation::Stack
         Properties:
