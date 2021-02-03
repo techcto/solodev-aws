@@ -79,4 +79,4 @@ Outputs:
 
     BackupVaultArn:
       Description: The AWS Backup ARN
-      Value: !Ref BackupVaultArn
+      Value: !GetAtt BackupVault.BackupVaultArn
