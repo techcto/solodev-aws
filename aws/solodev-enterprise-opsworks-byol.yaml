@@ -318,4 +318,7 @@ Outputs:
         Value: !Ref AdminPassword
     WebsiteUrl: 
         Description: Initital Solodev Website
-        Value: !Ref WebsiteUrl        
+        Value: !Ref WebsiteUrl
+    BackupVaultArn:
+        Description: The AWS Backup ARN
+        Value: !GetAtt Backup.Outputs.BackupVaultArn         

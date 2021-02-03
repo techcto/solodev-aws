@@ -74,3 +74,9 @@ Resources:
             ConditionKey: !Ref BackupTagKey
             ConditionValue: !Ref BackupTagValue
       BackupPlanId: !Ref BackupPlan    
+
+Outputs:
+
+    BackupVaultArn:
+      Description: The AWS Backup ARN
+      Value: !Ref BackupVaultArn
