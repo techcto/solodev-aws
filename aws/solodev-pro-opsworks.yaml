@@ -257,6 +257,6 @@ Outputs:
     WebsiteUrl: 
         Description: Initital Solodev Website
         Value: !Ref WebsiteUrl
-    BackupVaultArn:	
-        Description: The AWS Backup ARN	
-        Value: !GetAtt Backup.Outputs.BackupVaultArn                
+    BackupVaultArn:
+        Description: The AWS Backup ARN
+        Value: !GetAtt Backup.Outputs.BackupVaultArn              
