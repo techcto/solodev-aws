@@ -211,15 +211,15 @@ Resources:
                 StorageEncrypted: !Ref StorageEncrypted
                 Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
-    Backup:	
-        Type: AWS::CloudFormation::Stack	
-        Properties:	
-            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/backup.yaml	
-            Parameters:	
-                EnvironmentName: !Ref AWS::StackName	
-                BackupSelectionName: !Join ["-", ['EFS', !GetAtt EFS.Outputs.EFS]]	
-                BackupTagKey: 'Name'	
-                BackupTagValue: !GetAtt EFS.Outputs.Tag                     
+    Backup:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3.amazonaws.com/solodev-aws-ha/aws/infrastructure/backup.yaml
+            Parameters:
+                EnvironmentName: !Ref AWS::StackName
+                BackupSelectionName: !Join ["-", ['EFS', !GetAtt EFS.Outputs.EFS]]
+                BackupTagKey: 'Name'
+                BackupTagValue: !GetAtt EFS.Outputs.Tag
 
     RDS:
         Type: AWS::CloudFormation::Stack
@@ -277,7 +277,7 @@ Outputs:
         Value: !Ref AdminPassword
     WebsiteUrl: 
         Description: Initital Solodev Website
-        Value: !Ref WebsiteUrl
-    BackupVaultArn:	
-        Description: The AWS Backup ARN	
-        Value: !GetAtt Backup.Outputs.BackupVaultArn           
+        Value: !Ref WebsiteUrl     
+    BackupVaultArn:
+        Description: The AWS Backup ARN
+        Value: !GetAtt Backup.Outputs.BackupVaultArn      
