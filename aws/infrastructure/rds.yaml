@@ -51,6 +51,11 @@ Parameters:
     Description: Database Port
     Type: Number
 
+  DatabaseEngine:
+    Default: 'MySQL'
+    Description: Database Engine
+    Type: String
+
   DatabaseClass:
     Default: db.t2.medium
     Description: Database instance class
@@ -143,8 +148,7 @@ Resources:
       PreferredBackupWindow: '01:30-03:00'
       PreferredMaintenanceWindow: 'sat:04:00-sat:05:30'
       DBInstanceClass: !Ref DatabaseClass
-      Engine: MySQL
-      EngineVersion: '5.7'
+      Engine: !Ref DatabaseEngine
       MasterUsername: !Ref DatabaseUsername
       MasterUserPassword: !Ref DatabasePassword
       DBSubnetGroupName: !Ref DBSubnetGroup
