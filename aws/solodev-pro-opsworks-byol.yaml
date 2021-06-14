@@ -179,6 +179,11 @@ Parameters:
         Type: String
         Default: ""
 
+    CMSVersion:
+        Description: CMS Version
+        Type: String
+        Default: ""
+
 Resources:
 
     WebServerSecurityGroup:
@@ -252,6 +257,7 @@ Resources:
                 KeyName: !Ref KeyName
                 # FQDN: !Ref FQDN
                 # CertificateArn: !Ref CertificateArn
+                CMSVersion: !Ref CMSVersion
                 BYOL: "True"
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser

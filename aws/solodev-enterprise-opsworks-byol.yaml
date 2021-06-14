@@ -208,6 +208,11 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.   
 
+    CMSVersion:
+        Description: CMS Version
+        Type: String
+        Default: ""
+
 Conditions:
 
   RedisEnabled: !Equals
@@ -304,6 +309,7 @@ Resources:
                 ClientId: !Ref ClientId
                 ClientSecret: !Ref ClientSecret
                 RedisHost: !If [ RedisEnabled, !GetAtt Redis.Outputs.RedisHost, !Ref 'AWS::NoValue' ]
+                CMSVersion: !Ref CMSVersion
 
 Outputs:
 
