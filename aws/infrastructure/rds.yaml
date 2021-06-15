@@ -122,8 +122,8 @@ Resources:
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '3306'
-          ToPort: '3306'
+          FromPort: !Ref DatabasePort
+          ToPort: !Ref DatabasePort
           SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
       Tags:
         - Key: Name
@@ -149,6 +149,7 @@ Resources:
       PreferredMaintenanceWindow: 'sat:04:00-sat:05:30'
       DBInstanceClass: !Ref DatabaseClass
       Engine: !Ref DatabaseEngine
+      Port: !Ref DatabasePort
       MasterUsername: !Ref DatabaseUsername
       MasterUserPassword: !Ref DatabasePassword
       DBSubnetGroupName: !Ref DBSubnetGroup
