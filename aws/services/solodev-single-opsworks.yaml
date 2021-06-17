@@ -127,6 +127,11 @@ Parameters:
         Default: 'False'
         Type: String
 
+    CMSVersion:
+        Description: CMS Version
+        Type: String
+        Default: ""
+
     CookbookURL:
         Type: String
 
@@ -323,6 +328,7 @@ Resources:
                     SolodevPassword: !Ref AdminPassword
                     ClientId: !Ref ClientId
                     ClientSecret: !Ref ClientSecret
+                    CMSVersion: !Ref CMSVersion
                     SolodevTheme: ''
                     SolodevWebsite: ''
 
