@@ -46,48 +46,46 @@ Metadata:
 
 Mappings:
   BYOL:
-    us-east-1:
-      AMI: ami-05ffbbcb43d368a0e
-    us-east-2:
-      AMI: ami-01079500144af6cb1
-    us-west-1:
-      AMI: ami-08d852740b70461e7
-    us-west-2:
-      AMI: ami-0bd493a68dc7ba695
-    us-gov-west-1:
-      AMI: ami-0ffa459d50784a298
-    us-gov-east-1:
-      AMI: ami-07b0ca01898c66613
-    ca-central-1:
-      AMI: ami-0a2174fd97302ee60
-    eu-central-1:
-      AMI: ami-0daec32ae2c995986
-    eu-west-1:
-      AMI: ami-025447b7ca5f54904
-    eu-west-2:
-      AMI: ami-033852f30ccefe6f3
-    eu-west-3:
-      AMI: ami-07556a73327e30ede
-    eu-north-1:
-      AMI: ami-021327a65192f3ea7
-    ap-southeast-1:
-      AMI: ami-063993321b6ed64cc
-    ap-southeast-2:
-      AMI: ami-06b3f4b12f9841e16
-    ap-south-1:
-      AMI: ami-054f190395da5e961
-    ap-northeast-1:
-      AMI: ami-0278428e3bd95a122
-    ap-northeast-2:
-      AMI: ami-0eda5f9fcc6470c63
-    ap-east-1:
-      AMI: ami-0fcc9cc2d288cb7c6
-    sa-east-1:
-      AMI: ami-0f42f86e69bd10066
-    me-south-1:
-      AMI: ami-0339f5ec7b41dbae6
-    af-south-1:
-      AMI: ami-042b536c6f367cadf
+      us-east-1:
+        AMI: "ami-050b5f05a08045e17"
+      us-east-2:
+        AMI: "ami-00d8054b8ed2bf16f"
+      us-west-1:
+        AMI: "ami-0847e081e62a554fc"
+      us-west-2:
+        AMI: "ami-03d8477cca2206d95"
+      us-gov-west-1:
+        AMI: "ami-003964429ec16d57a"
+      us-gov-east-1:
+        AMI: "ami-0094de1e9df3ebf70"
+      ca-central-1:
+        AMI: "ami-040ca77f59aee0ba0"
+      eu-central-1:
+        AMI: "ami-0ec666b54ea3e46f0"
+      eu-west-1:
+        AMI: "ami-0921144fc5b2795f0"
+      eu-west-2:
+        AMI: "ami-0fd74b3aa276de2d0"
+      eu-west-3:
+        AMI: "ami-03dada95bb6a8ec04"
+      eu-north-1:
+        AMI: "ami-0e9141d05339ab846"
+      ap-southeast-1:
+        AMI: "ami-00be286fdb36c1d23"
+      ap-southeast-2:
+        AMI: "ami-026db3a371b768334"
+      ap-south-1:
+        AMI: "ami-0e71fbbe802a79ecb"
+      ap-northeast-1:
+        AMI: "ami-058fd30884a6e663b"
+      ap-northeast-2:
+        AMI: "ami-03794e86176ea20cb"
+      ap-east-1:
+        AMI: "ami-0b70b12c93eabd772"
+      sa-east-1:
+        AMI: "ami-08522cba52b02fc54"
+      me-south-1:
+        AMI: "ami-076dfa314ae1b10af"
 
 Parameters:
 
