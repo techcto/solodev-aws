@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    Solodev CMS Pro for Opsworks on AWS
+    Solodev CMS Pro for Opsworks on AWS.
 
 Metadata: 
   AWS::CloudFormation::Interface: 
