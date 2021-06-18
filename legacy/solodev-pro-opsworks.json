@@ -25,11 +25,6 @@
       "Type": "AWS::EC2::KeyPair::KeyName",
       "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
     },
-    "InstallBucketName":{
-      "Default":"solodev-install",
-      "Description":"Name of bucket containing files for download",
-      "Type":"String"
-    },
     "RestoreBucketName":{
       "Default":"",
       "Description":"Name of bucket containing files for restore",
@@ -340,7 +335,6 @@
 		    		"apache_conf_dir": "/etc/httpd/conf.d",
 		    		"AWSAccessKeyId": {"Ref":"CfnKeys"},
 		    		"AWSSecretKey": {"Fn::GetAtt":["CfnKeys","SecretAccessKey"]},
-		    		"InstallBucketName": {"Ref":"InstallBucketName"},
 		    		"RestoreBucketName": {"Ref":"RestoreBucketName"},
 		    		"BackupBucketName": {"Fn::Join": ["-", [{"Ref":"ClientName"}, {"Ref": "AWS::StackName"}, "backup"]]},
 		    		"CMSDir": {"Ref":"CMSDir"},
