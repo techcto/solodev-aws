@@ -45,7 +45,7 @@ Metadata:
 Mappings:
   Marketplace:
       us-east-1:
-        AMI: "ami-0d2f3787d72e34fb2"
+        AMI: "ami-0ac5543486cbf736f"
       us-east-2:
         AMI: "ami-03affff7a3905a5c7"
       us-west-1:
