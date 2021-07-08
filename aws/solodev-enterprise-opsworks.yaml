@@ -13,7 +13,8 @@ Metadata:
           default: "Network Setup"
         Parameters: 
           - VPCID
-          - Subnets
+          - PublicSubnet1ID
+          - PublicSubnet2ID
           - InstanceType
           - InstanceCount
           - KeyName
@@ -39,49 +40,50 @@ Metadata:
           - WebsiteUrl
           - RestoreBucketName
           - DeletionPolicy
+          - RedisEnabled
 
 Mappings:
   Marketplace:
-    us-east-1:
-      AMI: "ami-02c50ba27d033cd58"
-    us-east-2:
-      AMI: "ami-0cfdbef46343e8d88"
-    us-west-1:
-      AMI: "ami-04d35972cef4d3b36"
-    us-west-2:
-      AMI: "ami-05c5a878a88225054"
-    us-gov-west-1:
-      AMI: "ami-0e964b2e2ed5fca88"
-    us-gov-east-1:
-      AMI: "ami-0672e5e31928cb3ef"
-    ca-central-1:
-      AMI: "ami-0393948937c9539c3"
-    eu-central-1:
-      AMI: "ami-0647c2d1f91ef7d5f"
-    eu-west-1:
-      AMI: "ami-0c595aff33088f2f9"
-    eu-west-2:
-      AMI: "ami-09e64414fee90f5ca"
-    eu-west-3:
-      AMI: "ami-0223e961b18283b60"
-    eu-north-1:
-      AMI: "ami-03002d199b9519693"
-    ap-southeast-1:
-      AMI: "ami-022c2a15b966e1bbf"
-    ap-southeast-2:
-      AMI: "ami-00643e93f3cfd8f31"
-    ap-south-1:
-      AMI: "ami-0dc199a0f75cfbdc6"
-    ap-northeast-1:
-      AMI: "ami-0aa107ff9663c2433"
-    ap-northeast-2:
-      AMI: "ami-041fd41f38ec34db2"
-    ap-east-1:
-      AMI: "ami-0a67fbd8d4426a740"
-    sa-east-1:
-      AMI: "ami-007e60f122297a5f8"
-    me-south-1:
-      AMI: "ami-00ae091f9822dce11"
+      us-east-1:
+        AMI: "ami-054a2f21d69d15b7a"
+      us-east-2:
+        AMI: "ami-03affff7a3905a5c7"
+      us-west-1:
+        AMI: "ami-0b22b73d1b1d3c3c3"
+      us-west-2:
+        AMI: "ami-023aa176ed901a1de"
+      us-gov-west-1:
+        AMI: "ami-07dba16efae4b3609"
+      us-gov-east-1:
+        AMI: "ami-0cac661b2614b334b"
+      ca-central-1:
+        AMI: "ami-0d67bdad8b84491a7"
+      eu-central-1:
+        AMI: "ami-0b6b6c01696b3a1e6"
+      eu-west-1:
+        AMI: "ami-044429e4955c529a2"
+      eu-west-2:
+        AMI: "ami-06a97e8b5b97d65ca"
+      eu-west-3:
+        AMI: "ami-0ce4de21c98046c9e"
+      eu-north-1:
+        AMI: "ami-0cee85030a0b6619b"
+      ap-southeast-1:
+        AMI: "ami-0e6d845479aeea2d5"
+      ap-southeast-2:
+        AMI: "ami-046e2e377f698a23f"
+      ap-south-1:
+        AMI: "ami-0f0be8bb80c35df9c"
+      ap-northeast-1:
+        AMI: "ami-0a4760363ff5c403b"
+      ap-northeast-2:
+        AMI: "ami-0e3fa8aa85f50e425"
+      ap-east-1:
+        AMI: "ami-0932e6e62f9fc0a81"
+      sa-east-1:
+        AMI: "ami-088f5e3a4f7021daa"
+      me-south-1:
+        AMI: "ami-084d1d35966e68a23"
 
 Parameters:
 
@@ -91,11 +93,13 @@ Parameters:
         AllowedPattern: .+
         ConstraintDescription: Please choose VPC
 
-    Subnets:
-        Description: Choose at least two public subnets for this application
-        Type: List<AWS::EC2::Subnet::Id>
-        AllowedPattern: .+
-        ConstraintDescription: Please choose Subnets
+    PublicSubnet1ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
+
+    PublicSubnet2ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
 
     KeyName:
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -206,7 +210,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
                 CertificateArn: !Ref CertificateArn
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
     EFS:
         Type: AWS::CloudFormation::Stack
@@ -217,7 +221,7 @@ Resources:
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
 
     Backup:
         Type: AWS::CloudFormation::Stack
@@ -237,7 +241,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
                 DeletionPolicy: !Ref DeletionPolicy
@@ -253,7 +257,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
-                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]                    
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]              
 
     EC2:
         Type: AWS::CloudFormation::Stack
@@ -269,7 +273,7 @@ Resources:
                 KeyName: !Ref KeyName
                 FQDN: !Ref FQDN
                 CertificateArn: !Ref CertificateArn
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
                 LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
                 BYOL: False

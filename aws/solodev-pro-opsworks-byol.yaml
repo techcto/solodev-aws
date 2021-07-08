@@ -39,45 +39,47 @@ Metadata:
 Mappings:
   BYOL:
     us-east-1:
-      AMI: "ami-0ca316b63bf5294c5"
+      AMI: ami-0e9c55e630fa93900
     us-east-2:
-      AMI: "ami-035c33ba7ac42e117"
+      AMI: ami-01079500144af6cb1
     us-west-1:
-      AMI: "ami-081a57a43746b615f"
+      AMI: ami-08d852740b70461e7
     us-west-2:
-      AMI: "ami-01243a5e0c8f26a6c"
+      AMI: ami-0bd493a68dc7ba695
     us-gov-west-1:
-      AMI: "ami-0c33be87c483f097c"
+      AMI: ami-0ffa459d50784a298
     us-gov-east-1:
-      AMI: "ami-051269c140f17d74d"
+      AMI: ami-07b0ca01898c66613
     ca-central-1:
-      AMI: "ami-05fe58052f7f7f347"
+      AMI: ami-0a2174fd97302ee60
     eu-central-1:
-      AMI: "ami-0076b3d49ef92c6ff"
+      AMI: ami-0daec32ae2c995986
     eu-west-1:
-      AMI: "ami-052a226d772421682"
+      AMI: ami-025447b7ca5f54904
     eu-west-2:
-      AMI: "ami-04ca1a10376388e4b"
+      AMI: ami-033852f30ccefe6f3
     eu-west-3:
-      AMI: "ami-007c09cfae31b1759"
+      AMI: ami-07556a73327e30ede
     eu-north-1:
-      AMI: "ami-03752c4ac4567e9bf"
+      AMI: ami-021327a65192f3ea7
     ap-southeast-1:
-      AMI: "ami-0ddfa3fac5f225828"
+      AMI: ami-063993321b6ed64cc
     ap-southeast-2:
-      AMI: "ami-0bb0f42efebc7c4cf"
+      AMI: ami-06b3f4b12f9841e16
     ap-south-1:
-      AMI: "ami-003fedb7e11cb5e79"
+      AMI: ami-054f190395da5e961
     ap-northeast-1:
-      AMI: "ami-008a7d1c08183ead4"
+      AMI: ami-0278428e3bd95a122
     ap-northeast-2:
-      AMI: "ami-02719d6555202fdd3"
+      AMI: ami-0eda5f9fcc6470c63
     ap-east-1:
-      AMI: "ami-0ba36347b9f70c922"
+      AMI: ami-0fcc9cc2d288cb7c6
     sa-east-1:
-      AMI: "ami-04dc9323d987a4f3c"
+      AMI: ami-0f42f86e69bd10066
     me-south-1:
-      AMI: "ami-0b3e63e3365b9676f"
+      AMI: ami-0339f5ec7b41dbae6
+    af-south-1:
+      AMI: ami-042b536c6f367cadf
 
 Parameters:
 
@@ -177,6 +179,11 @@ Parameters:
         Type: String
         Default: ""
 
+    CMSVersion:
+        Description: CMS Version
+        Type: String
+        Default: ""
+
 Resources:
 
     WebServerSecurityGroup:
@@ -250,6 +257,7 @@ Resources:
                 KeyName: !Ref KeyName
                 # FQDN: !Ref FQDN
                 # CertificateArn: !Ref CertificateArn
+                CMSVersion: !Ref CMSVersion
                 BYOL: "True"
                 CookbookURL: !Ref CookbookURL
                 AdminUser: !Ref AdminUser

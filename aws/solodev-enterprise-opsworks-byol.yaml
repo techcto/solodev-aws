@@ -46,46 +46,46 @@ Metadata:
 
 Mappings:
   BYOL:
-    us-east-1:
-      AMI: "ami-0ca316b63bf5294c5"
-    us-east-2:
-      AMI: "ami-0fe54be4c7bdba474"
-    us-west-1:
-      AMI: "ami-0431ed08a30cfad0b"
-    us-west-2:
-      AMI: "ami-0d0c05a38ae7a6a59"
-    us-gov-west-1:
-      AMI: "ami-00638d78dcad51ec1"
-    us-gov-east-1:
-      AMI: "ami-079d6380dda687590"
-    ca-central-1:
-      AMI: "ami-0b57a93004f507d4a"
-    eu-central-1:
-      AMI: "ami-024a10008f1dc0db7"
-    eu-west-1:
-      AMI: "ami-02a67b2d21694d92a"
-    eu-west-2:
-      AMI: "ami-09b2ffa20f5b262d4"
-    eu-west-3:
-      AMI: "ami-09837febc9b8d874d"
-    eu-north-1:
-      AMI: "ami-02a791ac19e303415"
-    ap-southeast-1:
-      AMI: "ami-0610b2ea148e02a38"
-    ap-southeast-2:
-      AMI: "ami-0c3db7a7176c011d1"
-    ap-south-1:
-      AMI: "ami-0724588a05d270fd2"
-    ap-northeast-1:
-      AMI: "ami-0a90690d761b306d0"
-    ap-northeast-2:
-      AMI: "ami-017cf7451480b05e3"
-    ap-east-1:
-      AMI: "ami-0030ca1c1685931eb"
-    sa-east-1:
-      AMI: "ami-06e9bc235f16d39b4"
-    me-south-1:
-      AMI: "ami-05b6e1f36a0e59cd4"
+      us-east-1:
+        AMI: "ami-0e9c55e630fa93900"
+      us-east-2:
+        AMI: "ami-00d8054b8ed2bf16f"
+      us-west-1:
+        AMI: "ami-0847e081e62a554fc"
+      us-west-2:
+        AMI: "ami-03d8477cca2206d95"
+      us-gov-west-1:
+        AMI: "ami-003964429ec16d57a"
+      us-gov-east-1:
+        AMI: "ami-0094de1e9df3ebf70"
+      ca-central-1:
+        AMI: "ami-040ca77f59aee0ba0"
+      eu-central-1:
+        AMI: "ami-0ec666b54ea3e46f0"
+      eu-west-1:
+        AMI: "ami-0921144fc5b2795f0"
+      eu-west-2:
+        AMI: "ami-0fd74b3aa276de2d0"
+      eu-west-3:
+        AMI: "ami-03dada95bb6a8ec04"
+      eu-north-1:
+        AMI: "ami-0e9141d05339ab846"
+      ap-southeast-1:
+        AMI: "ami-00be286fdb36c1d23"
+      ap-southeast-2:
+        AMI: "ami-026db3a371b768334"
+      ap-south-1:
+        AMI: "ami-0e71fbbe802a79ecb"
+      ap-northeast-1:
+        AMI: "ami-058fd30884a6e663b"
+      ap-northeast-2:
+        AMI: "ami-03794e86176ea20cb"
+      ap-east-1:
+        AMI: "ami-0b70b12c93eabd772"
+      sa-east-1:
+        AMI: "ami-08522cba52b02fc54"
+      me-south-1:
+        AMI: "ami-076dfa314ae1b10af"
 
 Parameters:
 
@@ -98,12 +98,10 @@ Parameters:
     PublicSubnet1ID:
         Type: "AWS::EC2::Subnet::Id"
         Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
-        Default: ""
 
     PublicSubnet2ID:
         Type: "AWS::EC2::Subnet::Id"
         Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
-        Default: ""  
 
     KeyName:
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -208,6 +206,11 @@ Parameters:
         - 'false'
         ConstraintDescription: must be either true or false.   
 
+    CMSVersion:
+        Description: CMS Version
+        Type: String
+        Default: ""
+
 Conditions:
 
   RedisEnabled: !Equals
@@ -304,6 +307,7 @@ Resources:
                 ClientId: !Ref ClientId
                 ClientSecret: !Ref ClientSecret
                 RedisHost: !If [ RedisEnabled, !GetAtt Redis.Outputs.RedisHost, !Ref 'AWS::NoValue' ]
+                CMSVersion: !Ref CMSVersion
 
 Outputs:
 

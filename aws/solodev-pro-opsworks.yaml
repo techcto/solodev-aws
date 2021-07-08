@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >
 
-    Solodev CMS Pro for Opsworks on AWS
+    Solodev CMS Pro for Opsworks on AWS.
 
 Metadata: 
   AWS::CloudFormation::Interface: 
@@ -13,7 +13,8 @@ Metadata:
           default: "Network Setup"
         Parameters: 
           - VPCID
-          - Subnets
+          - PublicSubnet1ID
+          - PublicSubnet2ID
           - InstanceType
           - KeyName
           - CookbookURL
@@ -36,45 +37,45 @@ Metadata:
 Mappings:
   Marketplace:
     us-east-1:
-      AMI: "ami-02c50ba27d033cd58"
+      AMI: "ami-054a2f21d69d15b7a"
     us-east-2:
-      AMI: "ami-0c1a2807b5953243a"
+      AMI: "ami-0e9ca1cd2d5209163"
     us-west-1:
-      AMI: "ami-0ca8a94deac48a92c"
+      AMI: "ami-0c642c032ce52b079"
     us-west-2:
-      AMI: "ami-0ff49440b17bd2a44"
+      AMI: "ami-0d4df424fa433405d"
     us-gov-west-1:
-      AMI: "ami-0bb570b09e590228c"
+      AMI: "ami-0888f78b9138e26c6"
     us-gov-east-1:
-      AMI: "ami-0d057c68225f02f30"
+      AMI: "ami-09e2912475efc986e"
     ca-central-1:
-      AMI: "ami-031f628fb2c63c070"
+      AMI: "ami-023e6927e730ab11e"
     eu-central-1:
-      AMI: "ami-07eeea66bf7d994b2"
+      AMI: "ami-02946a29e40f2031a"
     eu-west-1:
-      AMI: "ami-07998ba0a439f9d22"
+      AMI: "ami-0afeaa41e4e4416e7"
     eu-west-2:
-      AMI: "ami-09c1e6428c4f782fd"
+      AMI: "ami-0d06cccb9a66e6fc4"
     eu-west-3:
-      AMI: "ami-0a1df1ebbe7cd6319"
+      AMI: "ami-0966d3d72e6dcee4e"
     eu-north-1:
-      AMI: "ami-074b87533c3aca7d5"
+      AMI: "ami-08fde9e5a714370c3"
     ap-southeast-1:
-      AMI: "ami-0c9592607732aca4d"
+      AMI: "ami-0d48e53358221b270"
     ap-southeast-2:
-      AMI: "ami-0c948615887c23650"
+      AMI: "ami-07b96ee2c05575c3b"
     ap-south-1:
-      AMI: "ami-031faa3a21cae16c2"
+      AMI: "ami-0a85a84f043ad6b84"
     ap-northeast-1:
-      AMI: "ami-006d8a8154b40b235"
+      AMI: "ami-03fe768d7094940d5"
     ap-northeast-2:
-      AMI: "ami-0432e5686ef22ba91"
+      AMI: "ami-0fc7a2bd0788d1c09"
     ap-east-1:
-      AMI: "ami-0808e7f2dfa8b6c21"
+      AMI: "ami-0f8eefcbc8a4086ba"
     sa-east-1:
-      AMI: "ami-0927f83b7ef8a228f"
+      AMI: "ami-0f32d9704c40b30af"
     me-south-1:
-      AMI: "ami-00914a0ba85b737af"
+      AMI: "ami-0d8b78fd8cb8d3801"
 
 Parameters:
 
@@ -84,11 +85,15 @@ Parameters:
         AllowedPattern: .+
         ConstraintDescription: Please choose VPC
 
-    Subnets:
-        Description: Choose at least two public subnets for this application
-        Type: List<AWS::EC2::Subnet::Id>
-        AllowedPattern: .+
-        ConstraintDescription: Please choose Subnets
+    PublicSubnet1ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 1 in your existing VPC (e.g., subnet-a0246dcd)
+        Default: ""
+
+    PublicSubnet2ID:
+        Type: "AWS::EC2::Subnet::Id"
+        Description: The ID of the public subnet in Availability Zone 2 in your existing VPC (e.g., subnet-b1236eea)
+        Default: ""    
 
     KeyName:
         Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -192,7 +197,7 @@ Resources:
                 VPC: !Ref VPCID
                 LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 StorageEncrypted: !Ref StorageEncrypted
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]       
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]       
 
     Backup:
         Type: AWS::CloudFormation::Stack
@@ -211,7 +216,7 @@ Resources:
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !Ref VPCID
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 LoadBalancerSecurityGroup: !Ref WebServerSecurityGroup
                 DatabasePassword: !Ref DatabasePassword
                 DatabaseName: 'solodev'
@@ -226,7 +231,7 @@ Resources:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
                 VPC: !Ref VPCID
-                Subnets: !Join [",", [!Select [0, !Ref Subnets], !Select [1, !Ref Subnets]]]
+                Subnets: !Join [",", [!Ref PublicSubnet1ID, !Ref PublicSubnet2ID]]
                 WebServerSecurityGroup: !Ref WebServerSecurityGroup
                 AMI: !FindInMap ["Marketplace", !Ref "AWS::Region", AMI]
                 EFS: !GetAtt EFS.Outputs.EFS
